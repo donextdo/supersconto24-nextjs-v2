@@ -335,7 +335,12 @@ const handlePhoneChange = (e:any) => {
                 //     pathname: '/orderMessage',
                 //     query: orderData,
                 //   });
-
+               
+                // const params = new URLSearchParams(searchParams);
+                // params.set('countryCode', newCode);
+                // const newParams = params.toString();
+                router.push(`/ordermessage?orderId=${response.data.orderId}`);
+               
             }
         } catch (error) {
             console.log(error); // handle the error

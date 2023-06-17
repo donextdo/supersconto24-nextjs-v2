@@ -1,5 +1,6 @@
 
 
+import MainFlyerList from '@/components/MainFlyer/MainFlyerList'
 import NewProductList from '@/components/NewProduct/NewProductList'
 import ProductList from '@/features/product/ProductList'
 import Image from 'next/image'
@@ -8,8 +9,19 @@ export default function Home() {
   return (
     <div className='container mx-auto xl:px-40 px-5'>
       {/* <NewProductList /> */}
-      <ProductList />
-      
+      {/* <ProductList /> */}
+      <div className='grid grid-cols-3 gap-1'>
+        {/* left side */}
+        <div className='col-span-1'>hh</div>
+
+        {/* right side */}
+        <div className='col-span-2 '>
+          <MainFlyerList />
+          <ProductList />
+        </div>
+
       </div>
+
+    </div>
   )
 }

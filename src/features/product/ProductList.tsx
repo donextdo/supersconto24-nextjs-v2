@@ -20,7 +20,7 @@ const ProductList = () => {
     console.log(products);
   }, [dispatch]);
   return ( 
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8">
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4">
             {products.map((product)=>(
                 <ProductCard key={product._id} product={product}/>
             ))}
