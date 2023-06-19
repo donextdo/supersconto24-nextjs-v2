@@ -5,5 +5,8 @@
   "counter": {
     "increment": "Increment",
     "decrement": "Decrement"
+  },
+  "mainFlyer": {
+    "loadMore": "LOAD MORE NEAREST FLYERS"
   }
 }
