@@ -40,6 +40,8 @@ export const cartSlice = createSlice({
       } else {
         state.items[itemIndex].count++;
       }
+      localStorage.setItem("myItems",JSON.stringify(state.items))
+
       state.totalCount++;
     },
     removeItem: (state, action: PayloadAction<string>) => {
@@ -75,6 +77,13 @@ export const cartSlice = createSlice({
       state.totalAmount = action.payload 
       
     },
+    getDataFrom: (state) => {
+      const items = localStorage.getItem("myItems") ? JSON.parse(localStorage.getItem("myItems")?? "") : [];
+
+      state.items = items
+      state.totalCount = items.length ?? 0;
+      state.totalAmount = 0;
+    }
   },
   // extraReducers: (builder) => {
   //   builder
@@ -98,6 +107,7 @@ export const {
   updateItemQuantity,
   removeAll,
   calSubTotal,
+    getDataFrom
 } = cartSlice.actions;
 
 export default cartSlice.reducer;
