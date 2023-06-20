@@ -1,4 +1,5 @@
 const MainFlyerList = () => {
+    console.log("hi")
     return ( 
         <div>
             <div  className='w-full h-[80vh] grid grid-cols-2 gap-x-2 gap-y-5 
