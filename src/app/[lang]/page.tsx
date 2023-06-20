@@ -21,8 +21,8 @@ export default async function Home({params: {lang}}: { params: { lang: Locale } 
 
                 {/* right side */}
                 <div className='col-span-2 '>
-                    <MainFlyerList dictionary={dictionary.mainFlyer}/>
-                    <ProductList/>
+                    <MainFlyerList locale={lang} dictionary={dictionary.mainFlyer}/>
+                    {/*<ProductList/>*/}
                 </div>
 
             </div>
