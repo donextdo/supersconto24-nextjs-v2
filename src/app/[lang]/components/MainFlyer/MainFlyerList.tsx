@@ -3,6 +3,15 @@ import {useCallback, useEffect, useState} from "react";
 import {useSearchParams, useRouter} from "next/navigation";
 import baseUrl from "../../../../../utils/baseUrl";
 import axios from "axios";
+import flyer1 from '../../../../../assets/flyers/flyer_1.jpg'
+import flyer2 from '../../../../../assets/flyers/flyer_2.jpg'
+import flyer3 from '../../../../../assets/flyers/flyer_3.jpg'
+import flyer4 from '../../../../../assets/flyers/flyer_4.jpg'
+import flyer5 from '../../../../../assets/flyers/flyer_5.jpg'
+import flyer6 from '../../../../../assets/flyers/flyer_6.jpg'
+import flyer7 from '../../../../../assets/flyers/flyer_7.jpg'
+import MainFlyerCard from "./MainFlyerCard";
+
 
 
 type MainFlyerListType = {
@@ -63,12 +72,16 @@ const MainFlyerList = (({dictionary, locale}: MainFlyerListType) => {
     }
 
     console.log("render", productList)
+    
     return (
         <div>
-            <div className='w-full h-[80vh] grid grid-cols-2 gap-x-2 gap-y-5
+            <div className='w-full h-[80vh] grid grid-cols-2 gap-x-4 gap-y-5
 overflow-y-scroll overflow-x-hidden scrollbar-w-2 sm:grid-cols-4
-xxl:grid-cols-4 bg-black'>
+xxl:grid-cols-4 '>
 
+                    {productList?.map((flyer:any, index:number)=>(
+                        <MainFlyerCard key={index} flyer={flyer}/>
+                    ))}
             </div>
 
             <button

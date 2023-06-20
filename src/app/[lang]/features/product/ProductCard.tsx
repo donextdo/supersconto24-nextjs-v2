@@ -49,7 +49,7 @@ let totalAmount = 0
   },[dispatch]);
 
   useEffect(()=>{
-    console.log(product)
+    // console.log(product)
   },[])
 
   useEffect(() => {
