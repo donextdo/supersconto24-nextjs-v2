@@ -28,7 +28,7 @@ const MainFlyerCard = ({flyer}:any) => {
                 </div>
                 <div className="col-span-2">
                     <h1 className="text-[8px] text-[#B5B5B5] text-right">{formattedDate}</h1>
-                    <h1 className="text-[8px] text-[#B5B5B5] text-right">{flyer.distance}</h1>
+                    <h1 className="text-[8px] text-[#B5B5B5] text-right">{flyer.shop_id.distance.toFixed(2)}</h1>
                 </div>
 
             </div>
