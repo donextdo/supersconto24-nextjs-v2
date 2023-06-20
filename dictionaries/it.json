@@ -1,0 +1,12 @@
+{
+  "server-component": {
+    "welcome": "Bounjiorno"
+  },
+  "counter": {
+    "increment": "Zuwachs",
+    "decrement": "Dekrementieren"
+  },
+  "mainFlyer": {
+    "loadMore": "CARICA ALTRI VOLANTINI PIÙ VICINI"
+  }
+}
