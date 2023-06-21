@@ -28,9 +28,7 @@ const MainFlyerCard = ({ flyer }: any) => {
           <h1 className="text-[8px] text-[#B5B5B5] text-right">
             {formattedDate}
           </h1>
-          <h1 className="text-[8px] text-[#B5B5B5] text-right">
-              {flyer?.shop_id?.distance && <h1 className="text-[8px] text-[#B5B5B5] text-right">{(flyer.shop_id.distance/1000)?.toFixed(2)}</h1>}
-          </h1>
+          {flyer?.shop_id?.distance && <h1 className="text-[8px] text-[#B5B5B5] text-right">{(flyer.shop_id.distance/1000)?.toFixed(2)}</h1>}
         </div>
       </div>
     </div>
