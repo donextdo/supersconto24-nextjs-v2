@@ -1,0 +1,1 @@
+{"version":3,"sources":["baseUrl.tsx"],"names":[],"mappings":";;AAAA,IAAM,OAAO,GAAG,8BAA8B,CAAC;AAE/C,yDAAyD;AAEzD,qBAAe,OAAO,CAAC","file":"baseUrl.js","sourcesContent":["const baseUrl = \"http://localhost:3000/v1/api\";\r\n\r\n// const baseUrl = 'https://api.supersconto24.com/v1/api'\r\n\r\nexport default baseUrl;\r\n"]}
