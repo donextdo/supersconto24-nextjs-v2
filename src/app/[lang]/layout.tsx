@@ -6,6 +6,7 @@ import { store } from "./redux/store";
 import { Provider } from "react-redux";
 import {i18n} from "../../../i18n-config";
 import React from "react";
+import Script from "next/script";
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -21,6 +22,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang={params.lang}>
+    <Script
+        src={`https://maps.googleapis.com/maps/api/js?key=AIzaSyALJN3bDbGEk8ppXieiWNnwHVYM_8ntKng&libraries=places`}
+        onLoad={() => console.log("Google Maps API script loaded")}
+    />
       <body className={inter.className}>
         <Provider store={store}>
           <Layout>

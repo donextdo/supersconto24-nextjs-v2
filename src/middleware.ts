@@ -1,3 +1,4 @@
+
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
@@ -26,6 +27,7 @@ function getLocale(request: NextRequest): string | undefined {
 export function middleware(request: NextRequest) {
     const pathname = request.nextUrl.pathname
     console.log("pathname =>", pathname)
+    console.log("request.url =>", request.url)
     console.log("cookie =>", request.cookies.get('lang'))
 
     // // `/_next/` and `/api/` are ignored by the watcher, but we need to ignore files in `public` manually.
@@ -50,7 +52,12 @@ export function middleware(request: NextRequest) {
         console.log(request.url)
         // e.g. incoming request is /products
         // The new URL is now /en-US/products
-        return NextResponse.redirect(new URL(`/${locale}/${pathname}`, request.url))
+        const url = new URL(request.url);
+        url.pathname = `/${locale}/${pathname}`;
+
+        console.log("redirect.url =>", url.toString())
+        return NextResponse.redirect(url)
+
     }
 }
 
