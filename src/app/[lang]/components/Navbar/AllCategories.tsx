@@ -124,7 +124,9 @@ const AllCategories = () => {
                           <a
                             href="#"
                             className="block px-2 py-2 pt-5 text-gray-500 hover:text-[#4BB62E]"
-                            //   onClick={() => getProductByCategory(subcategory._id)}
+                            onClick={() =>
+                              getProductByCategory(subcategory._id)
+                            }
                             onMouseEnter={() =>
                               handleSubCategoryHover(subcategory?._id)
                             }
