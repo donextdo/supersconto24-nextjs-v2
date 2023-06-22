@@ -1,11 +1,11 @@
 
-
 import MainFlyerList from '@/app/[lang]/components/MainFlyer/MainFlyerList'
 import NewProductList from '@/app/[lang]/components/NewProduct/NewProductList'
 import ProductList from '@/app/[lang]/features/product/ProductList'
 import Image from 'next/image'
 import {Locale} from "../../../i18n-config";
 import {getDictionary} from "../../../get-dictionary";
+import ShopsList from './components/Shops/ShopsList';
 
 export default async function Home({params: {lang}}: { params: { lang: Locale } }) {
     const dictionary = await getDictionary(lang)
@@ -27,6 +27,9 @@ export default async function Home({params: {lang}}: { params: { lang: Locale } 
 
             </div>
 
+            <div className='mt-8'>
+            <ShopsList />
+            </div>
         </div>
     )
 }

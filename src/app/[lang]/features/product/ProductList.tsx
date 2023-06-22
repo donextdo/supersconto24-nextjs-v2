@@ -21,7 +21,7 @@ const ProductList = () => {
   }, [dispatch]);
   return ( 
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4">
-            {products.map((product)=>(
+            {products.slice(0,8).map((product)=>(
                 <ProductCard key={product._id} product={product}/>
             ))}
 

@@ -85,7 +85,9 @@ xxl:grid-cols-4 '>
             </div>
 
             <button
-                className="w-full  bg-primary py-2 px-6 text-base font-medium text-white rounded-md hover:bg-primary/80">
+                className="w-full  bg-primary py-2 px-6 text-base font-medium text-white rounded-md hover:bg-primary/80" onClick={()=>{
+                    router.push(`/ordermessage?orderId=6492f48e189f0b6f28326db8`);
+                }}>
                 {dictionary.loadMore}
             </button>
         </div>
