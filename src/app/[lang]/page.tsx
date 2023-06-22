@@ -6,6 +6,7 @@ import Image from 'next/image'
 import {Locale} from "../../../i18n-config";
 import {getDictionary} from "../../../get-dictionary";
 import ShopsList from './components/Shops/ShopsList';
+import { ImageOne } from './components/ImageAds/ImageOne';
 
 export default async function Home({params: {lang}}: { params: { lang: Locale } }) {
     const dictionary = await getDictionary(lang)
@@ -14,15 +15,20 @@ export default async function Home({params: {lang}}: { params: { lang: Locale } 
     return (
         <div className='container mx-auto xl:px-40 px-5'>
             {/* <NewProductList /> */}
-            {/* <ProductList /> */}
             <div className='grid grid-cols-3 gap-1'>
                 {/* left side */}
-                <div className='col-span-1'> {dictionary['server-component'].welcome}</div>
+                <div className='col-span-1'>
+                     {dictionary['server-component'].welcome}
+                     <ImageOne />
+                     </div>
 
                 {/* right side */}
                 <div className='col-span-2 '>
                     <MainFlyerList locale={lang} dictionary={dictionary.mainFlyer}/>
-                    <ProductList/>
+                    <div className='mt-8'>
+                        <ProductList/>
+                    </div>
+                    
                 </div>
 
             </div>

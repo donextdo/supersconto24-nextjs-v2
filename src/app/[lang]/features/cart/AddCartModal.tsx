@@ -8,12 +8,7 @@ import { RootState } from "../../redux/store";
 import { Product } from "../../features/product/product";
 
 interface Item {
-    product_image: string;
-    unit_price: number;
-    totalAmount: number;
-    product_name: string;
     _id: string;
-    quantity: number
     isRecommended: boolean;
     isDiscount: boolean;
     isOrganic: boolean;
@@ -26,6 +21,7 @@ interface Item {
     title: string;
     isAvailable: boolean;
     price: number;
+    quantity: number;
     brand: string;
     description: string;
     productQuantity: number;
@@ -36,15 +32,24 @@ interface Item {
     review: number;
     mfgDate: string;
     life: string;
+    category: string;
+    tags: string;
+    speacialtag: string;
+    additionalInformation: string
+    isNewArrival: boolean
+    isBestSeller: boolean
+    imageArray: string
+    product_name: string;
     product_description: string;
-
+    unit_price: number;
+    product_image: string;
 }
 
 interface Props {
     item: Item,
     handler: MouseEventHandler<HTMLButtonElement>
-    setChangecolor : any
-    
+    setChangecolor: any
+
 }
 
 const AddToCartModal: React.FC<Props> = ({ item, handler, setChangecolor }) => {
@@ -52,7 +57,7 @@ const AddToCartModal: React.FC<Props> = ({ item, handler, setChangecolor }) => {
     const dispatch = useDispatch();
     const products = useSelector((state: RootState) => state.product.products) as Product[];
 
-    
+
 
     // useEffect(() => {
     //     const cartItems: [any] = JSON.parse(localStorage.getItem("cartItems")!) ?? []
@@ -64,13 +69,13 @@ const AddToCartModal: React.FC<Props> = ({ item, handler, setChangecolor }) => {
     // }, [item])
     console.log(item)
 
-   const prodcutone:any = products.find((product) => product._id === item._id);
+    const prodcutone: any = products.find((product) => product._id === item._id);
     console.log(prodcutone)
 
 
 
-    useEffect(()=>{
-        
+    useEffect(() => {
+
     })
 
     const decreaseClick = () => {
@@ -107,6 +112,10 @@ const AddToCartModal: React.FC<Props> = ({ item, handler, setChangecolor }) => {
 
     console.log({ item })
 
+    let discountprice;
+    discountprice = item.unit_price * (item.discount/100)
+  let newprice=item.unit_price-discountprice
+
     return (
 
         <div className="fixed inset-0 z-50 grid bg-opacity-75 place-items-center bg-slate-900">
@@ -128,7 +137,16 @@ const AddToCartModal: React.FC<Props> = ({ item, handler, setChangecolor }) => {
                             <p className="text-2xl font-bold text-center md:text-left">{item.product_name}</p>
                         </div>
                         <div className="flex gap-4 mt-6 md:gap-16 flex-raw">
-                            <div className="text-lg ">${item.unit_price}</div>
+                            <div className=" flex flex-row items-center">
+                                {item.isDiscount && (
+                                    <span className="text-gray-400 text-sm line-through mr-2 my-1 font-[1.125rem]">
+                                        ${item.unit_price.toFixed(2)}
+                                    </span>
+                                )}
+                                <span className="my-1 text-red-700 text-lg font-semibold">
+                                    ${newprice.toFixed(2)}
+                                </span>
+                            </div>
                             {/* <div className="flex flex-raw ">
                                 <div>
                                     <button
@@ -155,7 +173,7 @@ const AddToCartModal: React.FC<Props> = ({ item, handler, setChangecolor }) => {
                         <div className="mt-5 text-lg ">${item.unit_price * prodcutone?.count || 0}</div>
 
                         <div className=" mt-10 mb-5 md:mt-10 md:mb-0">
-                        {/* { (item.count ==undefined || item.count<1) && (
+                            {/* { (item.count ==undefined || item.count<1) && (
                             <button disabled={count === 0} className="disabled:opacity-50 bg-[#8DC14F]  px-2 py-[8px] rounded w-full" onClick={(e) => {
                                 const cartItems: [any] = JSON.parse(localStorage.getItem("cartItems")!) ?? []
                                 const product = cartItems.find(it => it._id === item._id)
@@ -175,61 +193,61 @@ const AddToCartModal: React.FC<Props> = ({ item, handler, setChangecolor }) => {
                                 Add to cart
                             </button>
                             )} */}
-                             { (prodcutone?.count ==undefined || prodcutone?.count<1) && (
-                            <button  className="disabled:opacity-50 bg-[#8DC14F]  px-2 py-[8px] rounded w-full" onClick={(e) => {
-                                // const cartItems: [any] = JSON.parse(localStorage.getItem("cartItems")!) ?? []
-                                // const product = cartItems.find(it => it._id === item._id)
-                                // if (product) {
-                                //     product.quantity = count
-                                // } else {
-                                //     cartItems.push({ _id: item._id, quantity: count })
-                                // }
-                                // localStorage.setItem("cartItems", JSON.stringify(cartItems))
-                                // handler(e);
-                                dispatch(addItem(item));
-                                const newQuantity = (prodcutone?.count || 0) + 1;
-                                dispatch(
-                                    updateProductQuantity({ productId: item._id, count: newQuantity })
-                                );
-                                console.log(prodcutone?.count)
+                            {(prodcutone?.count == undefined || prodcutone?.count < 1) && (
+                                <button className="disabled:opacity-50 bg-[#8DC14F]  px-2 py-[8px] rounded w-full" onClick={(e) => {
+                                    // const cartItems: [any] = JSON.parse(localStorage.getItem("cartItems")!) ?? []
+                                    // const product = cartItems.find(it => it._id === item._id)
+                                    // if (product) {
+                                    //     product.quantity = count
+                                    // } else {
+                                    //     cartItems.push({ _id: item._id, quantity: count })
+                                    // }
+                                    // localStorage.setItem("cartItems", JSON.stringify(cartItems))
+                                    // handler(e);
+                                    dispatch(addItem(item));
+                                    const newQuantity = (prodcutone?.count || 0) + 1;
+                                    dispatch(
+                                        updateProductQuantity({ productId: item._id, count: newQuantity })
+                                    );
+                                    console.log(prodcutone?.count)
 
-                                setChangecolor(true)
-                                const map = new Map();
-    map.set('product_id', prodcutone?._id);
-    map.set('isClicked', true);
+                                    setChangecolor(true)
+                                    const map = new Map();
+                                    map.set('product_id', prodcutone?._id);
+                                    map.set('isClicked', true);
 
-    // Convert the map to a string using JSON serialization
-    const mapString = JSON.stringify(Array.from(map.entries()));
+                                    // Convert the map to a string using JSON serialization
+                                    const mapString = JSON.stringify(Array.from(map.entries()));
 
-    // Save the map string in the session storage
-    sessionStorage.setItem('mapData', mapString);
-                            }}>
-                                Add to cart
-                            </button>
+                                    // Save the map string in the session storage
+                                    sessionStorage.setItem('mapData', mapString);
+                                }}>
+                                    Add to cart
+                                </button>
                             )}
                             {prodcutone?.count >= 1 && (
-                            <div className="flex flex-raw ">
-                                <div>
-                                    <button
-                                        className="px-3 text-lg text-white bg-black"
-                                        onClick={decreaseClick}
-                                    >
-                                        -
-                                    </button>
+                                <div className="flex flex-raw ">
+                                    <div>
+                                        <button
+                                            className="px-3 text-lg text-white bg-black"
+                                            onClick={decreaseClick}
+                                        >
+                                            -
+                                        </button>
+                                    </div>
+                                    <div>
+                                        <p className="w-10 text-lg text-center bg-gray-300">{prodcutone?.count}</p>
+                                    </div>
+                                    <div>
+                                        <button
+                                            className="px-3 text-lg text-white bg-black "
+                                            onClick={increaseClick}
+                                        >
+                                            +
+                                        </button>
+                                    </div>
                                 </div>
-                                <div>
-                                    <p className="w-10 text-lg text-center bg-gray-300">{prodcutone?.count}</p>
-                                </div>
-                                <div>
-                                    <button
-                                        className="px-3 text-lg text-white bg-black "
-                                        onClick={increaseClick}
-                                    >
-                                        +
-                                    </button>
-                                </div>
-                            </div>
-                             )} 
+                            )}
                         </div>
                     </div>
                 </section>

@@ -117,7 +117,7 @@ function Draggable({pages, setShowModal, changecolor, item}: any) {
                                     width={item?.items[0]?.coordinates?.imageWidth * (windowInfo.height - (16 * 7)) / item?.items[0]?.coordinates?.imageHeight}
                                     handleSelection={({itemId, itemName}) => {
                                         const selectedProduct = item.items.find((it: { _id: string; }) => it._id === itemId)
-                                        setShowModal({show: true, item: selectedProduct})
+                                        setShowModal({show: true, item: selectedProduct._id})
                                     }}
                                     imageHeight={item?.items[0]?.coordinates?.imageHeight}
                                     imageWidth={item?.items[0]?.coordinates?.imageWidth}

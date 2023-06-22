@@ -10,6 +10,7 @@ import nextArrow from '../../../../../public/arrow-next.svg'
 import prevArrow from '../../../../../public/arrow-prev.svg'
 import Draggable from "../Draggable/Draggable"
 import AddToCartModal from "../../features/cart/AddCartModal"
+import ProductPopup from "../../features/product/ProductPopup"
 
 
 interface Props {
@@ -106,7 +107,7 @@ const CatalogCarousel: React.FC<Props> = ({ catalog, params }) => {
         setCart(false);
     };
 
-    console.log("qqq",pages)
+    console.log("qqq",showModal)
     return (
         <div className="catalog-page">
             <div className="catalog-header">
@@ -178,8 +179,8 @@ const CatalogCarousel: React.FC<Props> = ({ catalog, params }) => {
             </Slider>*/}
                 <Draggable pages={pages} setShowModal={setShowModal} changecolor={changecolor} />
 
-                {showModal.show && showModal.item && <AddToCartModal item={showModal.item} setChangecolor={setChangecolor}
-                    handler={() => setShowModal(prevState => ({
+                {showModal.show && showModal.item && <ProductPopup proId={showModal.item} setChangecolor={setChangecolor}
+                    setProductPopup={() => setShowModal(prevState => ({
                         ...prevState,
                         show: false
                     }))} />}
