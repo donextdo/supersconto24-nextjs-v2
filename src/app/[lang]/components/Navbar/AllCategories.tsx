@@ -31,7 +31,7 @@ const AllCategories = () => {
   };
   const router = useRouter();
   const pathname = usePathname();
-
+  // http://localhost:3000/v1/api/users/google/callback
   useEffect(() => {
     const fetchData = async () => {
       const response = await axios.get(`${baseUrl}/category/categories`);

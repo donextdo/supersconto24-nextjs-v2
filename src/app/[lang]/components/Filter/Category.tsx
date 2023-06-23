@@ -1,14 +1,17 @@
 "use client";
 import axios from "axios";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import baseUrl from "../../../../../utils/baseUrl";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 const Category = ({ categoryId }: any) => {
   const [subCategory, setSubCategory] = useState([]);
   const [isEmpty, setIsEmpty] = useState(false);
   const [checkedCategory, setCheckedCategory] = useState({});
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams()!;
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -23,10 +26,29 @@ const Category = ({ categoryId }: any) => {
     fetchData();
   }, [categoryId]);
 
+  const catId = searchParams.get("categoryId");
+  const minP: number | null = Number(searchParams.get("min_price"));
+  const maxP: number | null = Number(searchParams.get("max_price"));
+
+  const createQueryString = useCallback(
+    (name: string, value: string | number) => {
+      const params = new URLSearchParams();
+      params.set(name, String(value));
+      return params.toString();
+    },
+    [searchParams]
+  );
+
   const handleCtegoryClick = (categoryId: any, name: any) => {
     let updatedCheckedCategory = {};
 
     if (checkedCategory === categoryId) {
+      router.push(
+        `/filterProduct?categoryId=${catId}&subCategories=${undefined}&${createQueryString(
+          "min_price",
+          minP
+        )}&${createQueryString("max_price", maxP)}`
+      );
       // if the clicked category is already checked, uncheck it
       // router.push({
       //   pathname: router.pathname,
@@ -34,6 +56,12 @@ const Category = ({ categoryId }: any) => {
       // });
     } else {
       updatedCheckedCategory = categoryId;
+      router.push(
+        `/filterProduct?categoryId=${catId}&subCategories=${categoryId}&${createQueryString(
+          "min_price",
+          minP
+        )}&${createQueryString("max_price", maxP)}`
+      );
       // if the clicked category is not checked, check it
       // router.push({
       //   pathname: router.pathname,

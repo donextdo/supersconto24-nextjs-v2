@@ -26,10 +26,10 @@ export const Location = () => {
         const lat = Number(searchParams.get("lat"))
         const long = Number(searchParams.get("long"))
         const delayDebounceFn = setInterval(() => {
-            // if (!isNaN(lat) && !isNaN(long) && google) {
-            //     getAddressFromCoordinates(lat, long);
-            //     clearInterval(delayDebounceFn)
-            // }
+            if (!isNaN(lat) && !isNaN(long) && google) {
+                getAddressFromCoordinates(lat, long);
+                clearInterval(delayDebounceFn)
+            }
         }, 500)
 
         return () => clearInterval(delayDebounceFn)
@@ -40,24 +40,24 @@ export const Location = () => {
     useEffect(() => {
         const delayDebounceFn = setTimeout(() => {
             // Create a new AutocompleteService instance
-            // const autocompleteService = new google.maps.places.AutocompleteService();
+            const autocompleteService = new google.maps.places.AutocompleteService();
 
-            // // Call the getPlacePredictions method
-            // autocompleteService.getPlacePredictions(
-            //     {
-            //         input: searchTerm,
-            //     },
-            //     (predictions: google.maps.places.AutocompletePrediction[], status: google.maps.places.PlacesServiceStatus) => {
-            //         if (status === google.maps.places.PlacesServiceStatus.OK) {
-            //             // Process the predictions as needed
-            //             setResult(predictions);
-            //             console.log(predictions);
-            //         } else {
-            //             // Handle the API response error
-            //             console.error('Autocomplete API error:', status);
-            //         }
-            //     }
-            // );
+            // Call the getPlacePredictions method
+            autocompleteService.getPlacePredictions(
+                {
+                    input: searchTerm,
+                },
+                (predictions: google.maps.places.AutocompletePrediction[], status: google.maps.places.PlacesServiceStatus) => {
+                    if (status === google.maps.places.PlacesServiceStatus.OK) {
+                        // Process the predictions as needed
+                        setResult(predictions);
+                        console.log(predictions);
+                    } else {
+                        // Handle the API response error
+                        console.error('Autocomplete API error:', status);
+                    }
+                }
+            );
         }, 500)
 
         return () => clearTimeout(delayDebounceFn)
@@ -73,56 +73,56 @@ export const Location = () => {
     )
 
     function handleSelectLocation(item: any) {
-        // console.log(item)
-        // const placeService = new google.maps.places.PlacesService(
-        //     document.createElement("div")
-        // );
-        // console.log("placeService: ", placeService);
+        console.log(item)
+        const placeService = new google.maps.places.PlacesService(
+            document.createElement("div")
+        );
+        console.log("placeService: ", placeService);
 
-        // placeService.getDetails(
-        //     {placeId: item.place_id},
-        //     (
-        //         placeResult: google.maps.places.PlaceResult | null,
-        //         placeStatus: google.maps.places.PlacesServiceStatus
-        //     ) => {
-        //         console.log("placeResult: ", placeResult);
+        placeService.getDetails(
+            {placeId: item.place_id},
+            (
+                placeResult: google.maps.places.PlaceResult | null,
+                placeStatus: google.maps.places.PlacesServiceStatus
+            ) => {
+                console.log("placeResult: ", placeResult);
 
-        //         if (
-        //             placeStatus === google.maps.places.PlacesServiceStatus.OK &&
-        //             placeResult
-        //         ) {
-        //             const lat = placeResult.geometry?.location?.lat();
-        //             const lng = placeResult.geometry?.location?.lng();
-        //             const formattedAddress = placeResult.formatted_address;
-        //             setSelectedLocation(formattedAddress)
+                if (
+                    placeStatus === google.maps.places.PlacesServiceStatus.OK &&
+                    placeResult
+                ) {
+                    const lat = placeResult.geometry?.location?.lat();
+                    const lng = placeResult.geometry?.location?.lng();
+                    const formattedAddress = placeResult.formatted_address;
+                    setSelectedLocation(formattedAddress)
 
-        //             console.log("Formatted Address: ", {formattedAddress, lat, lng});
-        //             router.push(`/?${createQueryString("lat", lat)}&${createQueryString("long", lng)}`, {shallow: false})
-        //             setShowModal(false)
+                    console.log("Formatted Address: ", {formattedAddress, lat, lng});
+                    router.push(`/?${createQueryString("lat", lat)}&${createQueryString("long", lng)}`, {shallow: false})
+                    setShowModal(false)
 
-        //         }
-        //     }
-        // );
+                }
+            }
+        );
     }
 
     function getAddressFromCoordinates(lat: number, lng: number): void {
-        // console.log("getAddressFromCoordinates", {lat, lng})
-        // const geocoder = new google.maps.Geocoder();
-        // const latLng = new google.maps.LatLng(lat, lng);
+        console.log("getAddressFromCoordinates", {lat, lng})
+        const geocoder = new google.maps.Geocoder();
+        const latLng = new google.maps.LatLng(lat, lng);
 
-        // geocoder.geocode({location: latLng}, (results: any, status: any) => {
-        //     if (
-        //         status === google.maps.GeocoderStatus.OK &&
-        //         results &&
-        //         results.length > 0
-        //     ) {
-        //         const formattedAddress = results[0].formatted_address;
-        //         console.log("Formatted Address: ", formattedAddress, results);
+        geocoder.geocode({location: latLng}, (results: any, status: any) => {
+            if (
+                status === google.maps.GeocoderStatus.OK &&
+                results &&
+                results.length > 0
+            ) {
+                const formattedAddress = results[0].formatted_address;
+                console.log("Formatted Address: ", formattedAddress, results);
 
-        //         // Use the formatted address as needed
-        //         setSelectedLocation(formattedAddress);
-        //     }
-        // });
+                // Use the formatted address as needed
+                setSelectedLocation(formattedAddress);
+            }
+        });
     }
 
     function getMyLocation() {
