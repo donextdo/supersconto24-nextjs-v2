@@ -24,7 +24,7 @@ const LoginCard = () => {
                 />
               </div>
         </div>
-        <h1 className="font-semibold mb-4 mt-4 text-center text-[#636466]">
+        <h1 className="font-semibold mb-4 mt-4 text-center text-[#636466] text-[13px]">
         Discover the Best Deals Around You: Your One-Stop Marketplace for Local Discounts and Promotions!
         </h1>
         <div className="flex mt-8">
@@ -43,7 +43,7 @@ const LoginCard = () => {
             </p>
 
             <div className="mb-4">
-              <button className="flex items-center w-[302px] border border-gray-300 text-black   font-semibold h-[45px] pl-[10px]  rounded-md">
+              <button className="flex items-center w-[302px] border border-gray-300 text-black   h-[45px] pl-[10px]  rounded-md">
                 {/* <FaGoogle className="mr-2" /> */}
                 <img
                   width="25"
@@ -55,7 +55,7 @@ const LoginCard = () => {
               </button>
             </div>
             <div className="mb-4">
-              <button className="flex items-center w-[302px] border border-gray-300 text-black   font-semibold h-[45px] pl-[10px] rounded-md">
+              <button className="flex items-center w-[302px] border border-gray-300 text-black h-[45px] pl-[10px] rounded-md">
                 {/* <FaFacebook className="mr-2" /> */}
                 <img
                   width="25"
@@ -107,7 +107,7 @@ const LoginCard = () => {
         </div>
 
         {/* footer */}
-        <div className="mt-8 h-[51px]">
+        <div className="mt-8 h-[51px] bg-[#f1f2f2]">
           <hr className="border-gray-300 w-full " />
 
           <p className="text-gray-500 mt-[10px] text-center text-[13px]">
