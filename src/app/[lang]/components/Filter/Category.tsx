@@ -1,8 +1,8 @@
 "use client";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import baseUrl from "../../../../../utils/baseUrl";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 const Category = ({ categoryId }: any) => {
   const [subCategory, setSubCategory] = useState([]);
@@ -25,6 +25,9 @@ const Category = ({ categoryId }: any) => {
 
   const handleCtegoryClick = (categoryId: any, name: any) => {
     let updatedCheckedCategory = {};
+
+    const router = useRouter();
+    const pathname = usePathname();
 
     if (checkedCategory === categoryId) {
       // if the clicked category is already checked, uncheck it
