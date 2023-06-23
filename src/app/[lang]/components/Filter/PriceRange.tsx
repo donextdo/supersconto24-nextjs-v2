@@ -1,13 +1,17 @@
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import Brand from "./Brand";
 import Category from "./Category";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-const PriceRange = () => {
+const PriceRange = ({ categoryId }: any) => {
   const [minValue, setMinValue] = useState(0);
   const [maxValue, setMaxValue] = useState(50000);
   const [maxPriceValue, setMaxPriceValue] = useState(0);
   const progressRef = useRef<HTMLDivElement>(null);
+
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams()!;
 
   // useEffect(() => {
   //   if (categoryId) {
@@ -36,18 +40,18 @@ const PriceRange = () => {
   //   }
   // }, []);
 
-  const router = useRouter();
+  useEffect(() => {
+    const min_price = searchParams.get("min_price");
+    const max_price = searchParams.get("max_price");
+    const minPrice = Number(min_price);
+    const maxPrice = Number(max_price);
 
-  // useEffect(() => {
-  //   const { query } = router;
-  //   const minPrice = Number(query.min_price);
-  //   const maxPrice = Number(query.max_price);
+    if (!isNaN(minPrice) && !isNaN(maxPrice)) {
+      setMinValue(minPrice);
+      setMaxValue(maxPrice);
+    }
+  }, [router]);
 
-  //   if (!isNaN(minPrice) && !isNaN(maxPrice)) {
-  //     setMinValue(minPrice);
-  //     setMaxValue(maxPrice);
-  //   }
-  // }, [router.query]);
   const handleMin = (e: ChangeEvent<HTMLInputElement>) => {
     e.persist();
     e.preventDefault();
@@ -57,12 +61,12 @@ const PriceRange = () => {
         // Ignore invalid input
       } else {
         setMinValue(newMinValue);
-        //   updatePriceQuery(newMinValue, maxValue);
+        updatePriceQuery(newMinValue, maxValue);
       }
     } else {
       if (newMinValue < minValue) {
         setMinValue(newMinValue);
-        //   updatePriceQuery(newMinValue, maxValue);
+        updatePriceQuery(newMinValue, maxValue);
       }
     }
   };
@@ -76,12 +80,12 @@ const PriceRange = () => {
         // Ignore invalid input
       } else {
         setMaxValue(newMaxValue);
-        //   updatePriceQuery(minValue, newMaxValue);
+        updatePriceQuery(minValue, newMaxValue);
       }
     } else {
       if (newMaxValue > maxValue) {
         setMaxValue(newMaxValue);
-        //   updatePriceQuery(minValue, newMaxValue);
+        updatePriceQuery(minValue, newMaxValue);
       }
     }
   };
@@ -93,31 +97,67 @@ const PriceRange = () => {
     }
   }, [minValue, maxValue]);
 
-  // const updatePriceQuery = (min: number, max: number) => {
-  //   router.push(
-  //     {
-  //       pathname: router.pathname,
-  //       query: {
-  //         ...router.query,
-  //         min_price: min,
-  //         max_price: max,
-  //       },
-  //     },
-  //     undefined,
-  //     { scroll: false }
-  //   );
-  // };
+  const updatePriceQuery = (min: number, max: number) => {
+    const url = searchParams.get("categoryId");
 
-  // const setPriceQuery = () => {
-  //   router.push({
-  //     pathname: router.pathname,
-  //     query: {
-  //       ...router.query,
-  //       min_price: minValue,
-  //       max_price: maxValue,
-  //     },
-  //   });
-  // };
+    const query = {
+      min_price: minValue,
+      max_price: maxValue,
+    };
+    router.push(
+      `/filterProduct?categoryId=${url}&${createQueryString(
+        "min_price",
+        query.min_price
+      )}&${createQueryString("max_price", query.max_price)}`
+    );
+    // router.push(
+    //   {
+    //     pathname: router.pathname,
+    //     query: {
+    //       ...router.query,
+    //       min_price: min,
+    //       max_price: max,
+    //     },
+    //   },
+    //   undefined,
+    //   { scroll: false }
+    // );
+  };
+
+  const createQueryString = useCallback(
+    (name: string, value: string | number) => {
+      const params = new URLSearchParams();
+      params.set(name, String(value));
+      return params.toString();
+    },
+    [searchParams]
+  );
+
+  const setPriceQuery = () => {
+    console.log("pathname : ", pathname);
+
+    const url = searchParams.get("categoryId");
+
+    const query = {
+      min_price: minValue,
+      max_price: maxValue,
+    };
+    router.push(
+      `/filterProduct?categoryId=${url}&${createQueryString(
+        "min_price",
+        query.min_price
+      )}&${createQueryString("max_price", query.max_price)}`
+    );
+
+    // router.push({
+    //   pathname: router.pathname,
+    //   query: {
+    //     ...router.query,
+    //     min_price: minValue,
+    //     max_price: maxValue,
+    //   },
+    // });
+  };
 
   return (
     <div className="box-border max-h-[85px] max-w-[270px] lg:mt-12  ">
@@ -172,7 +212,7 @@ const PriceRange = () => {
             <button
               type="button"
               className="uppercase text-[.75rem] ml-3 font-semibold"
-              //onClick={setPriceQuery}
+              onClick={setPriceQuery}
             >
               filter
             </button>
