@@ -521,7 +521,7 @@ const ItemPages = ({ params }: IProps) => {
                                             alt="mainImage"
                                         />
                                     </div>
-                                    <div className="flex gap-2 justify-center">
+                                    {/* <div className="flex gap-2 justify-center">
                                         <button className="arrow left" onClick={prevSlide}>
                                             <MdArrowBackIos />
                                         </button>
@@ -559,7 +559,7 @@ const ItemPages = ({ params }: IProps) => {
                                         <MdArrowForwardIos />
 
                                         </button>
-                                    </div>
+                                    </div> */}
 
                                 </div>
                             </div>
@@ -625,7 +625,7 @@ const ItemPages = ({ params }: IProps) => {
                                             </button>
                                         </div>
                                     </div>
-                                    <div className="flex flex-row mt-10  ">
+                                    {/* <div className="flex flex-row mt-10  ">
                                         <div className="max-h-[33px] max-w-[135px] bg-white border border-gray-600 rounded-[2.0625rem] hover:cursor-pointer">
                                             <button
                                                 className="flex flex-row px-3 py-2"
@@ -638,14 +638,14 @@ const ItemPages = ({ params }: IProps) => {
                                             </button>
                                         </div>
                                         <div className="ml-4 flex flex-row items-center justify-center">
-                                            {/* <button type="button" className="flex flex-row ">
+                                            <button type="button" className="flex flex-row ">
                                             <TbArrowsDownUp className="h-[15px] w-[15px] text-gray-500"></TbArrowsDownUp>
                                             <span className="text-[11px] ml-2 tracking-[-0.05em] text-gray-500 font-semibold uppercase">
                                                 compare
                                             </span>
-                                        </button> */}
+                                        </button>
                                         </div>
-                                    </div>
+                                    </div> */}
                                     <div className="max-h-[66px] w-full mt-6">
                                         {data.type && (
                                             <div className="flex flex-row text-[.75rem] place-items-start mb-1">
@@ -726,7 +726,7 @@ const ItemPages = ({ params }: IProps) => {
                                             </div>
                                         )}
 
-                                        <div className="flex flex-row gap-1.5 max-w-[229px] mt-6">
+                                        <div className="flex flex-row gap-1.5 max-w-[229px] my-6">
                                             <div className="">
                                                 <a
                                                     href={facebookShareUrl}

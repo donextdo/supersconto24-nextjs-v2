@@ -305,7 +305,7 @@ let newprice=data.unit_price-discountprice
                                     />
                                 </div>
 
-                                <div className="flex items-center justify-center row min-h-[63px] max-w-[421.2px] md:min-h-[67px] md:max-w-[444.66px]">
+                                {/* <div className="flex items-center justify-center row min-h-[63px] max-w-[421.2px] md:min-h-[67px] md:max-w-[444.66px]">
                                     <div className="flex items-center justify-center min-w-[67px] min-h-[67px] lg:min-w-[67px] lg:min-h-[67px] md:min-w-[94.4px] md:min-h-[94.4px]  border border-gray-400 mr-2 hover:cursor-pointer"
                                         onClick={() => handleClick(data?.side)}
                                     >
@@ -334,7 +334,7 @@ let newprice=data.unit_price-discountprice
                                             alt="Man looking at item at a store"
                                         />
                                     </div>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                         <div className=" w-full ">
@@ -406,12 +406,12 @@ let newprice=data.unit_price-discountprice
                                 </div>
                                 <div className="flex flex-row mt-10  ">
                                     <div className="max-h-[33px] max-w-[135px] bg-white border border-gray-600 rounded-[2.0625rem] hover:cursor-pointer">
-                                        <button className="flex flex-row px-3 py-2" onClick={() => handleWishlist(data)}>
+                                        {/* <button className="flex flex-row px-3 py-2" onClick={() => handleWishlist(data)}>
                                             <FaHeart className="h-[15px] w-[15px] text-gray-500"></FaHeart>
                                             <span className="text-[10.5px] ml-2 tracking-[-0.05em] text-gray-500 font-semibold uppercase">
                                                 ADD TO WISHLIST
                                             </span>
-                                        </button>
+                                        </button> */}
                                     </div>
                                     <div className="ml-4 flex flex-row items-center justify-center">
                                         {/* <button type="button" className="flex flex-row ">

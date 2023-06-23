@@ -4,7 +4,8 @@ import { MdKeyboardArrowDown, MdOutlineStorage } from "react-icons/md";
 import baseUrl from "../../../../../utils/baseUrl";
 import axios from "axios";
 import { IoIosArrowForward } from "react-icons/io";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+
 interface Category {
   _id: string;
   name: string;
@@ -29,6 +30,7 @@ const AllCategories = () => {
     setHomeOpen(!homeOpen);
   };
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,10 +53,22 @@ const AllCategories = () => {
       setviewSubCategoryList(selectedCategory);
       setActiveArrow(true);
       console.log("sub : ", selectedCategory);
+    } else {
+      setActiveCategory(null);
+      setviewSubCategoryList([]);
+      setActiveArrow(false);
     }
+  };
+
+  const hasSubcategories = (categoryId: string) => {
+    const selectedCategory = viewSubCategory.find(
+      (category) => category.mainCategoryId === categoryId
+    );
+    return selectedCategory !== undefined;
   };
   const handleCategoryLeave = () => {
     setActiveCategory(null);
+    setIsHover(false);
   };
 
   const handleSubCategoryHover = (_id: any) => {
@@ -66,6 +80,16 @@ const AllCategories = () => {
     setHomeOpen(false);
     router.push(`/filterProduct?categoryId=${_id}`);
   };
+
+  useEffect(() => {
+    if (pathname === "/en") {
+      setHomeOpen(true);
+      handleCategoryLeave();
+    } else {
+      setHomeOpen(false);
+      handleCategoryLeave();
+    }
+  }, [pathname]);
 
   return (
     <div className="">
@@ -90,7 +114,7 @@ const AllCategories = () => {
         </div>
       </button>
       {homeOpen && (
-        <div className="text-[13px] w-64 py-2 min-w-[17rem] min-h-[32rem]  bg-white mt-3 border border-gray m-auto absolute p-3 z-30">
+        <div className="text-[13px] w-64 py-2 min-w-[17rem] min-h-[32rem]  bg-white mt-2.5 border border-gray m-auto absolute p-3 z-30">
           <ul className="relative">
             {viewCategory.map((category, index) => {
               return (
@@ -108,35 +132,36 @@ const AllCategories = () => {
                   >
                     <div className=" flex flex-row items-center justify-between">
                       <div>{category?.name} </div>
-                      {activeCategory === category._id && (
-                        <IoIosArrowForward className="text-gray-500 group-hover:text-[#4BB62E]" />
+                      {hasSubcategories(category?._id) && (
+                        <IoIosArrowForward className="text-gray-500" />
                       )}
                     </div>
                   </a>
-                  {activeCategory === category._id && (
-                    <ul
-                      className="text-[13px] py-2  p-3  bg-white border border-gray absolute ml-[258px] top-[-0.52rem] z-30 min-w-[17rem] min-h-[32.5rem]"
-                      onMouseEnter={() => setIsHover(true)}
-                      onMouseLeave={handleCategoryLeave}
-                    >
-                      {viewSubCategoryList.map((subcategory, subIndex) => (
-                        <li key={subIndex}>
-                          <a
-                            href="#"
-                            className="block px-2 py-2 pt-5 text-gray-500 hover:text-[#4BB62E]"
-                            onClick={() =>
-                              getProductByCategory(subcategory._id)
-                            }
-                            onMouseEnter={() =>
-                              handleSubCategoryHover(subcategory?._id)
-                            }
-                          >
-                            {subcategory.name}
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
+                  {activeCategory === category._id &&
+                    viewSubCategoryList.length > 0 && (
+                      <ul
+                        className="text-[13px] py-2  p-3  bg-white border border-gray absolute ml-[258px] top-[-0.52rem] z-30 min-w-[17rem] min-h-[32.5rem]"
+                        onMouseEnter={() => setIsHover(true)}
+                        onMouseLeave={handleCategoryLeave}
+                      >
+                        {viewSubCategoryList.map((subcategory, subIndex) => (
+                          <li key={subIndex}>
+                            <a
+                              href="#"
+                              className="block px-2 py-2 pt-5 text-gray-500 hover:text-[#4BB62E]"
+                              onClick={() =>
+                                getProductByCategory(subcategory._id)
+                              }
+                              onMouseEnter={() =>
+                                handleSubCategoryHover(subcategory?._id)
+                              }
+                            >
+                              {subcategory.name}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                 </li>
               );
             })}
@@ -145,14 +170,14 @@ const AllCategories = () => {
           <hr className="my-2" />
 
           <div className="py-2 px-2">
-              <p className="hover:text-[#4BB62E] ">Value Of the Day</p>
-            </div>
-            <div className="py-2 px-2">
-              <p className="hover:text-[#4BB62E]">Top 100 Offers</p>
-            </div>
-            <div className="py-2 px-2">
-              <p className="hover:text-[#4BB62E]">New Arrivals</p>
-            </div>
+            <p className="hover:text-[#4BB62E] ">Value Of the Day</p>
+          </div>
+          <div className="py-2 px-2">
+            <p className="hover:text-[#4BB62E]">Top 100 Offers</p>
+          </div>
+          <div className="py-2 px-2">
+            <p className="hover:text-[#4BB62E]">New Arrivals</p>
+          </div>
         </div>
       )}
     </div>

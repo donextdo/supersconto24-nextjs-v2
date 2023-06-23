@@ -5,14 +5,15 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 import baseUrl from "../../../../../utils/baseUrl";
+import axios from "axios";
 // import axios from "axios";
-// import socketIOClient from "socket.io-client";
+import socketIOClient from "socket.io-client";
 
 interface Item {
   _id: string;
-  title: string;
-  price: number;
-  front: string;
+  product_name: string;
+  unit_price: number;
+  product_image: string;
   discount: number;
 }
 
@@ -30,12 +31,15 @@ export const SearchItem = () => {
         return;
       }
 
-      // const response = await axios.post(`${baseUrl}/products/searchBySocket`, {
-      //   query,
-      // });
-      // const Products = response.data;
+      const response = await axios.post(
+        `${baseUrl}/catelog/item/searchBySocket`,
+        {
+          query,
+        }
+      );
+      const Products = response.data;
 
-      // setResults(Products);
+      setResults(Products);
     };
 
     const timeoutId = setTimeout(() => {
@@ -89,8 +93,8 @@ export const SearchItem = () => {
                     <Image
                       width={40}
                       height={40}
-                      src={item.front}
-                      alt={item.title}
+                      src={item.product_image}
+                      alt={item.product_name}
                     />
                   </li>
 
@@ -98,18 +102,19 @@ export const SearchItem = () => {
                     className="cursor-pointer text-start ml-2 flex-1 hover:underline text-sm font-medium"
                     onClick={() => sendView(item?._id)}
                   >
-                    {item.title}
+                    {item.product_name}
                   </li>
                 </div>
                 <div className="flex flex-col">
                   <li className="cursor-pointer text-end text-sm text-gray-400 font-semibold line-through mr-2 text-[14px] font-ff-headings">
-                    RS {item.price}
+                    RS {item.unit_price}
                   </li>
                   <li className="cursor-pointer text-end text-red-600 text-sm font-semibold mr-2 font-ff-headings">
                     Rs
-                    {(item.price - item.price * (item.discount / 100)).toFixed(
-                      2
-                    )}
+                    {(
+                      item.unit_price -
+                      item.unit_price * (item.discount / 100)
+                    ).toFixed(2)}
                   </li>
                 </div>
               </div>
