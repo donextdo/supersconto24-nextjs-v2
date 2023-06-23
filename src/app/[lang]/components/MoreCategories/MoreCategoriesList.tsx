@@ -16,40 +16,40 @@ const MoreCategoriesList = () => {
     const categories = [
         {
             image: cat1,
-            name: "LIDL",
+            name: "Electronic",
         },
         {
             image: cat2,
-            name: "euronics",
+            name: "Home Care",
         },
         {
             image: cat3,
-            name: "LIDL",
+            name: "Health and Beauty",
         },
         {
             image: cat4,
-            name: "euronics",
+            name: "Clothing",
         }, {
             image: cat5,
-            name: "LIDL",
+            name: "Toys",
         },
         {
             image: cat6,
-            name: "euronics",
+            name: "Sport",
         }, {
             image: cat7,
-            name: "LIDL",
+            name: "Automobile",
         },
         {
             image: cat8,
-            name: "euronics",
+            name: "",
         }, {
             image: cat9,
-            name: "LIDL",
+            name: "Diy & Garderning",
         },
         {
             image: cat10,
-            name: "euronics",
+            name: "Childhood",
         },
     ]
 

@@ -13,7 +13,7 @@ type Props = {
 const Layout: React.FC<Props> = ({ children }) => {
   return (
     <div className="">
-      <LocaleSwitcher />
+      {/* <LocaleSwitcher /> */}
       <Message />
       <TopHeader />
       <Header />

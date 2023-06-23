@@ -618,7 +618,7 @@ const ItemPages = ({ params }: IProps) => {
                                             </div>
                                             <button
                                                 type="button"
-                                                className=" bg-blue-900 text-white min-h-[34px] min-w-[140px] rounded-full text-[13px]  ml-4"
+                                                className=" bg-primary text-white min-h-[34px] min-w-[140px] rounded-full text-[13px]  ml-4"
                                                 onClick={() => handleaddToCart(data)}
                                             >
                                                 Add to cart

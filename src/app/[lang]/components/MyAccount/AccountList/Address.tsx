@@ -155,7 +155,7 @@ const Address = () => {
                             <h2 className="font-semibold mb-2">BILLING ADDRESS</h2>
                             <hr />
                             {/* <Link href="/bill"><h2 className="text-[#2bbef9] mt-4">Add</h2></Link>  */}
-                            <button className="text-[#2bbef9] mt-4" onClick={handleClick}>Add</button>
+                            <button className="text-green-400 mt-4" onClick={handleClick}>Add</button>
 
                             <h2>You have not set up this type of address yet.</h2>
 
@@ -183,7 +183,7 @@ const Address = () => {
                             <h2 className="font-semibold mb-2">SHIPPING ADDRESS</h2>
                             <hr />
                             {/* <h2 className="text-[#2bbef9] mt-4">Add</h2> */}
-                            <button className="text-[#2bbef9] mt-4" onClick={handleClick1}>Add</button>
+                            <button className="text-green-400 mt-4" onClick={handleClick1}>Add</button>
 
                             <h2>You have not set up this type of address yet.</h2>
 

@@ -257,7 +257,7 @@ for (let i = 1; i <= (5-product.review); i++) {
         {(product.count == undefined || product.count < 1) && (
           <button
             type="button"
-            className=" bg-blue-900 text-white h-8  rounded-full w-full "
+            className=" bg-primary text-white h-8  rounded-full w-full "
             onClick={() => handleaddToCart(product)}
           >
             Add to cart

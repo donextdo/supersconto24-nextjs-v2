@@ -216,7 +216,7 @@ const Orders = () => {
               <p className="leading-loose">
                 <Link
                   href="/shop"
-                  className="bg-[#233a95] text-white p-2 rounded-md"
+                  className="bg-primary text-white p-2 rounded-md"
                 >
                   Browse Products
                 </Link>{" "}

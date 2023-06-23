@@ -14,7 +14,7 @@ const MainFlyerCard = ({ flyer }: any) => {
                 <Image
                     src={flyer.pages[0].page_image}
                     alt="item1"
-                    className="object-cover w-full h-full rounded-md"
+                    className="object-contain w-full h-full rounded-md bg-[#efefef]"
                     width={450}
                     height={400}
                 />
