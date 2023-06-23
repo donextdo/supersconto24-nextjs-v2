@@ -21,7 +21,7 @@ const LoginCard = () => {
 
           <div className="w-1/2 px-6 border-r">  
             <p className="text-left mb-8">
-              By continuing you agree to Quora's{" "}
+              By continuing you agree to Quora&apos;s{" "}
               <a href="#" className="text-blue-500 underline">
                 Terms of Service
               </a>{" "}
