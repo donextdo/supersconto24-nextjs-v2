@@ -34,7 +34,7 @@ export default function LocaleSwitcher({handleLanguageSelect}:any) {
     // };
     return (
 
-        <div className='absolute w-[100px] max-h-[540px] bg-white right-0 z-50 top-4 px-5 py-4 shadow-lg'>
+        <div className='absolute w-[100px] max-h-[540px] bg-white right-0 z-50 top-4 px-5 py-4 shadow-lg flex flex-col items-center justify-center space-y-2 rounded-b-lg'>
             {/* <p className="text-lg font-bold">Locale switcher:</p> */}
 
             <ul className="">

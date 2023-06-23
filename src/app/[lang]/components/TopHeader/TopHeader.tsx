@@ -7,7 +7,7 @@ import Currency from "../Currency/Currency";
 const TopHeader = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [isOpenCurrency, setIsOpenCurrency] = useState(false);
-    const [selectedLanguage, setSelectedLanguage] = useState('');
+    const [selectedLanguage, setSelectedLanguage] = useState('English');
     const contactNumber = process.env.NEXT_PUBLIC_CONTACT_NUMBER;
     const message = process.env.NEXT_PUBLIC_MESSAGE;
 
@@ -66,7 +66,7 @@ const TopHeader = () => {
                                 className=" text-xs"
                             // onClick={handleClick}
                             >
-                                {selectedLanguage ? selectedLanguage : 'Select Language'}
+                                {selectedLanguage}
                             </button>
 
                             {isOpen && <LocaleSwitcher handleLanguageSelect={handleLanguageSelect}/>}
@@ -81,7 +81,7 @@ const TopHeader = () => {
                                 className=" text-xs"
                             // onClick={handleClick}
                             >
-                                Select Currency
+                                USD
                                 {/* {selectedLanguage ? selectedLanguage : 'Select Currency'} */}
                             </button>
 
