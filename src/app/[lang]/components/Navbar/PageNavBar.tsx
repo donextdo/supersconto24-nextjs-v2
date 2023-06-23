@@ -134,13 +134,13 @@ const PageNavBar = () => {
           </button>
         </li>
         {/* Blog */}
-        <li className="font-semibold font-ff-headings">
+        {/* <li className="font-semibold font-ff-headings">
           <button className="lg:py-2 lg:px-4 lg:ml-4  hover:rounded-full  hover:bg-[#F0FAFF]">
             <Link href="#" className="text-gray-700 hover:text-[#4BB62E]">
               BLOG
             </Link>
           </button>
-        </li>
+        </li> */}
 
         {/* Contact */}
         <li className="font-semibold font-ff-headings">

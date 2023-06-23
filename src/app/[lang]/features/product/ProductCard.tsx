@@ -12,6 +12,7 @@ import { Product } from "./product";
 import Link from "next/link";
 // import ProductPopup from "./ProductPopup";
 import axios from "axios";
+import ProductPopup from "./ProductPopup";
 // import baseUrl from "../../../utils/baseUrl";
 // import { http } from "../../../utils/request";
 
@@ -25,6 +26,9 @@ export const ProductCard: FC<Props> = ({ product }) => {
   const [wishlist, setWishlist] = useState([]);
   const dispatch = useDispatch();
   const cartItems = useSelector((state: RootState) => state.cart.items);
+  const [proId, setProId] = useState("");
+
+
   let id:any;
 
 if (typeof localStorage !== "undefined") {
@@ -144,12 +148,10 @@ const handleWishlist = async (product: any) => {
 
 
 
-  let proId
-  const handlepopup = (product:any) => {
-    setProductPopup(true)
-    proId=product._id
-    console.log(proId)
-  }
+const handlepopup = (product: any) => {
+  setProductPopup(true);
+  setProId(product);
+};
 
   let yellowstars = [];
   let graystars=[];
@@ -162,6 +164,7 @@ for (let i = 1; i <= (5-product.review); i++) {
 }
 
   return (
+    <>
     <div
       className="w-full min-h-[350px] mx-auto bg-white border border-gray-200  overflow-hidden relative group hover:drop-shadow-lg rounded-sm"
       key={product._id}
@@ -187,7 +190,7 @@ for (let i = 1; i <= (5-product.review); i++) {
         )}
       </div>
       <div className="max-w-[40px] max-h-[85px] ">
-        <button className="absolute max-w-[24px] max-h-[24px] top-2 right-2 bg-white flex items-center justify-center rounded-full h-8 w-8 hover:cursor-pointer drop-shadow-lg md:invisible group-hover:visible md:group-hover:-translate-x-3 md:group-hover:ease-in transition duration-150 hover:bg-blue-900 group/icon2" onClick={() => handlepopup(product)}>
+        <button className="absolute max-w-[24px] max-h-[24px] top-2 right-2 bg-white flex items-center justify-center rounded-full h-8 w-8 hover:cursor-pointer drop-shadow-lg md:invisible group-hover:visible md:group-hover:-translate-x-3 md:group-hover:ease-in transition duration-150 hover:bg-blue-900 group/icon2" onClick={() => handlepopup(product._id)}>
           <SlSizeFullscreen className="h-[10px] w-[10px] fill-blue-900 group-hover/icon2:fill-white" />
         </button>
 
@@ -284,6 +287,11 @@ for (let i = 1; i <= (5-product.review); i++) {
         )}
       </div>
     </div>
+    {productPopup && (
+        <ProductPopup setProductPopup={setProductPopup} proId={proId} />
+      )}
+    
+    </>
   );
 };
-//max-w-md
+

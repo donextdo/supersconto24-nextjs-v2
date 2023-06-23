@@ -7,6 +7,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import baseUrl from "../../../../utils/baseUrl";
 import { AppDispatch, RootState } from "@/app/[lang]/redux/store";
 import CheckoutSidebar from "@/app/[lang]/components/Checkout/CheckoutSidebar";
+import { Locale } from "../../../../i18n-config";
 
 
 export interface OrderObj {
@@ -24,7 +25,7 @@ export interface OrderObj {
 }
 
 
-const Checkout = () => {
+const Checkout = async () => {   
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [companyName, setCompanyName] = useState('');
@@ -339,7 +340,7 @@ const handlePhoneChange = (e:any) => {
                 // const params = new URLSearchParams(searchParams);
                 // params.set('countryCode', newCode);
                 // const newParams = params.toString();
-                router.push(`/ordermessage?orderId=${response.data.orderId}`);
+                router.push(`/en/ordermessage?orderId=${response.data.orderId}`);
                
             }
         } catch (error) {
