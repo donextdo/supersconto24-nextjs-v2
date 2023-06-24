@@ -7,6 +7,7 @@ import { Provider } from "react-redux";
 import {i18n} from "../../../i18n-config";
 import React from "react";
 import Script from "next/script";
+import GoogleAuth from "@/app/[lang]/features/auth/GoogleAuth";
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -26,9 +27,14 @@ export default function RootLayout({
         src={`https://maps.googleapis.com/maps/api/js?key=AIzaSyALJN3bDbGEk8ppXieiWNnwHVYM_8ntKng&libraries=places`}
         onLoad={() => console.log("Google Maps API script loaded")}
     />
+    <Script
+        src="https://accounts.google.com/gsi/client" async defer
+        onLoad={() => console.log("Google Maps API script loaded")}
+    />
       <body className={inter.className}>
         <Provider store={store}>
           <Layout>
+            <GoogleAuth/>
             {children}
           </Layout>
         </Provider>

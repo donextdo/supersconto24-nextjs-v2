@@ -456,7 +456,7 @@ const Register: React.FC<Props> = () => {
           <div className="mx-2 mt-5 mb-10 ">
             <button
               type="submit"
-              className={`rounded-md w-full block bg-[#233a95] px-3.5 py-2.5 text-center text-sm font-semibold text-white ${
+              className={`rounded-md w-full block bg-primary px-3.5 py-2.5 text-center text-sm font-semibold text-white ${
                 isLoading ? "loading" : ""
               } ${isDisabled ? "opacity-60" : ""}`}
               onClick={handleClick}

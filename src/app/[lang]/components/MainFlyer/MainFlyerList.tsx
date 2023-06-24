@@ -11,6 +11,7 @@ import flyer5 from '../../../../../assets/flyers/flyer_5.jpg'
 import flyer6 from '../../../../../assets/flyers/flyer_6.jpg'
 import flyer7 from '../../../../../assets/flyers/flyer_7.jpg'
 import MainFlyerCard from "./MainFlyerCard";
+import Link from "next/link";
 
 
 type MainFlyerListType = {
@@ -23,6 +24,8 @@ type MainFlyerListType = {
 const MainFlyerList = (({dictionary, locale}: MainFlyerListType) => {
     const [coordinates, setCoordinates] = useState<any>()
     const [productList, setProductList] = useState<any>()
+    const [visible, setVisible] = useState(8)
+
     const searchParams = useSearchParams()!
     const router = useRouter()
     const makeRequest = axiosRequest();
@@ -82,19 +85,28 @@ const MainFlyerList = (({dictionary, locale}: MainFlyerListType) => {
 
     console.log("render", productList)
 
+    const showMoreItem = () => {
+        setVisible((prevValue)=>prevValue + 8)
+    }
+
     return (
         <div>
-            <div className='w-full h-[80vh] grid grid-cols-2 gap-x-4 gap-y-5
+            <div className='w-full h-[48vh] grid grid-cols-2 gap-x-4 gap-y-5
 overflow-y-scroll overflow-x-hidden scrollbar-w-2 sm:grid-cols-4
-xxl:grid-cols-4 '>
+xxl:grid-cols-4 pt-4'>
 
-                {productList?.map((flyer: any, index: number) => (
+                {productList?.slice(0,visible).map((flyer: any, index: number) => (
+                <Link href={`/catalog-preview/${flyer._id}`} key={index}>
                     <MainFlyerCard key={index} flyer={flyer}/>
+                    </Link>
                 ))}
             </div>
 
             <button
-                className="w-full  bg-primary py-2 px-6 text-base font-medium text-white rounded-md hover:bg-primary/80">
+                className="w-full  bg-[#F5F5F5] py-2 px-6 text-base font-medium text-[#898989] rounded-md hover:bg-[#E7E7E7]" onClick={()=>{
+                    router.push(`/ordermessage?orderId=6492f48e189f0b6f28326db8`);
+                    setVisible((prevValue)=>prevValue + 8)
+                }}>
                 {dictionary.loadMore}
             </button>
         </div>

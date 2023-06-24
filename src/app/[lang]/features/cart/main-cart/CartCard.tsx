@@ -8,11 +8,13 @@ import { FaPlus, FaMinus } from "react-icons/fa";
 import { GrFormClose } from "react-icons/gr";
 import { IoCloseSharp, IoClose } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
+import baseUrl from "../../../../../../utils/baseUrl";
 
 const CartCard = ({ item, index, totalAmount }: any) => {
     const dispatch = useDispatch()
     const cartItems = useSelector((state: RootState) => state.cart.items);
     let totalAmount1 = useSelector((state: RootState) => state.cart.totalAmount);
+
 
 
 
@@ -55,9 +57,14 @@ const CartCard = ({ item, index, totalAmount }: any) => {
     }
     let newprice = item.unit_price - discountprice
 
-    let subtotal = (item.count) * (newprice)
+    let subtotal = (item.cartQuantity) * (newprice)
+
+    const p1: Product | undefined = cartItems.find((c1) => c1._id === item._id);
+
+    console.log(p1)
 
     return (
+        
         <div className="grid grid-cols-4 sm:grid-cols-12 grid-2 gap-1 border-b border-[#71778e] py-3 h-28 items-center relative bg-white" key={index} >
             <div className="h-[95px] sm:col-span-2">
                 <Image
@@ -82,7 +89,7 @@ const CartCard = ({ item, index, totalAmount }: any) => {
                 <button className="p-2 bg-[#edeef5] rounded-full w-[30px] flex items-center" onClick={() => handleDecrement(item)}>
                     <FaMinus className="text-xs" />
                 </button>
-                <p className="text-sm flex items-center justify-center w-7 mx-1">{item.count
+                <p className="text-sm flex items-center justify-center w-7 mx-1">{p1?.count
                     || 0}</p>
                 <button className="p-2 bg-[#edeef5] rounded-full w-[30px] flex items-center" onClick={() => handleIncrement(item)}>
                     <FaPlus className="text-xs " />

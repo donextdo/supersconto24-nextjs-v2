@@ -25,7 +25,7 @@ export default function BottomFooter() {
         <div className="flex justify-between px-2">
           <div className="flex">
             <div>
-              <button className="p-5 border rounded-full md:ml-40 lg:ml-0">
+              <button className="p-3 border rounded-full md:ml-40 lg:ml-0">
                 <FiPhoneCall />
               </button>
             </div>
@@ -37,51 +37,55 @@ export default function BottomFooter() {
             </div>
           </div>
 
+          <div className="flex flex-row gap-2">
+            {/* <div className="ml-7 xl:ml-40 2xl:ml-96  sm:mx-10 xl:mx-0 lg:ml-16 md:ml-40">
 
-                {/* <div className="ml-7 xl:ml-40 2xl:ml-96  sm:mx-10 xl:mx-0 lg:ml-16 md:ml-40">
+              <p className="font-semibold text-[14px] xl:ml-7 md:ml-7 ">
+                Download App on Mobile :
+              </p>
+              <p className="text-gray-400 text-[12px]">
+                15% discount on your first purchase
+              </p>
+            </div> */}
 
-                  <p className="font-semibold text-[14px] xl:ml-7 md:ml-7 ">
-                    Download App on Mobile :
-                  </p>
-                  <p className="text-gray-400 text-[12px]">
-                    15% discount on your first purchase
-                  </p>
-                </div> */}
+            <div className="mt-3 lg:mt-0 xl:mt-0 md:mx-32 lg:mx-0 ">
+              <button>
+                <Image
+                  src={googleplay}
+                  alt="GooglePlay - Image"
+                  className="ml-5 lg:ml-0 xl:ml-5"
+                  width={116}
+                  height={38}
+                />
+              </button>
+              <button>
+                <Image
+                  src={applestore}
+                  alt="AppStore - Image"
+                  className="ml-2 xl:ml-2"
+                  width={116}
+                  height={38}
+                />
+              </button>
+            </div>
 
-                <div className="mt-3 lg:mt-0 xl:mt-0 md:mx-32 lg:mx-0 ">
-                  <button>
-                    <Image
-                      src={googleplay}
-                      alt="GooglePlay - Image"
-                      className="ml-5 lg:ml-0 xl:ml-5"
-                      width={116}
-                      height={38}
-                    />
-                  </button>
-                  <button>
-                    <Image
-                      src={applestore}
-                      alt="AppStore - Image"
-                      className="ml-2 xl:ml-2"
-                      width={116}
-                      height={38}
-                    />
-                  </button>
-                </div>
-
-          <div className="sm:mx-[25%]  lg:mx-0 xl:mx-0 my-0">
-            <Link href="https://www.facebook.com/buntalksl"><button className="border rounded-full p-2  mt-3 lg:mt-0 text-[#233a95]">
-              <GrFacebookOption />
-            </button></Link>
-            <button className="border rounded-full p-2  mx-2 text-[#233a95]">
-              <AiOutlineTwitter />
-            </button>
-            <button className="border rounded-full p-2    text-[#233a95]">
-              <AiOutlineInstagram />
-            </button>
+            <div className="sm:mx-[25%]  lg:mx-0 xl:mx-0 my-0">
+              <Link href="https://www.facebook.com"><button className="border rounded-full p-2  mt-3 lg:mt-0 text-[#233a95]">
+                <GrFacebookOption />
+              </button></Link>
+              <Link href="https://www.twitter.com">
+                <button className="border rounded-full p-2  mx-2 text-[#233a95]">
+                  <AiOutlineTwitter />
+                </button>
+              </Link>
+              <Link href="https://www.instagram.com">
+                <button className="border rounded-full p-2    text-[#233a95]">
+                  <AiOutlineInstagram />
+                </button>
+              </Link>
+            </div>
           </div>
         </div>
-
         <hr className="my-5 " />
 
         <div className="xl:flex justify-between">
@@ -90,7 +94,7 @@ export default function BottomFooter() {
 
               <p className="text-gray-400 text-[12px] pl-5 xl:mr-7">
 
-                Copyright © 2023 Buntalk. All Rights Reserved.
+                Copyright © 2023 SUPERSCONTO24. All Rights Reserved.
               </p>
             </div>
 

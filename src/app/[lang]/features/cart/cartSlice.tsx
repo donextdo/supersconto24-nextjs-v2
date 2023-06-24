@@ -44,6 +44,20 @@ export const cartSlice = createSlice({
 
       state.totalCount++;
     },
+    addItems: (state, action: PayloadAction<{ product: Product; count: number }>) => {
+      const { product, count } = action.payload;
+      const itemIndex = state.items.findIndex((item) => item._id === product._id);
+
+      if (itemIndex === -1) {
+        state.items.push({ ...product, count });
+      } else {
+        state.items[itemIndex].count += count;
+      }
+
+      state.totalCount += count;
+      localStorage.setItem("myItems", JSON.stringify(state.items));
+      localStorage.setItem("myTotalCount", state.totalCount.toString());
+    },
     removeItem: (state, action: PayloadAction<string>) => {
       const itemIndex = state.items.findIndex(
         (item) => item._id === action.payload
@@ -103,6 +117,7 @@ export const cartSlice = createSlice({
 
 export const {
   addItem,
+  addItems,
   removeItem,
   updateItemQuantity,
   removeAll,

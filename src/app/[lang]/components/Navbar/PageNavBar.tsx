@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 const PageNavBar = () => {
   const [homeOpen, setHomeOpen] = useState(false);
   const toggleHome = () => {
-    setHomeOpen(homeOpen);
+    setHomeOpen(!homeOpen);
   };
   const [shopOpen, setShopOpen] = useState(false);
 
@@ -19,57 +19,8 @@ const PageNavBar = () => {
   return (
     <div className="lg:flex lg:flex-row ">
       <ul className="lg:space-x-1 lg:flex gap gap-0">
-        {/* <li className="font-semibold rounded-full bg-[#F0FAFF] ">
-          <button onMouseEnter={toggleShop} className="lg:py-2 lg:px-4">
-            <div>
-              <Link
-                href="#"
-                className="text-[#4BB62E] flex text-[15px]  font-ff-headings"
-              >
-                HOME
-                <MdKeyboardArrowDown className="ml-2 text-xl" />
-              </Link>
-            </div>
-          </button>
-
-          {homeOpen && (
-            <div className="text-[13px] absolute w-40 py-2 mt-2 shadow-md font-medium bg-white rounded-lg ">
-              <Link
-                href="#"
-                className="block px-4 py-2 text-gray-800 hover:text-[#4BB62E] "
-              >
-                Home 1
-              </Link>
-              <Link
-                href="#"
-                className="block px-4 py-2 text-gray-800 hover:text-[#4BB62E] "
-              >
-                Home 2
-              </Link>
-              <Link
-                href="#"
-                className="block px-4 py-2 text-gray-800 hover:text-[#4BB62E] "
-              >
-                Home 3
-              </Link>
-              <Link
-                href="#"
-                className="block px-4 py-2 text-gray-800 hover:text-[#4BB62E] "
-              >
-                Home 4
-              </Link>
-              <Link
-                href="#"
-                className="block px-4 py-2 text-gray-800 hover:text-[#4BB62E]"
-              >
-                Home 5
-              </Link>
-            </div>
-          )}
-        </li> */}
-
-        {/* Shop */}
-        <li className="font-semibold hoverable hover:rounded-full  hover:bg-[#F0FAFF] ">
+         {/* Shop */}
+         <li className="font-semibold hoverable hover:rounded-full  hover:bg-[#F0FAFF] ">
           <button onMouseEnter={toggleShop} className="lg:py-2 lg:px-4">
             <div>
               <Link
@@ -82,8 +33,59 @@ const PageNavBar = () => {
             </div>
           </button>
         </li>
+
+        <li className="font-semibold rounded-full bg-[#F0FAFF] ">
+          <button onClick={toggleHome} className="lg:py-2 lg:px-4">
+            <div>
+              <Link
+                href="#"
+                className="text-[#4BB62E] flex text-[15px]  font-ff-headings"
+              >
+                Our Menu
+                <MdKeyboardArrowDown className="ml-2 text-xl" />
+              </Link>
+            </div>
+          </button>
+
+          {homeOpen && (
+            <div className="text-[13px] absolute w-40 py-2 mt-2 shadow-md font-medium bg-white rounded-lg ">
+              <Link
+                href="#"
+                className="block px-4 py-2 text-gray-800 hover:text-[#4BB62E] "
+              >
+                MEATS &amp; SEAFOOD
+              </Link>
+              <Link
+                href="#"
+                className="block px-4 py-2 text-gray-800 hover:text-[#4BB62E] "
+              >
+                BAKERY
+              </Link>
+              <Link
+                href="#"
+                className="block px-4 py-2 text-gray-800 hover:text-[#4BB62E] "
+              >
+                BEVERAGES
+              </Link>
+              <Link
+                href="#"
+                className="block px-4 py-2 text-gray-800 hover:text-[#4BB62E] "
+              >
+                Menu 4
+              </Link>
+              <Link
+                href="#"
+                className="block px-4 py-2 text-gray-800 hover:text-[#4BB62E]"
+              >
+                Menu 5
+              </Link>
+            </div>
+          )}
+        </li>
+
+       
         {/* Meats & SeaFood */}
-        <li className="font-semibold font-ff-headings hoverable hover:rounded-full  hover:bg-[#F0FAFF] ">
+        {/* <li className="font-semibold font-ff-headings hoverable hover:rounded-full  hover:bg-[#F0FAFF] ">
           <button
             // onMouseEnter={toggleShop}
             className="lg:py-2 lg:px-4 inline-flex items-center"
@@ -98,9 +100,9 @@ const PageNavBar = () => {
               MEATS &amp; SEAFOOD
             </Link>
           </button>
-        </li>
+        </li> */}
         {/* Bakery */}
-        <li className="font-semibold font-ff-headings hoverable hover:rounded-full  hover:bg-[#F0FAFF] ">
+        {/* <li className="font-semibold font-ff-headings hoverable hover:rounded-full  hover:bg-[#F0FAFF] ">
           <button
             // onMouseEnter={toggleShop}
             className="lg:py-2 lg:px-4 inline-flex items-center"
@@ -115,9 +117,9 @@ const PageNavBar = () => {
               BAKERY
             </Link>
           </button>
-        </li>
+        </li> */}
         {/* Beverages */}
-        <li className="font-semibold font-ff-headings hoverable hover:rounded-full  hover:bg-[#F0FAFF] ">
+        {/* <li className="font-semibold font-ff-headings hoverable hover:rounded-full  hover:bg-[#F0FAFF] ">
           <button
             // onMouseEnter={toggleShop}
             className="lg:py-2 lg:px-4 inline-flex items-center"
@@ -132,11 +134,11 @@ const PageNavBar = () => {
               BEVERAGES
             </Link>
           </button>
-        </li>
+        </li> */}
         {/* Blog */}
         <li className="font-semibold font-ff-headings">
           <button className="lg:py-2 lg:px-4 lg:ml-4  hover:rounded-full  hover:bg-[#F0FAFF]">
-            <Link href="#" className="text-gray-700 hover:text-[#4BB62E]">
+            <Link href="/blog" className="text-gray-700 hover:text-[#4BB62E]">
               BLOG
             </Link>
           </button>
