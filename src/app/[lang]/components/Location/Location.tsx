@@ -1,7 +1,11 @@
+"use client"
 import {ChangeEvent, useCallback, useEffect, useState} from "react";
 import {MdKeyboardArrowDown} from "react-icons/md";
 import {FiSearch} from "react-icons/fi";
 import {useRouter, useSearchParams} from "next/navigation";
+import PlacesServiceStatus = google.maps.places.PlacesServiceStatus;
+import AutocompletePrediction = google.maps.places.AutocompletePrediction;
+import PlaceResult = google.maps.places.PlaceResult;
 
 interface LocationType {
     dollar_min: any;
@@ -14,7 +18,7 @@ interface LocationType {
 export const Location = () => {
     const [showModal, setShowModal] = useState<boolean>(false);
     const [result, setResult] = useState<any>([])
-    const [selectedLocation, setSelectedLocation] = useState()
+    const [selectedLocation, setSelectedLocation] = useState("")
     const [searchTerm, setSearchTerm] = useState("")
     const searchParams = useSearchParams()!
     const router = useRouter()
@@ -38,33 +42,37 @@ export const Location = () => {
 
 
     useEffect(() => {
-        const delayDebounceFn = setTimeout(() => {
-            // Create a new AutocompleteService instance
-            const autocompleteService = new google.maps.places.AutocompleteService();
 
-            // Call the getPlacePredictions method
-            autocompleteService.getPlacePredictions(
-                {
-                    input: searchTerm,
-                },
-                (predictions: google.maps.places.AutocompletePrediction[], status: google.maps.places.PlacesServiceStatus) => {
-                    if (status === google.maps.places.PlacesServiceStatus.OK) {
-                        // Process the predictions as needed
-                        setResult(predictions);
-                        console.log(predictions);
-                    } else {
-                        // Handle the API response error
-                        console.error('Autocomplete API error:', status);
+        let delayDebounceFn: any
+        if (searchTerm) {
+            delayDebounceFn = setTimeout(() => {
+                // Create a new AutocompleteService instance
+                const autocompleteService = new google.maps.places.AutocompleteService();
+
+                // Call the getPlacePredictions method
+                autocompleteService.getPlacePredictions(
+                    {
+                        input: searchTerm,
+                    },
+                    (predictions: AutocompletePrediction[] | null , status: PlacesServiceStatus ) => {
+                        if (status === google.maps.places.PlacesServiceStatus.OK) {
+                            // Process the predictions as needed
+                            setResult(predictions);
+                            console.log(predictions);
+                        } else {
+                            // Handle the API response error
+                            console.error('Autocomplete API error:', status);
+                        }
                     }
-                }
-            );
-        }, 500)
+                );
+            }, 500)
+        }
 
         return () => clearTimeout(delayDebounceFn)
     }, [searchTerm])
 
     const createQueryString = useCallback(
-        (name: string, value: string) => {
+        (name: string, value: any) => {
             const params = new URLSearchParams()
             params.set(name, value)
             return params.toString()
@@ -82,8 +90,8 @@ export const Location = () => {
         placeService.getDetails(
             {placeId: item.place_id},
             (
-                placeResult: google.maps.places.PlaceResult | null,
-                placeStatus: google.maps.places.PlacesServiceStatus
+                placeResult: PlaceResult | null,
+                placeStatus: PlacesServiceStatus
             ) => {
                 console.log("placeResult: ", placeResult);
 
@@ -94,10 +102,10 @@ export const Location = () => {
                     const lat = placeResult.geometry?.location?.lat();
                     const lng = placeResult.geometry?.location?.lng();
                     const formattedAddress = placeResult.formatted_address;
-                    setSelectedLocation(formattedAddress)
+                    setSelectedLocation(formattedAddress!)
 
                     console.log("Formatted Address: ", {formattedAddress, lat, lng});
-                    router.push(`/?${createQueryString("lat", lat)}&${createQueryString("long", lng)}`, {shallow: false})
+                    router.push(`/?${createQueryString("lat", lat ?? null)}&${createQueryString("long", lng ?? null)}`, {shallow: false})
                     setShowModal(false)
 
                 }
@@ -134,7 +142,7 @@ export const Location = () => {
         }
     }
 
-   
+
     return (
         <div className=" z-40">
             <div
@@ -146,7 +154,7 @@ export const Location = () => {
                         Your Location
                     </div>
                     <div
-                        className="text-[0.8125rem] self-start font-semibold overflow-hidden whitespace-nowrap text-[#233a95] pr-4">
+                        className="truncate w-[130px] text-[0.8125rem] self-start font-semibold overflow-hidden whitespace-nowrap text-[#233a95] pr-4">
                         {selectedLocation ?? "Select a location"}
                     </div>
                 </div>

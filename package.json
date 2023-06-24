@@ -11,6 +11,8 @@
   "dependencies": {
     "@formatjs/intl-localematcher": "0.2.32",
     "@reduxjs/toolkit": "^1.9.5",
+    "@types/google.accounts": "^0.0.7",
+    "@types/google.maps": "^3.53.4",
     "@types/negotiator": "0.6.1",
     "@types/node": "20.2.5",
     "@types/react": "18.2.8",
@@ -19,6 +21,7 @@
     "axios": "^1.4.0",
     "eslint": "8.42.0",
     "eslint-config-next": "13.4.4",
+    "jwt-decode": "^3.1.2",
     "negotiator": "0.6.3",
     "next": "13.4.6",
     "postcss": "8.4.24",
