@@ -37,8 +37,8 @@ const LoginCard = () => {
 
 
     return (
-        <div className="flex justify-center pt-8">
-            <div className="w-[700px] bg-white  shadow-lg">
+        <div className="flex justify-center pt-8 ">
+            <div className="w-[700px] bg-white  shadow-lg border ">
                 <div className="flex flex-row justify-center items-center">
                     <div className="h-[50px] w-auto ">
                         {/* <Logo /> */}

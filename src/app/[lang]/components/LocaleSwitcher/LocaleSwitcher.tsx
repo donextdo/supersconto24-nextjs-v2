@@ -34,17 +34,17 @@ export default function LocaleSwitcher({handleLanguageSelect}:any) {
     // };
     return (
 
-        <div className='absolute w-[100px] max-h-[540px] bg-white right-0 z-50 top-4 px-5 py-4 shadow-lg flex flex-col items-center justify-center space-y-2 rounded-b-lg'>
+        <div className='absolute w-[100px] max-h-[540px] bg-white left-0 z-50 top-4 px-5 py-4 shadow-lg  rounded-b-lg'>
             {/* <p className="text-lg font-bold">Locale switcher:</p> */}
 
-            <ul className="">
+            <ul className=" space-y-2">
                 {i18n.locales.map((locale) => {
                     return (
-                        <li key={locale} className="mr-2" onClick={() => handleLanguageSelect(locale)}>
+                        <li key={locale} className="" onClick={() => handleLanguageSelect(locale)}>
                             <a onClick={() => {
                                 setCookie('lang', locale, 365)
                                 router.push(redirectedPathName(locale));
-                            }} className='text-primary'>{locale}</a>
+                            }} className='text-black hover:text-primary text-xs'><button>{locale}</button></a>
                         </li>
                     )
                 })}

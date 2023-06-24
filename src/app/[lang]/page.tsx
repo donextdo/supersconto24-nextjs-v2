@@ -6,10 +6,11 @@ import Image from 'next/image'
 import { Locale } from "../../../i18n-config";
 import { getDictionary } from "../../../get-dictionary";
 import ShopsList from './components/Shops/ShopsList';
-import { ImageOne } from './components/ImageAds/ImageOne';
+import { ImageOne, ImageTwo } from './components/ImageAds/ImageOne';
 import MoreCategoriesList from './components/MoreCategories/MoreCategoriesList';
 import NewsLettertwo from './components/NewsLetter2/NewsLettertwo';
 import LatestFlyers from './components/LatestFlyers/LatestFlyers';
+import FeaturedFlyer from './components/FeaturedFlyer/FeaturedFlyer';
 
 export default async function Home({ params: { lang } }: { params: { lang: Locale } }) {
     const dictionary = await getDictionary(lang)
@@ -61,12 +62,25 @@ export default async function Home({ params: { lang } }: { params: { lang: Local
 
             </div>
 
-            <div className='mt-8'>
-                <ShopsList />
+            <div className='w-full flex flex-row gap-4'>
+                <div className='w-96 hidden xl:block'>
+                    <ImageTwo />
+                </div>
+                <div className='w-full'>
+                    <div className='mt-8'>
+                        <FeaturedFlyer />
+                    </div>
+
+                </div>
+
             </div>
 
             <div className='mt-8'>
                 <LatestFlyers locale={lang} dictionary={dictionary.mainFlyer}/>
+            </div>
+
+            <div className='mt-8'>
+                <ShopsList />
             </div>
 
             <div className='mt-8'>
