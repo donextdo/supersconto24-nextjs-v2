@@ -68,7 +68,7 @@ export default async function Home({ params: { lang } }: { params: { lang: Local
                 </div>
                 <div className='w-full'>
                     <div className='mt-8'>
-                        <FeaturedFlyer />
+                    <FeaturedFlyer />
                     </div>
 
                 </div>
@@ -76,7 +76,7 @@ export default async function Home({ params: { lang } }: { params: { lang: Local
             </div>
 
             <div className='mt-8'>
-                <LatestFlyers locale={lang} dictionary={dictionary.mainFlyer}/>
+                <LatestFlyers />
             </div>
 
             <div className='mt-8'>

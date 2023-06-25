@@ -76,7 +76,7 @@ const FilteredProduct = ({
               Do not miss the current offers until the end of March.
             </div>
           </div>
-          <div
+          {/* <div
             className=" p-2 h-9 flex flex-row rounded-full border border-gray-300 text-sm w-32 text-gray-500 px-4 justify-between cursor-pointer"
             onClick={goToProduct}
           >
@@ -84,7 +84,7 @@ const FilteredProduct = ({
             <span>
               <BsArrowRight className="text-lg"></BsArrowRight>
             </span>
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4">

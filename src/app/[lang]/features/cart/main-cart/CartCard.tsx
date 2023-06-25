@@ -57,10 +57,11 @@ const CartCard = ({ item, index, totalAmount }: any) => {
     }
     let newprice = item.unit_price - discountprice
 
-    let subtotal = (item.cartQuantity) * (newprice)
+    
 
-    const p1: Product | undefined = cartItems.find((c1) => c1._id === item._id);
+    const p1: Product  = cartItems.find((c1) => c1._id === item._id) !
 
+    let subtotal = (p1.count) * (newprice)
     console.log(p1)
 
     return (

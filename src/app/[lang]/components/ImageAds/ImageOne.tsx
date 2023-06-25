@@ -45,7 +45,7 @@ export const ImageOne = () => {
           alt="banner - Image"
           className="mb-0 h-[260px] w-full rounded-md lg:h-[403px] lg:w-[270px]"
         />
-        <div className="absolute inset-0 flex flex-col justify-center max-w-[390px] max-h-[290px] md:justify-center md:mt-14 md:max-w-[450px] lg:ml-7 lg:mt-0 px-8">
+        {/* <div className="absolute inset-0 flex flex-col justify-center max-w-[390px] max-h-[290px] md:justify-center md:mt-14 md:max-w-[450px] lg:ml-7 lg:mt-0 px-8">
           <div className="flex flex-row  mt-3 lg:mt-6 items-center">
             <h1 className="text-white text-sm capitalize">
               best bakery products
@@ -66,7 +66,7 @@ export const ImageOne = () => {
           <div className="bg-cyan-500 py-2  flex flex-row rounded-full text-[13px] w-[100px] text-white font-bold px-4 justify-between mt-3 lg:mt-6">
             Shop Now
           </div>
-        </div>
+        </div> */}
       </div>
     );
   };
