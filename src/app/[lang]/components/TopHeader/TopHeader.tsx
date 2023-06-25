@@ -25,7 +25,7 @@ const TopHeader = () => {
                         <nav>
                             <ul className="flex gap-4 text-xs">
                                 <li>
-                                    <Link href="/">
+                                    <Link href="/about">
                                         <p>About Us</p>
                                     </Link>
                                 </li>
@@ -36,7 +36,7 @@ const TopHeader = () => {
                                 </li>
                                 <li>
                                     <Link href="/wishlist">
-                                        <p>Wishlist</p>
+                                        {/* <p>Wishlist</p> */}
                                     </Link>
                                 </li>
                                 <li>
