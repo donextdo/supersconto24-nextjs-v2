@@ -16,6 +16,7 @@ const nextConfig = {
         APP_NAME: "supersconto",
         APP_LOGO_URL: "",
       },
+    output: 'standalone'
 }
 
 module.exports = nextConfig
