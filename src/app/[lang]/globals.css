@@ -89,7 +89,7 @@ input[type=range]::-webkit-slider-thumb {
   top: 0;
 }
 .selection-div:hover {
-  background: rgba(218, 218, 246, 0.52);
+  background: rgba(218, 218, 246, 0.52) !important;
 }
 
 .slick-arrow {

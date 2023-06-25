@@ -12,6 +12,9 @@ import flyer6 from '../../../../../assets/flyers/flyer_6.jpg'
 import flyer7 from '../../../../../assets/flyers/flyer_7.jpg'
 import MainFlyerCard from "./MainFlyerCard";
 import Link from "next/link";
+import { useDispatch, useSelector } from "react-redux";
+import { addFlyer } from "./FlyerSlice";
+import { RootState } from "../../redux/store";
 
 
 type MainFlyerListType = {
@@ -23,8 +26,10 @@ type MainFlyerListType = {
 
 const MainFlyerList = (({dictionary, locale}: MainFlyerListType) => {
     const [coordinates, setCoordinates] = useState<any>()
-    const [productList, setProductList] = useState<any>()
+    // const [productList, setProductList] = useState<any>()
     const [visible, setVisible] = useState(8)
+    const productList = useSelector((state: RootState) => state.flyer.flyers);
+    const dispatch = useDispatch()
 
     const searchParams = useSearchParams()!
     const router = useRouter()
@@ -53,7 +58,7 @@ const MainFlyerList = (({dictionary, locale}: MainFlyerListType) => {
                 long: coordinates.longitude
             }
 
-            router.push(`/?${createQueryString("lat", query.lat)}&${createQueryString("long", query.long)}`, {shallow: false})
+            router.push(`/${locale}?${createQueryString("lat", query.lat)}&${createQueryString("long", query.long)}`, {shallow: false})
         }
 
     }, [coordinates])
@@ -64,7 +69,9 @@ const MainFlyerList = (({dictionary, locale}: MainFlyerListType) => {
             .then(data => {
                 // Handle the response
 
-                setProductList(data)
+                // setProductList(data)
+                dispatch(addFlyer(data))
+
                 console.log(data);
             })
             .catch(error => {
@@ -104,7 +111,6 @@ xxl:grid-cols-4 pt-4'>
 
             <button
                 className="w-full  bg-[#F5F5F5] py-2 px-6 text-base font-medium text-[#898989] rounded-md hover:bg-[#E7E7E7]" onClick={()=>{
-                    router.push(`/ordermessage?orderId=6492f48e189f0b6f28326db8`);
                     setVisible((prevValue)=>prevValue + 8)
                 }}>
                 {dictionary.loadMore}
