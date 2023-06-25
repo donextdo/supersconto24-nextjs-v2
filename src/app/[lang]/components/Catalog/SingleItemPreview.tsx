@@ -1,9 +1,9 @@
 import React from 'react';
 import Image from "next/image";
 import marked from '../../../../../assets/right/marked.png'
-import { useDispatch, useSelector } from 'react-redux';
-import { Product } from '../../features/product/product';
-import { RootState } from '../../redux/store';
+import {useDispatch, useSelector} from 'react-redux';
+import {Product} from '../../features/product/product';
+import {RootState} from '../../redux/store';
 
 
 interface Props {
@@ -15,32 +15,28 @@ interface Props {
     height: number
     handleSelection: (data: any) => void
     changecolor: any
-    
+
 }
 
 const SingleItemPreview: React.FC<Props> = ({
-    strokeImageUrl,
-    coordinates,
-    imageWidth,
-    imageHeight,
-    handleSelection,
-    width,
-    height,
-    changecolor,
-    
-}) => {
+                                                strokeImageUrl,
+                                                coordinates,
+                                                imageWidth,
+                                                imageHeight,
+                                                handleSelection,
+                                                width,
+                                                height,
+                                                changecolor,
 
-    const dispatch = useDispatch();
-    const products = useSelector((state: RootState) => state.product.products) as Product[];
-   
+                                            }) => {
 
-    const theproduct:any = products.find((product) => product._id === coordinates.id);
-   
+    const products = useSelector((state: RootState) => state.cart.items) as Product[];
 
-    // console.log({width, height, imageWidth, imageHeight, coordinates})
+    console.log({width, height, imageWidth, imageHeight, coordinates, products})
+
     return (
-        
-        <div style={{ position: "relative", maxWidth: width, height, userSelect: "none" }} >
+
+        <div style={{position: "relative", maxWidth: width, height, userSelect: "none"}}>
             {strokeImageUrl && <>
                 <div style={{
                     maxWidth: width,
@@ -49,56 +45,39 @@ const SingleItemPreview: React.FC<Props> = ({
                     background: `url(${strokeImageUrl})`,
                     backgroundSize: "cover",
                     backgroundRepeat: "no-repeat"
-                }} />
+                }}/>
                 {coordinates.map((crop: any, index: number) => {
                     const scaleX = width / imageWidth;
                     const scaleY = height / imageHeight;
+                    const isAdded = products.some((p) => p._id === crop.id)
                     return (
-                       
-                        theproduct?.count>=1 ? <div className="selection-div" key={`interactive-div-${index}`} style={{
-                            background: "rgba(255, 255, 255, 0.1)",
+
+                        <div className="selection-div" key={`interactive-div-${index}`} style={{
+                            background: "white",
+                            opacity: 0.5,
                             width: crop.width * scaleX,
                             height: crop.height * scaleY,
-                            transform: `translate(${crop.x * scaleX}px, ${crop.y * scaleY}px)`,
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center"
+                            transform: `translate(${crop.x * scaleX}px, ${crop.y * scaleY}px)`
                         }} onClick={() => handleSelection({
-                            crop: { ...crop, imageWidth, imageHeight },
-                        
+                            crop: {...crop, imageWidth, imageHeight},
                             index,
                             imageWidth,
                             imageHeight,
                             itemId: crop.id,
                             itemName: crop.name
                         })}>
-                            <Image
+                            {isAdded && <Image
                                 src={marked}
                                 alt="LOGO"
                                 className='h-11 sm:h-9 md:h-11 w-auto'
                                 style={{
                                     width: `${crop.width * scaleX * 0.8}px`,
                                     height: `${crop.height * scaleY * 0.8}px`,
-                                    
+
                                 }}
-                            />
-                        
-                        </div> :
-                            <div className="selection-div" key={`interactive-div-${index}`} style={{
-                                background: "white",
-                                opacity: 0.5,
-                                width: crop.width * scaleX,
-                                height: crop.height * scaleY,
-                                transform: `translate(${crop.x * scaleX}px, ${crop.y * scaleY}px)`
-                            }} onClick={() => handleSelection({
-                                crop: { ...crop, imageWidth, imageHeight },
-                        
-                                index,
-                                imageWidth,
-                                imageHeight,
-                                itemId: crop.id,
-                                itemName: crop.name
-                            })}></div>
+                            />}
+
+                        </div>
                     )
                 })}
             </>}
