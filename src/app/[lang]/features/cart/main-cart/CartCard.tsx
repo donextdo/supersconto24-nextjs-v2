@@ -10,7 +10,7 @@ import { IoCloseSharp, IoClose } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import baseUrl from "../../../../../../utils/baseUrl";
 
-const CartCard = ({ item, index, totalAmount }: any) => {
+const CartCard = ({ item, index, totalAmount, setCount }: any) => {
     const dispatch = useDispatch()
     const cartItems = useSelector((state: RootState) => state.cart.items);
     let totalAmount1 = useSelector((state: RootState) => state.cart.totalAmount);
@@ -21,17 +21,35 @@ const CartCard = ({ item, index, totalAmount }: any) => {
     const handleCheckboxChange = () => {
 
     }
-    const handleIncrement = (item: Product) => {
-        const newQuantity = (item.count || 0) + 1;
-        dispatch(updateItemQuantity({ itemId: item._id, count: newQuantity }));
-        dispatch(updateProductQuantity({ productId: item._id, count: newQuantity }))
+    const handleIncrement = (product: Product) => {
+        const cartItemsString = localStorage.getItem('cartItems');
+        const items = cartItemsString ? JSON.parse(cartItemsString) : [];
+      
+        const itemIndex = items.findIndex((item:any) => item._id === product._id);
+        
+          if (itemIndex !=-1) {     
+            items[itemIndex].count += 1;
+            localStorage.setItem('cartItems', JSON.stringify(items));
+            setCount(items[itemIndex].count)
+            
+          }
         dispatch(calSubTotal(totalAmount))
     };
 
-    const handleDecrement = (item: Product) => {
-        const newQuantity = Math.max((item.count || 0) - 1, 0);
-        dispatch(updateItemQuantity({ itemId: item._id, count: newQuantity }));
-        dispatch(updateProductQuantity({ productId: item._id, count: newQuantity }))
+    const handleDecrement = (product: Product) => {
+        const cartItemsString = localStorage.getItem('cartItems');
+        const items = cartItemsString ? JSON.parse(cartItemsString) : [];
+      
+        const itemIndex = items.findIndex((item:any) => item._id === product._id);
+        console.log(itemIndex)
+          if (itemIndex != -1) {
+            if (items[itemIndex].count > 0) { // Check if count is greater than 0
+                items[itemIndex].count -= 1;
+                localStorage.setItem('cartItems', JSON.stringify(items));
+                setCount(items[itemIndex].count);
+              }
+    
+          }
         dispatch(calSubTotal(totalAmount))
 
     };

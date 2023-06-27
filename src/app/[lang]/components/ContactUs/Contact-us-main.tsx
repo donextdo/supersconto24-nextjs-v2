@@ -19,7 +19,7 @@ function ContactUs() {
       </div>
 
       {/* Section -02 */}
-      <div className=" md:flex sm:mx-2.5 mx-2.5 xl:mx-10 2xl:mx-60 relative">
+      <div className=" md:flex container mx-auto xl:px-40 px-5 relative">
         <div className="mt-10  bg-[#f3f4f7] container md:mx-2.5">
           <div className="py-10 text-center sm:py-10 md:py-10">
             <p className="text-3xl sm:text-4xl   sm:px-[50%] px-[48%]  md:px-24 lg:px-[45%] text-primary">

@@ -17,6 +17,10 @@ const TopHeader = () => {
         // You can perform additional actions based on the selected language
     };
 
+    function handleAccount () {
+        window.location.href = '/account'
+    }
+
     return (
         <>
             <div className=" hidden xl:block container mx-auto xl:px-40 px-5">
@@ -30,7 +34,7 @@ const TopHeader = () => {
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/account">
+                                    <Link onClick={handleAccount} href={""}>
                                         <p>My account</p>
                                     </Link>
                                 </li>

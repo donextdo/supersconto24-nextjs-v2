@@ -16,7 +16,7 @@ const LatestFlyersCard = ({ flyer }: any) => {
     const date = new Date(dateString);
     const formattedDate = date.toLocaleDateString("en-US", {
         year: "2-digit",
-        month: "long",
+        month: "short",
         day: "numeric",
     });
     return (
@@ -39,10 +39,10 @@ const LatestFlyersCard = ({ flyer }: any) => {
                     <h1 className="text-[10px]">{flyer.shop_id?.shop_name ? flyer.shop_id?.shop_name : ''}</h1>
                 </div>
                 <div className="col-span-2">
-                    <h1 className="text-[8px] text-[#B5B5B5] text-right">
+                    <h1 className="text-[10px] font-semibold text-[#B5B5B5] text-right">
                         {formattedDate}
                     </h1>
-                    {flyer?.shop_id?.distance && <h1 className="text-[8px] text-[#B5B5B5] text-right">{(flyer.shop_id.distance / 1000)?.toFixed(2)}</h1>}
+                    {flyer?.shop_id?.distance && <h1 className="text-[10px] font-semibold text-[#B5B5B5] text-right">{(flyer.shop_id.distance / 1000)?.toFixed(2)} km</h1>}
                 </div>
             </div>
 

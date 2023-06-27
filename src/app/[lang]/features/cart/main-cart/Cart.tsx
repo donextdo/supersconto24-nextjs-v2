@@ -16,6 +16,7 @@ import { RootState } from "@/app/[lang]/redux/store";
 import baseUrl from "../../../../../../utils/baseUrl";
 import CaPopup from "@/app/[lang]/components/NewProduct/CaPopup";
 import CartCard from "./CartCard";
+import { Product } from "../../product/product";
 
 
 // import { PDFDocument, StandardFonts } from 'pdf-lib';
@@ -31,7 +32,16 @@ interface CartType {
 }
 
 const Cart: FC<CartType> = () => {
-    const cartItems = useSelector((state: RootState) => state.cart.items);
+    const [cartItems, setCartItems] = useState<Product[]>([]);
+    const [count, setCount] = useState(0);
+
+    useEffect(() => {
+        const cartItemsString = localStorage.getItem('cartItems');
+        const parsedCartItems = cartItemsString ? JSON.parse(cartItemsString) : [];
+        setCartItems(parsedCartItems);
+       
+    }, [count]);
+
     let totalAmount1 = useSelector((state: RootState) => state.cart.totalAmount);
 
     const [selectedValue, setSelectedValue] = useState("Ship");
@@ -293,7 +303,8 @@ const Cart: FC<CartType> = () => {
                                     {cartObj[shop]
                                         .sort((a: any, b: any) => a.product_name.localeCompare(b.product_name))
                                         .map((item: any, index: number) => (
-                                            <CartCard item={item} key={index} totalAmount={totalAmount} />
+                                            <CartCard item={item} key={index} totalAmount={totalAmount}
+                                            setCount={setCount} />
                                         ))}
                                 </div>
                             ))}

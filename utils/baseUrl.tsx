@@ -6,9 +6,9 @@ import axios, {
   isCancel,
 } from "axios";
 
-// const baseUrl = "http://localhost:3000/v1/api";
+const baseUrl = "http://localhost:3000/v1/api";
 
-const baseUrl = "https://api.supersconto24.com/v1/api";
+// const baseUrl = "https://api.supersconto24.com/v1/api";
 
 type AxiosRequestType = { url: string; data?: any; method?: string };
 export const axiosRequest = () => {
