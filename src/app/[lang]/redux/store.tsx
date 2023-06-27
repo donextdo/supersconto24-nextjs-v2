@@ -3,6 +3,7 @@ import productReducer from "../features/product/productSlice";
 import cartReducer from "../features/cart/cartSlice";
 import orderSlice from "@/app/[lang]/components/Checkout/orderSlice";
 import authReducer from "@/app/[lang]/features/auth/authSlice";
+import siteDataReducer from "@/app/[lang]/features/site-data/siteDataSlice";
 import flyerReducer from "../components/MainFlyer/FlyerSlice";
 // import userReducer from "../features/User/userSlice"
 
@@ -13,6 +14,7 @@ export const store = configureStore({
     order: orderSlice,
     auth: authReducer,
     flyer: flyerReducer,
+    siteData: siteDataReducer,
   },
 });
 

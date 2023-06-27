@@ -3,7 +3,6 @@ import Message from "../Message/Message";
 import TopHeader from "../TopHeader/TopHeader";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer-top";
-import LocaleSwitcher from "@/app/[lang]/components/LocaleSwitcher/LocaleSwitcher";
 import NavBar from "../Navbar/NavBar";
 import {usePathname} from "next/navigation";
 
