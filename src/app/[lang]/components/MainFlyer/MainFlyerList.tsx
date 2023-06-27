@@ -1,7 +1,7 @@
 "use client"
 import {useCallback, useEffect, useState} from "react";
-import {useSearchParams, useRouter} from "next/navigation";
-import baseUrl, {axiosRequest} from "../../../../../utils/baseUrl";
+import {useSearchParams, useRouter, usePathname} from "next/navigation";
+import baseUrl, {axiosRequest, updateParamValue} from "../../../../../utils/baseUrl";
 import axios from "axios";
 import flyer1 from '../../../../../assets/flyers/flyer_1.jpg'
 import flyer2 from '../../../../../assets/flyers/flyer_2.jpg'
@@ -30,19 +30,19 @@ const MainFlyerList = (({dictionary, locale}: MainFlyerListType) => {
     const [visible, setVisible] = useState(8)
     const productList = useSelector((state: RootState) => state.flyer.flyers);
     const dispatch = useDispatch()
-
+    const pathname = usePathname()
     const searchParams = useSearchParams()!
     const router = useRouter()
     const makeRequest = axiosRequest();
 
-    const createQueryString = useCallback(
+    /*const createQueryString = useCallback(
         (name: string, value: string) => {
-            const params = new URLSearchParams()
+            const params = new URLSearchParams(searchParams.toString())
             params.set(name, value)
             return params.toString()
         },
         [searchParams]
-    )
+    )*/
 
     useEffect(() => {
         console.log("init runs")
@@ -50,15 +50,22 @@ const MainFlyerList = (({dictionary, locale}: MainFlyerListType) => {
     }, [])
 
 
-    useEffect(() => {
-        console.log(coordinates)
-        if (coordinates) {
-            const query = {
-                lat: coordinates.latitude,
-                long: coordinates.longitude
-            }
 
-            router.push(`/${locale}?${createQueryString("lat", query.lat)}&${createQueryString("long", query.long)}`, {shallow: false})
+    useEffect(() => {
+        console.log(pathname)
+        if (coordinates) {
+            // const query = {
+            //     lat: coordinates.latitude,
+            //     long: coordinates.longitude
+            // }
+
+            // router.push(`${pathname}?${createQueryString("lat", query.lat)}&${createQueryString("long", query.long)}`, {shallow: false})
+
+            const data = [
+                { key: 'lat', value: coordinates.latitude },
+                { key: 'long', value: coordinates.longitude },
+            ];
+            router.push(updateParamValue(data), {shallow: false})
         }
 
     }, [coordinates])
