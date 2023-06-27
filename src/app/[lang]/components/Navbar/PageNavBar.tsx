@@ -5,6 +5,10 @@ import { FaMugHot } from "react-icons/fa";
 import { MdOutlineBakeryDining } from "react-icons/md";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { useEffect, useState } from "react";
+import axios from "axios";
+import baseUrl from "../../../../../utils/baseUrl";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 const PageNavBar = () => {
   const [homeOpen, setHomeOpen] = useState(false);
@@ -14,14 +18,18 @@ const PageNavBar = () => {
   const [shopOpen, setShopOpen] = useState(false);
 
   const toggleShop = () => {
-    setShopOpen(shopOpen);
+    setShopOpen(!shopOpen);
   };
+
+  const productList = useSelector((state: RootState) => state.flyer.flyers);
+
+  
   return (
     <div className="lg:flex lg:flex-row ">
       <ul className="lg:space-x-1 lg:flex gap gap-0">
          {/* Shop */}
          <li className="font-semibold hoverable hover:rounded-full  hover:bg-[#F0FAFF] ">
-          <button onMouseEnter={toggleShop} className="lg:py-2 lg:px-4">
+          <button onClick={toggleShop} className="lg:py-2 lg:px-4">
             <div>
               <Link
                 href="#"
@@ -32,6 +40,20 @@ const PageNavBar = () => {
               </Link>
             </div>
           </button>
+
+          {shopOpen && (
+            <div className="text-[13px] absolute w-40 py-2 mt-2 shadow-md font-medium bg-white rounded-lg z-50">
+              {productList.map((flyer, index)=>(
+                   <Link
+                   key={index}
+                   href="#"
+                   className="block px-4 py-2 text-gray-800 hover:text-[#4BB62E] "
+                 >
+                   {flyer.shop_id?.shop_name ? flyer.shop_id?.shop_name : ''}
+                 </Link>
+              ))}        
+            </div>
+          )}
         </li>
 
         <li className="font-semibold rounded-full bg-[#F0FAFF] ">
@@ -48,7 +70,7 @@ const PageNavBar = () => {
           </button>
 
           {homeOpen && (
-            <div className="text-[13px] absolute w-40 py-2 mt-2 shadow-md font-medium bg-white rounded-lg ">
+            <div className="text-[13px] absolute w-40 py-2 mt-2 shadow-md font-medium bg-white rounded-lg z-50">
               <Link
                 href="#"
                 className="block px-4 py-2 text-gray-800 hover:text-[#4BB62E] "
@@ -71,13 +93,13 @@ const PageNavBar = () => {
                 href="#"
                 className="block px-4 py-2 text-gray-800 hover:text-[#4BB62E] "
               >
-                Menu 4
+                Desserts
               </Link>
               <Link
                 href="#"
                 className="block px-4 py-2 text-gray-800 hover:text-[#4BB62E]"
               >
-                Menu 5
+                Furniture
               </Link>
             </div>
           )}
@@ -157,7 +179,7 @@ const PageNavBar = () => {
         </li>
       </ul>
       {/* Shop DropDown */}
-      {shopOpen && (
+      {/* {shopOpen && (
         <div className="w-full xl:px-16 text-[13px] grid grid-flow-col py-2 mt-2 font-medium  rounded-lg grid-col-5">
           <div className="relative mx-5">
             <p className="font-bold px-4 text-[#233a95] hover:text-[#4BB62E]">
@@ -379,7 +401,7 @@ const PageNavBar = () => {
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

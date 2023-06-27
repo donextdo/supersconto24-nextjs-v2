@@ -8,11 +8,23 @@ import { removeItem } from "../cartSlice";
 
 
 
-const CartPopupCard = ({ item }: any) => {
+const CartPopupCard = ({ item, setCartItems }: any) => {
     const dispatch = useDispatch()
 
     const handleRemove = (_id:any) => {
-        dispatch(removeItem(_id))
+        const cartItemsString = localStorage.getItem('cartItems');
+        const items = cartItemsString ? JSON.parse(cartItemsString) : [];
+
+
+        const filteredCartItems = items.filter((item: any) => item._id !== _id);
+
+        if (filteredCartItems.length == 0) {
+            localStorage.removeItem("cartItems");
+        } else {
+            localStorage.setItem("cartItems", JSON.stringify(filteredCartItems));
+        }
+
+        setCartItems(filteredCartItems)
     }
     
     let discountprice;

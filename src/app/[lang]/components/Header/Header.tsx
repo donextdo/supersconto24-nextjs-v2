@@ -25,57 +25,30 @@ const Header = () => {
   const totalCount = useSelector((state: RootState) => state.cart.totalCount);
   const totalAmount = useSelector((state: RootState) => state.cart.totalAmount);
   const router = useRouter();
+  const [totalPrice, setTotalPrice] = useState(0)
+  const [totalQuantity, setTotalQuantity] = useState(0)
 
   useEffect(() => {
     localStorage.setItem('totalCount', totalCount.toString());
   }, [totalCount]);
-  
-  // const { publicRuntimeConfig } = getConfig();
 
-  // const logoUrl = publicRuntimeConfig.APP_LOGO_URL;
-
-  // const Logo = () => {
-  //   if (logoUrl !== "") {
-  //     console.log("logo url");
-  //     return (
-  //       <Image
-  //         src={logoUrl}
-  //         alt={publicRuntimeConfig.APP_NAME}
-  //         style={{
-  //           objectFit: "contain",
-  //           backgroundColor: "white",
-  //           width: "100%",
-  //           height: "100%",
-  //         }}
-  //         width={450}
-  //         height={400}
-  //       />
-  //     );
-  //   } else {
-  //     console.log("logo url");
-  //     return (
-  //       <Image
-  //         src={logo}
-  //         alt="item1"
-  //         style={{
-  //           objectFit: "contain",
-  //           backgroundColor: "white",
-  //           width: "100%",
-  //           height: "100%",
-  //         }}
-  //         width={450}
-  //         height={400}
-  //       />
-  //     );
-  //   }
-  // };
+  useEffect(() => {
+    const cartItemsString = localStorage.getItem('cartItems');
+    const cartItemsArray = cartItemsString ? JSON.parse(cartItemsString) : [];
+    if (cartItemsArray.length > 0){
+      const sum = cartItemsArray.reduce((accumulator: any, currentValue: any) => accumulator + (currentValue.count * currentValue.unit_price), 0);
+      const sumQuantity = cartItemsArray.reduce((accumulator: any, currentValue: any) => accumulator + currentValue.count, 0);
+      setTotalPrice(sum)
+      setTotalQuantity(sumQuantity)
+    }
+  },[]);
 
   const handleClick = () => {
     setCart(!cart)
     // router.push("/cart")
 
   };
-  const hnadleEnter = () => {
+  const handleEnter = () => {
     setCart(true);
   };
   const handleLeave = () => {
@@ -125,10 +98,10 @@ const Header = () => {
                 </button>
               </Link>
             </div>
-            <div className="mr-4">Rs {totalAmount.toFixed(2)}</div>
+            <div className="mr-4">Rs {totalPrice.toFixed(2)}</div>
             <div
               className="relative"
-              onMouseEnter={hnadleEnter}
+              onMouseEnter={handleEnter}
               onMouseLeave={handleLeave}
             >
               <button
@@ -139,9 +112,9 @@ const Header = () => {
               </button>
 
               {cart && <CartPopup setCart={setCart} />}
-              {totalCount > 0 && (
+              {totalQuantity > 0 && (
                 <div className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full h-5 w-5 flex items-center justify-center">
-                  {totalCount}
+                  {totalQuantity}
                 </div>
               )}
             </div>
@@ -179,7 +152,7 @@ const Header = () => {
           </div>
           <div
             className="relative"
-            onMouseEnter={hnadleEnter}
+            onMouseEnter={handleEnter}
             onMouseLeave={handleLeave}
           >
             <button
@@ -188,10 +161,10 @@ const Header = () => {
             >
               <SlHandbag className="text-2xl text-[#ea2b0f]" />
             </button>
-            {cart && <CartPopup setCart={setCart} />}
-            {totalCount > 0 && (
+            {cart && <CartPopup setCart={setCart} setTotalPrice={setTotalPrice} />}
+            {totalQuantity > 0 && (
               <div className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full h-5 w-5 flex items-center justify-center">
-                {totalCount}
+                {totalQuantity}
               </div>
             )}
           </div>

@@ -1,8 +1,11 @@
 'use client'
 import Link from "next/link";
 import LocaleSwitcher from "../LocaleSwitcher/LocaleSwitcher";
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import Currency from "../Currency/Currency";
+import {useDispatch} from "react-redux";
+import {AppDispatch} from "@/app/[lang]/redux/store";
+import {getExchangeRates} from "@/app/[lang]/features/site-data/siteDataSlice";
 
 const TopHeader = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -10,12 +13,20 @@ const TopHeader = () => {
     const [selectedLanguage, setSelectedLanguage] = useState('English');
     const contactNumber = process.env.NEXT_PUBLIC_CONTACT_NUMBER;
     const message = process.env.NEXT_PUBLIC_MESSAGE;
+    const dispatch = useDispatch<AppDispatch>()
+
+    useEffect(() => {
+        dispatch(getExchangeRates())
+    }, [])
 
     const handleLanguageSelect = (language: any) => {
         setSelectedLanguage(language);
         setIsOpen(false);
-        // You can perform additional actions based on the selected language
     };
+
+    function handleAccount () {
+        window.location.href = '/account'
+    }
 
     return (
         <>
@@ -30,7 +41,7 @@ const TopHeader = () => {
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/account">
+                                    <Link onClick={handleAccount} href={""}>
                                         <p>My account</p>
                                     </Link>
                                 </li>
@@ -62,10 +73,7 @@ const TopHeader = () => {
                             onMouseEnter={() => setIsOpen(true)}
                             onMouseLeave={() => setIsOpen(false)}
                         >
-                            <button
-                                className=" text-xs"
-                            // onClick={handleClick}
-                            >
+                            <button className=" text-xs">
                                 {selectedLanguage}
                             </button>
 
@@ -77,13 +85,7 @@ const TopHeader = () => {
                             onMouseEnter={() => setIsOpenCurrency(true)}
                             onMouseLeave={() => setIsOpenCurrency(false)}
                         >
-                            <button
-                                className=" text-xs"
-                            // onClick={handleClick}
-                            >
-                                USD
-                                {/* {selectedLanguage ? selectedLanguage : 'Select Currency'} */}
-                            </button>
+                            <button className=" text-xs">EUR</button>
 
                             {isOpenCurrency && <Currency />}
 

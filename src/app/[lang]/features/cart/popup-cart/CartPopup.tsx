@@ -8,9 +8,17 @@ import { useEffect, useState } from "react";
 import { RootState } from "@/app/[lang]/redux/store";
 import { calSubTotal } from "@/app/[lang]/features/cart/cartSlice";
 import CartPopupCard from "@/app/[lang]/features/cart/popup-cart/CartPopupCard";
+import { Product } from "../../product/product";
 
 const CartPopup = ({setCart}:any) => {
-    const cartItems = useSelector((state: RootState) => state.cart.items);
+  const [cartItems, setCartItems] = useState<Product[]>([])
+
+  useEffect(() => {
+    const cartItemsString = localStorage.getItem('cartItems');
+    const cartItemsArray = cartItemsString ? JSON.parse(cartItemsString) : [];
+    setCartItems(cartItemsArray)
+  },[]);
+
     let totalAmount1 = useSelector((state: RootState) => state.cart.totalAmount);
     const [cartObj, setCartObj] = useState<any>([]);
   
@@ -50,7 +58,7 @@ const CartPopup = ({setCart}:any) => {
           <div className="absolute w-[300px] max-h-[540px] bg-white right-0 z-50 px-5 py-4 shadow-lg">
             <div className="max-h-[260px] overflow-y-auto overflow-x-hidden">
               {cartItems.map((item:any, index:number) => (
-                <CartPopupCard item={item} key={index} />
+                <CartPopupCard item={item} key={index} setCartItems={setCartItems}/>
               ))}
             </div>
             <div className="flex justify-between mt-6 mb-4">

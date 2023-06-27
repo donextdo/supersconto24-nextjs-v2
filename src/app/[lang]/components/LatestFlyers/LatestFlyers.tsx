@@ -24,7 +24,7 @@ const LatestFlyers = () => {
         <div className='flex flex-col w-full gap-6'>
 
             <h2 className='text-lg font-semibold'>
-                LATEST FLYERS
+                TOP DEALS
             </h2>
             <div className="">
                 <section className="w-full ">

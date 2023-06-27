@@ -24,6 +24,10 @@ const AccountPage = () => {
 
     }, [authState])
 
+    useEffect(()=>{
+        // window.location.reload();
+    },[])
+
     return ( 
         <div>
         {/* {isLoggedIn ? <MyAccount /> : <LoginRegisterPage />} */}
