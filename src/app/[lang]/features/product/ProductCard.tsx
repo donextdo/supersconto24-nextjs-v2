@@ -14,6 +14,8 @@ import Link from "next/link";
 import axios from "axios";
 import ProductPopup from "./ProductPopup";
 import Swal from "sweetalert2";
+import {useSearchParams} from "next/navigation";
+import {convertPrice} from "../../../../../utils/baseUrl";
 // import baseUrl from "../../../utils/baseUrl";
 // import { http } from "../../../utils/request";
 
@@ -29,6 +31,20 @@ export const ProductCard: FC<Props> = ({ product }) => {
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const [proId, setProId] = useState("");
   const [count, setCount] = useState(0);
+  const searchParams = useSearchParams()
+  const rates = useSelector((state: RootState) => state.siteData.currencyRates)
+  const [localeRate, setLocaleRate] = useState(0)
+  const [targetRate, setTargetRate] = useState(0)
+
+  useEffect(() => {
+    console.log(rates)
+      if (rates?.rates){
+        const currency = searchParams.get("currency") ?? "EUR"
+        console.log(rates, rates.rates[currency])
+        setLocaleRate(rates.rates["EUR"])
+        setTargetRate(rates.rates[currency])
+      }
+  }, [rates, searchParams])
 
 
   useEffect(()=>{
@@ -207,7 +223,7 @@ for (let i = 1; i <= product.review; i++) {
 for (let i = 1; i <= (5-product.review); i++) {
   graystars.push(<FaStar />);
 }
-
+  console.log(convertPrice(product.unit_price,localeRate,targetRate))
   return (
     <>
     <div
@@ -285,11 +301,11 @@ for (let i = 1; i <= (5-product.review); i++) {
         <div className=" flex flex-row items-center">
           
             <span className="text-gray-400 text-sm line-through mr-2 my-1 font-[1.125rem]">
-              ${product.unit_price.toFixed(2) as unknown as ReactElement}
+              ${convertPrice(product.unit_price,localeRate,targetRate).toFixed(2) as unknown as ReactElement}
             </span>
             {product.discount && (
           <span className="my-1 text-red-700 text-lg font-semibold">
-            ${newprice.toFixed(2)}
+            ${convertPrice(newprice,localeRate,targetRate).toFixed(2)}
           </span>
             )}
         </div>

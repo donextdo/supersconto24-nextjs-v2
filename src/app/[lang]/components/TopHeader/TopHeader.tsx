@@ -1,31 +1,73 @@
 'use client'
 import Link from "next/link";
 import LocaleSwitcher from "../LocaleSwitcher/LocaleSwitcher";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import Currency from "../Currency/Currency";
 import {useDispatch} from "react-redux";
 import {AppDispatch} from "@/app/[lang]/redux/store";
 import {getExchangeRates} from "@/app/[lang]/features/site-data/siteDataSlice";
+import {castDraft} from "immer";
+import {usePathname, useRouter, useSearchParams} from "next/navigation";
+import {updateParamValue} from "../../../../../utils/baseUrl";
 
-const TopHeader = () => {
+const TopHeader = ({lang}: { lang: string }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [isOpenCurrency, setIsOpenCurrency] = useState(false);
-    const [selectedLanguage, setSelectedLanguage] = useState('English');
+    const [selectedCurrency, setSelectedCurrency] = useState("EUR")
     const contactNumber = process.env.NEXT_PUBLIC_CONTACT_NUMBER;
     const message = process.env.NEXT_PUBLIC_MESSAGE;
     const dispatch = useDispatch<AppDispatch>()
+    const searchParams = useSearchParams();
+    const pathname = usePathname()
+    const router = useRouter();
+
+
+    useEffect(() => {
+        console.log(searchParams.toString())
+        const currency = searchParams.get("currency")
+        if (currency==="USD" || currency==="EUR") {
+            setSelectedCurrency(currency)
+        }
+    }, [])
+
+    /*const createQueryString = useCallback(
+        (name: string, value: string) => {
+            const params = new URLSearchParams(searchParams.toString())
+            params.set(name, value)
+
+            return params.toString()
+        },
+        [searchParams]
+    )*/
 
     useEffect(() => {
         dispatch(getExchangeRates())
-    }, [])
+
+        const data = [
+            { key: 'currency', value: selectedCurrency }
+        ];
+        router.push(updateParamValue(data))
+
+    }, [selectedCurrency])
+
 
     const handleLanguageSelect = (language: any) => {
-        setSelectedLanguage(language);
         setIsOpen(false);
     };
 
-    function handleAccount () {
+    function handleAccount() {
         window.location.href = '/account'
+    }
+
+    function getLanguageFromCode() {
+        switch (lang) {
+            case 'it':
+                return "Italian";
+            case 'en':
+                return "English"
+            default:
+                return "English"
+        }
     }
 
     return (
@@ -74,7 +116,7 @@ const TopHeader = () => {
                             onMouseLeave={() => setIsOpen(false)}
                         >
                             <button className=" text-xs">
-                                {selectedLanguage}
+                                {getLanguageFromCode()}
                             </button>
 
                             {isOpen && <LocaleSwitcher handleLanguageSelect={handleLanguageSelect}/>}
@@ -85,16 +127,16 @@ const TopHeader = () => {
                             onMouseEnter={() => setIsOpenCurrency(true)}
                             onMouseLeave={() => setIsOpenCurrency(false)}
                         >
-                            <button className=" text-xs">EUR</button>
+                            <button className=" text-xs">{selectedCurrency}</button>
 
-                            {isOpenCurrency && <Currency />}
+                            {isOpenCurrency && <Currency setSelectedCurrency={setSelectedCurrency}/>}
 
                         </div>
                     </div>
                 </div>
 
             </div>
-            <hr />
+            <hr/>
         </>
     );
 }

@@ -33,7 +33,7 @@ export default function RootLayout({
     />
       <body className={inter.className}>
         <Provider store={store}>
-          <Layout>
+          <Layout params={params}>
             <GoogleAuth/>
             {children}
           </Layout>

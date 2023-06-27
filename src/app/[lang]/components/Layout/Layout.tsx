@@ -8,9 +8,10 @@ import {usePathname} from "next/navigation";
 
 type Props = {
     children: ReactNode;
+    params: {lang: string};
 };
 
-const Layout: React.FC<Props> = ({children}) => {
+const Layout: React.FC<Props> = ({children, params:{lang}}) => {
 
     const pathname = usePathname()
     return (
@@ -18,7 +19,7 @@ const Layout: React.FC<Props> = ({children}) => {
             {/* <LocaleSwitcher /> */}
             {!pathname.includes("catalog-preview") && <>
                 <Message/>
-                <TopHeader/>
+                <TopHeader lang={lang}/>
                 <Header/>
                 <NavBar/>
             </>}
