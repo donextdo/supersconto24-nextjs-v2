@@ -6,7 +6,6 @@ import Currency from "../Currency/Currency";
 import {useDispatch} from "react-redux";
 import {AppDispatch} from "@/app/[lang]/redux/store";
 import {getExchangeRates} from "@/app/[lang]/features/site-data/siteDataSlice";
-import {Locale} from "../../../../../i18n-config";
 
 const TopHeader = () => {
     const [isOpen, setIsOpen] = useState(false);
