@@ -15,7 +15,6 @@ import axios from "axios";
 import ProductPopup from "./ProductPopup";
 import Swal from "sweetalert2";
 import {useSearchParams} from "next/navigation";
-import {convertPrice} from "../../../../../utils/baseUrl";
 import useCurrency from "@/app/[lang]/components/Hooks/useCurrencyHook";
 // import baseUrl from "../../../utils/baseUrl";
 // import { http } from "../../../utils/request";

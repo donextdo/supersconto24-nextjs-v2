@@ -58,3 +58,4 @@ export function updateParamValue(data: any) {
 
   return `${window.location.pathname}?${updatedParams.join("&")}`;
 }
+export default baseUrl;
