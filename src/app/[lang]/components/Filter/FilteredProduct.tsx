@@ -27,6 +27,7 @@ const FilteredProduct = ({
   useEffect(() => {
     dispatch(fetchProducts());
 
+    console.log("categoryId ", categoryId);
     console.log("data ", products);
     console.log(products);
   }, [dispatch]);
@@ -54,9 +55,11 @@ const FilteredProduct = ({
         }
 
         const response = await axios.get(url);
-        const products = response.data.products;
-        console.log("response.data: ", response.data.products);
+        console.log("fffffffffffffff : ", response.data);
+        const products = response.data;
+        console.log("response.data: ", response.data);
         setProduct(products);
+        console.log("filter productttttttttttttttttt : ", product);
       } catch (error) {
         console.error(error);
       }
@@ -66,29 +69,8 @@ const FilteredProduct = ({
 
   return (
     <>
-      <div>
-        <div className="flex flex-row items-center justify-between mb-9 ">
-          <div className="flex flex-col">
-            <div className="uppercase font-semibold text-lg font-ff-headings lg:text-xl">
-              Best Seller
-            </div>
-            <div className="text-xs text-gray-400">
-              Do not miss the current offers until the end of March.
-            </div>
-          </div>
-          <div
-            className=" p-2 h-9 flex flex-row rounded-full border border-gray-300 text-sm w-32 text-gray-500 px-4 justify-between cursor-pointer"
-            onClick={goToProduct}
-          >
-            View All
-            <span>
-              <BsArrowRight className="text-lg"></BsArrowRight>
-            </span>
-          </div>
-        </div>
-      </div>
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4">
-        {products.slice(0, 4).map((product) => (
+        {product.map((product) => (
           <ProductCard key={product._id} product={product} />
         ))}
       </div>

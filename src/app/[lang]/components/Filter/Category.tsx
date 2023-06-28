@@ -43,12 +43,19 @@ const Category = ({ categoryId }: any) => {
     let updatedCheckedCategory = {};
 
     if (checkedCategory === categoryId) {
-      router.push(
-        `/filterProduct?categoryId=${catId}&subCategories=${undefined}&${createQueryString(
-          "min_price",
-          minP
-        )}&${createQueryString("max_price", maxP)}`
-      );
+      if (catId && minP && maxP) {
+        router.push(
+          `/filterProduct?categoryId=${catId}&subCategories=${undefined}&${createQueryString(
+            "min_price",
+            minP
+          )}&${createQueryString("max_price", maxP)}`
+        );
+      } else if (catId) {
+        router.push(
+          `/filterProduct?categoryId=${catId}&subCategories=${undefined}`
+        );
+      }
+
       // if the clicked category is already checked, uncheck it
       // router.push({
       //   pathname: router.pathname,
@@ -56,12 +63,19 @@ const Category = ({ categoryId }: any) => {
       // });
     } else {
       updatedCheckedCategory = categoryId;
-      router.push(
-        `/filterProduct?categoryId=${catId}&subCategories=${categoryId}&${createQueryString(
-          "min_price",
-          minP
-        )}&${createQueryString("max_price", maxP)}`
-      );
+      if (catId && minP && maxP) {
+        router.push(
+          `/filterProduct?categoryId=${catId}&subCategories=${categoryId}&${createQueryString(
+            "min_price",
+            minP
+          )}&${createQueryString("max_price", maxP)}`
+        );
+      } else if (catId) {
+        router.push(
+          `/filterProduct?categoryId=${catId}&subCategories=${categoryId}`
+        );
+      }
+
       // if the clicked category is not checked, check it
       // router.push({
       //   pathname: router.pathname,
