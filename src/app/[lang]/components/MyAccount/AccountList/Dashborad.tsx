@@ -1,18 +1,20 @@
 import { RootState } from "@/app/[lang]/redux/store";
 import { JSXElementConstructor, ReactElement, ReactFragment } from "react";
-import { useSelector } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import Orders from "./Orders";
+import {logOut} from "@/app/[lang]/features/auth/authSlice";
 
 const Dashboard = ({onButtonClick, handleAddressClick, handleAccountDetailsClick}:any) => {
     const orderList = useSelector((state: RootState) => state.order.orders);
-    console.log(orderList)
+    let dispatch = useDispatch();
+    const userData = localStorage.getItem("userData") ? JSON.parse(atob(localStorage.getItem("userData")!)) : null
+
+    console.log(userData)
+
 
     const handleClick = () => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("id");
-
-        location.reload();
-
+        dispatch(logOut())
+        location.reload()
     }
     const handleorder = () => {
        
@@ -23,11 +25,10 @@ const Dashboard = ({onButtonClick, handleAddressClick, handleAccountDetailsClick
     let extractedUsername: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | ReactFragment | null | undefined;
 
     // review name
-    if (localStorage.getItem('email') !== null) {
-        email = localStorage.getItem('email');
-        console.log(email)
-        if (email !== null) {
-            username = email.split('@')[0]; // Extract the username from the email
+    if (userData) {
+
+        if (userData?.email !== null) {
+            username = userData?.email.split('@')[0]; // Extract the username from the email
             extractedUsername = username.replace(/"/g, '');
         } else {
             // Handle the case when the email value is null

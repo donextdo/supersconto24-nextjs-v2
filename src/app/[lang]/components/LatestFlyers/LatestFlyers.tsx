@@ -6,86 +6,25 @@ import axios from "axios";
 import Link from "next/link";
 import Slider from "../Shared/Slider";
 import LatestFlyersCard from "./LatestFlyerCard";
-
-
-type MainFlyerListType = {
-    dictionary: {
-        loadMore: string
-    },
-    locale: string
-}
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 
 
 
-const LatestFlyers = ({dictionary, locale}: MainFlyerListType) => {
-
-    const [coordinates, setCoordinates] = useState<any>()
-    const [productList, setProductList] = useState<any>()
-    const searchParams = useSearchParams()!
-    const router = useRouter()
-    const makeRequest = axiosRequest();
-
-    const createQueryString = useCallback(
-        (name: string, value: string) => {
-            const params = new URLSearchParams()
-            params.set(name, value)
-            return params.toString()
-        },
-        [searchParams]
-    )
-
-    useEffect(() => {
-        console.log("init runs")
-        getLocation()
-    }, [])
 
 
-    useEffect(() => {
-        console.log(coordinates)
-        if (coordinates) {
-            const query = {
-                lat: coordinates.latitude,
-                long: coordinates.longitude
-            }
 
-            router.push(`/?${createQueryString("lat", query.lat)}&${createQueryString("long", query.long)}`, {shallow: false})
-        }
+const LatestFlyers = () => {
 
-    }, [coordinates])
-
-    useEffect(() => {
-        const url = searchParams.get('long') && searchParams.get('lat') ? `${baseUrl}/catelog/book?long=${searchParams.get('long')}&lat=${searchParams.get('lat')}` : `${baseUrl}/catelog/book`
-        makeRequest({url: url})
-            .then(data => {
-                // Handle the response
-
-                setProductList(data)
-                console.log(data);
-            })
-            .catch(error => {
-                // Handle errors
-                console.error(error);
-            });
-
-    }, [searchParams])
-
-
-    function getLocation() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(({coords}) => {
-                setCoordinates(coords)
-            });
-        }
-    }
-
+    const productList = useSelector((state: RootState) => state.flyer.flyers);
     console.log("render", productList)
 
     return (
         <div className='flex flex-col w-full gap-6'>
 
             <h2 className='text-lg font-semibold'>
-                LATEST FLYERS
+                TOP DEALS
             </h2>
             <div className="">
                 <section className="w-full ">

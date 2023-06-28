@@ -135,7 +135,7 @@ const AccountDetails = () => {
             />
 
             <button
-                className="bg-[#233a95] text-white py-2.5 px-4 mb-4 rounded-md text-sm"
+                className="bg-primary text-white py-2.5 px-4 mb-4 rounded-md text-sm"
                 onClick={handleSaveChanges}
             >
                 Save Changes

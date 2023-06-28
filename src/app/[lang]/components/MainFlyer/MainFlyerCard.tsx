@@ -5,7 +5,7 @@ const MainFlyerCard = ({ flyer }: any) => {
     const date = new Date(dateString);
     const formattedDate = date.toLocaleDateString("en-US", {
         year: "2-digit",
-        month: "long",
+        month: "short",
         day: "numeric",
     });
     return (
@@ -14,7 +14,7 @@ const MainFlyerCard = ({ flyer }: any) => {
                 <Image
                     src={flyer.pages[0].page_image}
                     alt="item1"
-                    className="object-cover w-full h-full rounded-md"
+                    className="object-contain w-full h-full rounded-md bg-[#efefef]"
                     width={450}
                     height={400}
                 />
@@ -22,13 +22,13 @@ const MainFlyerCard = ({ flyer }: any) => {
             <div className="grid grid-cols-5 gap-2 ">
                 <div className="col-span-3 ">
                     <h1 className="font-bold text-xs">{flyer.title}</h1>
-                    <h1 className="text-[10px]">{flyer.shop_id.shop_name}</h1>
+                    <h1 className="text-[10px]">{flyer.shop_id?.shop_name ? flyer.shop_id?.shop_name : '' }</h1>
                 </div>
                 <div className="col-span-2">
-                    <h1 className="text-[8px] text-[#B5B5B5] text-right">
+                    <h1 className="text-[10px] text-[#B5B5B5] text-right font-semibold">
                         {formattedDate}
                     </h1>
-                    {flyer?.shop_id?.distance && <h1 className="text-[8px] text-[#B5B5B5] text-right">{(flyer.shop_id.distance / 1000)?.toFixed(2)}</h1>}
+                    {flyer?.shop_id?.distance && <h1 className="text-[10px] text-[#B5B5B5] text-right font-semibold">{(flyer.shop_id.distance / 1000)?.toFixed(2)} km</h1>}
                 </div>
             </div>
         </div>

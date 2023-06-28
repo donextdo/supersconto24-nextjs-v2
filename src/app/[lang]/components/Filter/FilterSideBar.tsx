@@ -12,12 +12,6 @@ const FilterSideBar = ({
   maxValue,
   subcategory,
 }: any) => {
-  useEffect(() => {
-    console.log("filter side bar categoryId ? ", categoryId);
-    console.log("filter side bar minValue ? ", minValue);
-    console.log("filter side bar maxValue ? ", maxValue);
-  });
-
   return (
     <div className="flex flex-row mb-9">
       <div className="lg:w-1/4 hidden lg:block">

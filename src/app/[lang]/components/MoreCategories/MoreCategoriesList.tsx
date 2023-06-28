@@ -16,40 +16,40 @@ const MoreCategoriesList = () => {
     const categories = [
         {
             image: cat1,
-            name: "LIDL",
+            name: "Electronic",
         },
         {
             image: cat2,
-            name: "euronics",
+            name: "Home Care",
         },
         {
             image: cat3,
-            name: "LIDL",
+            name: "Health and Beauty",
         },
         {
             image: cat4,
-            name: "euronics",
+            name: "Clothing",
         }, {
             image: cat5,
-            name: "LIDL",
+            name: "Toys",
         },
         {
             image: cat6,
-            name: "euronics",
+            name: "Sport",
         }, {
             image: cat7,
-            name: "LIDL",
+            name: "Automobile",
         },
         {
             image: cat8,
-            name: "euronics",
+            name: "",
         }, {
             image: cat9,
-            name: "LIDL",
+            name: "Diy & Garderning",
         },
         {
             image: cat10,
-            name: "euronics",
+            name: "Childhood",
         },
     ]
 
@@ -71,7 +71,7 @@ const MoreCategoriesList = () => {
                             {/* Do not miss the current offers until the end of March. */}
                         </div>
                     </div>
-                    <div
+                    {/* <div
                         className=" p-2 h-9 flex flex-row rounded-full border border-gray-300 text-sm w-32 text-gray-500 px-4 justify-between cursor-pointer"
                         // onClick={goToProduct}
                     >
@@ -79,10 +79,10 @@ const MoreCategoriesList = () => {
                         <span>
                             <BsArrowRight className="text-lg"></BsArrowRight>
                         </span>
-                    </div>
+                    </div> */}
                 </div>
             </div>
-            <div className="grid grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
 
             {categories.map((category: any, index: number) => (
                 

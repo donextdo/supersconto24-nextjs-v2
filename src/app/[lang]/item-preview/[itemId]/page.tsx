@@ -1,7 +1,7 @@
 'use client'
 import { FaStar } from "react-icons/fa";
 import Image from "next/image";
-import { FC, useEffect, useState } from "react";
+import { FC, ReactElement, useEffect, useState } from "react";
 import {
     FaHeart,
     FaFacebookF,
@@ -28,6 +28,8 @@ import Description from "../../components/ViewItem/Details/Description";
 import Review from "../../components/ViewItem/Details/Review";
 import AdditionalInformation from "../../components/ViewItem/Details/AdditionalInformation";
 import { addItems } from "../../features/cart/cartSlice";
+import Swal from "sweetalert2";
+
 // interface ItemData {
 //     description: string;
 //     quantity: number;
@@ -37,9 +39,9 @@ import { addItems } from "../../features/cart/cartSlice";
 //   }
 interface IProps {
     params: {
-      itemId: string;
+        itemId: string;
     };
-  }
+}
 const ItemPages = ({ params }: IProps) => {
     const itemId = params.itemId
     console.log(params)
@@ -91,6 +93,8 @@ const ItemPages = ({ params }: IProps) => {
     const [hideSideImage, setHideSideImage] = useState(false);
     const [categoryName, setcategoryname] = useState();
     let [newQuantity, setNewQuantity] = useState<number>(1)
+    const [count, setCount] = useState(1);
+
 
     let id: any;
     if (typeof localStorage !== "undefined") {
@@ -101,7 +105,7 @@ const ItemPages = ({ params }: IProps) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     let [imageArray1, setImageArray1] = useState<string[]>([]);
     let [imageArray2, setImageArray2] = useState<string[]>([]);
-    
+
 
     const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -123,7 +127,7 @@ const ItemPages = ({ params }: IProps) => {
         const itemId = searchParams.get('itemId')
         // const { itemId } = router.query;
         console.log(itemId)
-    
+
     }, []);
 
 
@@ -162,11 +166,11 @@ const ItemPages = ({ params }: IProps) => {
     // }, [data.imageArray]);
 
 
-    const combinedArray:any = [];
+    const combinedArray: any = [];
     console.log(combinedArray[0])
 
     const [selectedImage, setSelectedImage] = useState(combinedArray[0]);
-    
+
     console.log(selectedImage)
 
 
@@ -256,27 +260,42 @@ const ItemPages = ({ params }: IProps) => {
     );
 
     const handleIncrement = (data: Product) => {
-        const setQuantity = (item?.count || 1) + 1;
-        setNewQuantity(setQuantity)
-        console.log(newQuantity)
-
-        dispatch(
-            updateProductQuantity({ productId: data._id, count: setQuantity })
-        );
+        setCount(count + 1);
     };
 
     const handleDecrement = (data: Product) => {
-        const setQuantity = Math.max((item?.count || 0) - 1, 0);
-        setNewQuantity(setQuantity)
-        console.log(newQuantity)
-
-        dispatch(
-            updateProductQuantity({ productId: data._id, count: setQuantity })
-        );
+        if (count > 0) {
+            setCount(count - 1);
+        }
     };
 
+
     const handleaddToCart = (data: any) => {
-        dispatch(addItems({ product: data, count: newQuantity }));
+        const cartItemsString = localStorage.getItem('cartItems');
+        const items = cartItemsString ? JSON.parse(cartItemsString) : [];
+
+        const itemIndex = items.findIndex((item: any) => item._id === data._id);
+
+        if (itemIndex === -1) {
+            const newItem = { ...data, count: count };
+            items.push(newItem);
+            localStorage.setItem('cartItems', JSON.stringify(items));
+        } else {
+            items[itemIndex].count += count;
+            localStorage.setItem('cartItems', JSON.stringify(items));
+        }
+        Swal.fire({
+            title:
+                '<span style="font-size: 18px">Item has been added to your card</span>',
+            width: 400,
+            timer: 1500,
+            // padding: '3',
+            color: "white",
+            background: "#00B853",
+            showConfirmButton: false,
+            heightAuto: true,
+            position: "bottom-end",
+        });
 
     };
 
@@ -491,7 +510,8 @@ const ItemPages = ({ params }: IProps) => {
                                     <div className="absolute max-w-[88.41px] max-h-[49px] flex flex-col items-start gap-1 p-2">
                                         {data?.discount && (
                                             <div className=" font-semibold max-w-[45.39px] max-h-[24px] px-4 py-1 bg-sky-400 text-white rounded text-[10px] flex items-center justify-center">
-                                                {data?.discount != undefined ? data.discount : 0}%
+                                                {data.discount as unknown as ReactElement}%
+
                                             </div>
                                         )}
                                         {data?.isRecommended && (
@@ -570,9 +590,11 @@ const ItemPages = ({ params }: IProps) => {
                                             Rs {data?.unit_price.toFixed(2)}
                                         </span>
 
-                                        <span className="my-1 text-red-700 text-[1.625rem] font-semibold">
-                                            Rs {newprice.toFixed(2)}
-                                        </span>
+                                        {data.discount && (
+                                            <span className="my-1 text-red-700 text-lg font-semibold">
+                                                ${newprice.toFixed(2)}
+                                            </span>
+                                        )}
                                     </div>
                                     {data?.quantity > 0 ? (
                                         <div className="font-medium py-2 px-2 mt-2 max-h-[26px] max-w-[68.35px] bg-emerald-100 text-green-600 rounded-full text-[.75rem] flex items-center justify-center uppercase tracking-tighter">
@@ -601,7 +623,7 @@ const ItemPages = ({ params }: IProps) => {
                                                 </button>
 
                                                 <div className=" flex items-center justify-center w-full text-center ">
-                                                    {item?.count || 1}
+                                                    {count}
                                                 </div>
 
                                                 {/* <div className=" flex items-center justify-center w-full text-center ">
@@ -618,7 +640,7 @@ const ItemPages = ({ params }: IProps) => {
                                             </div>
                                             <button
                                                 type="button"
-                                                className=" bg-blue-900 text-white min-h-[34px] min-w-[140px] rounded-full text-[13px]  ml-4"
+                                                className=" bg-primary text-white min-h-[34px] min-w-[140px] rounded-full text-[13px]  ml-4"
                                                 onClick={() => handleaddToCart(data)}
                                             >
                                                 Add to cart

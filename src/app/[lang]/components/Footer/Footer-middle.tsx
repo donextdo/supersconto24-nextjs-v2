@@ -43,7 +43,7 @@ function MainFooter() {
 
   return (
     <>
-      <div className="grid w-full pt-10 grid-col xl:grid-flow-col xl:grid-col-4 xl:grid-rows-1 sm:grid-col-2 sm:grid-rows-3 sm:grid-flow-col  bg-gray-50 ">
+      {/* <div className="grid w-full pt-10 grid-col xl:grid-flow-col xl:grid-col-4 xl:grid-rows-1 sm:grid-col-2 sm:grid-rows-3 sm:grid-flow-col  bg-gray-50 ">
         {viewCategory.map((category) => (
           <>
             {category.subcategories.length > 0 && (
@@ -68,7 +68,7 @@ function MainFooter() {
             )}
           </>
         ))}
-      </div>
+      </div> */}
 
       <div className="">
         <BottomFooter />

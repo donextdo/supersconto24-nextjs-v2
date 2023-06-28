@@ -5,72 +5,31 @@ import { FaMugHot } from "react-icons/fa";
 import { MdOutlineBakeryDining } from "react-icons/md";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { useEffect, useState } from "react";
+import axios from "axios";
+import baseUrl from "../../../../../utils/baseUrl";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 const PageNavBar = () => {
   const [homeOpen, setHomeOpen] = useState(false);
   const toggleHome = () => {
-    setHomeOpen(homeOpen);
+    setHomeOpen(!homeOpen);
   };
   const [shopOpen, setShopOpen] = useState(false);
 
   const toggleShop = () => {
-    setShopOpen(shopOpen);
+    setShopOpen(!shopOpen);
   };
+
+  const productList = useSelector((state: RootState) => state.flyer.flyers);
+
+  
   return (
     <div className="lg:flex lg:flex-row ">
       <ul className="lg:space-x-1 lg:flex gap gap-0">
-        {/* <li className="font-semibold rounded-full bg-[#F0FAFF] ">
-          <button onMouseEnter={toggleShop} className="lg:py-2 lg:px-4">
-            <div>
-              <Link
-                href="#"
-                className="text-[#4BB62E] flex text-[15px]  font-ff-headings"
-              >
-                HOME
-                <MdKeyboardArrowDown className="ml-2 text-xl" />
-              </Link>
-            </div>
-          </button>
-
-          {homeOpen && (
-            <div className="text-[13px] absolute w-40 py-2 mt-2 shadow-md font-medium bg-white rounded-lg ">
-              <Link
-                href="#"
-                className="block px-4 py-2 text-gray-800 hover:text-[#4BB62E] "
-              >
-                Home 1
-              </Link>
-              <Link
-                href="#"
-                className="block px-4 py-2 text-gray-800 hover:text-[#4BB62E] "
-              >
-                Home 2
-              </Link>
-              <Link
-                href="#"
-                className="block px-4 py-2 text-gray-800 hover:text-[#4BB62E] "
-              >
-                Home 3
-              </Link>
-              <Link
-                href="#"
-                className="block px-4 py-2 text-gray-800 hover:text-[#4BB62E] "
-              >
-                Home 4
-              </Link>
-              <Link
-                href="#"
-                className="block px-4 py-2 text-gray-800 hover:text-[#4BB62E]"
-              >
-                Home 5
-              </Link>
-            </div>
-          )}
-        </li> */}
-
-        {/* Shop */}
-        <li className="font-semibold hoverable hover:rounded-full  hover:bg-[#F0FAFF] ">
-          <button onMouseEnter={toggleShop} className="lg:py-2 lg:px-4">
+         {/* Shop */}
+         <li className="font-semibold hoverable hover:rounded-full  hover:bg-[#F0FAFF] ">
+          <button onClick={toggleShop} className="lg:py-2 lg:px-4">
             <div>
               <Link
                 href="#"
@@ -81,9 +40,74 @@ const PageNavBar = () => {
               </Link>
             </div>
           </button>
+
+          {shopOpen && (
+            <div className="text-[13px] absolute w-40 py-2 mt-2 shadow-md font-medium bg-white rounded-lg z-50">
+              {productList.map((flyer, index)=>(
+                   <Link
+                   key={index}
+                   href="#"
+                   className="block px-4 py-2 text-gray-800 hover:text-[#4BB62E] "
+                 >
+                   {flyer.shop_id?.shop_name ? flyer.shop_id?.shop_name : ''}
+                 </Link>
+              ))}        
+            </div>
+          )}
         </li>
+
+        <li className="font-semibold rounded-full bg-[#F0FAFF] ">
+          <button onClick={toggleHome} className="lg:py-2 lg:px-4">
+            <div>
+              <Link
+                href="#"
+                className="text-[#4BB62E] flex text-[15px]  font-ff-headings"
+              >
+                Our Menu
+                <MdKeyboardArrowDown className="ml-2 text-xl" />
+              </Link>
+            </div>
+          </button>
+
+          {homeOpen && (
+            <div className="text-[13px] absolute w-40 py-2 mt-2 shadow-md font-medium bg-white rounded-lg z-50">
+              <Link
+                href="#"
+                className="block px-4 py-2 text-gray-800 hover:text-[#4BB62E] "
+              >
+                MEATS &amp; SEAFOOD
+              </Link>
+              <Link
+                href="#"
+                className="block px-4 py-2 text-gray-800 hover:text-[#4BB62E] "
+              >
+                BAKERY
+              </Link>
+              <Link
+                href="#"
+                className="block px-4 py-2 text-gray-800 hover:text-[#4BB62E] "
+              >
+                BEVERAGES
+              </Link>
+              <Link
+                href="#"
+                className="block px-4 py-2 text-gray-800 hover:text-[#4BB62E] "
+              >
+                Desserts
+              </Link>
+              <Link
+                href="#"
+                className="block px-4 py-2 text-gray-800 hover:text-[#4BB62E]"
+              >
+                Furniture
+              </Link>
+            </div>
+          )}
+        </li>
+
+       
         {/* Meats & SeaFood */}
-        <li className="font-semibold font-ff-headings hoverable hover:rounded-full  hover:bg-[#F0FAFF] ">
+        {/* <li className="font-semibold font-ff-headings hoverable hover:rounded-full  hover:bg-[#F0FAFF] ">
           <button
             // onMouseEnter={toggleShop}
             className="lg:py-2 lg:px-4 inline-flex items-center"
@@ -98,9 +122,9 @@ const PageNavBar = () => {
               MEATS &amp; SEAFOOD
             </Link>
           </button>
-        </li>
+        </li> */}
         {/* Bakery */}
-        <li className="font-semibold font-ff-headings hoverable hover:rounded-full  hover:bg-[#F0FAFF] ">
+        {/* <li className="font-semibold font-ff-headings hoverable hover:rounded-full  hover:bg-[#F0FAFF] ">
           <button
             // onMouseEnter={toggleShop}
             className="lg:py-2 lg:px-4 inline-flex items-center"
@@ -115,9 +139,9 @@ const PageNavBar = () => {
               BAKERY
             </Link>
           </button>
-        </li>
+        </li> */}
         {/* Beverages */}
-        <li className="font-semibold font-ff-headings hoverable hover:rounded-full  hover:bg-[#F0FAFF] ">
+        {/* <li className="font-semibold font-ff-headings hoverable hover:rounded-full  hover:bg-[#F0FAFF] ">
           <button
             // onMouseEnter={toggleShop}
             className="lg:py-2 lg:px-4 inline-flex items-center"
@@ -132,15 +156,15 @@ const PageNavBar = () => {
               BEVERAGES
             </Link>
           </button>
-        </li>
+        </li> */}
         {/* Blog */}
-        {/* <li className="font-semibold font-ff-headings">
+        <li className="font-semibold font-ff-headings">
           <button className="lg:py-2 lg:px-4 lg:ml-4  hover:rounded-full  hover:bg-[#F0FAFF]">
-            <Link href="#" className="text-gray-700 hover:text-[#4BB62E]">
+            <Link href="/blog" className="text-gray-700 hover:text-[#4BB62E]">
               BLOG
             </Link>
           </button>
-        </li> */}
+        </li>
 
         {/* Contact */}
         <li className="font-semibold font-ff-headings">
@@ -155,7 +179,7 @@ const PageNavBar = () => {
         </li>
       </ul>
       {/* Shop DropDown */}
-      {shopOpen && (
+      {/* {shopOpen && (
         <div className="w-full xl:px-16 text-[13px] grid grid-flow-col py-2 mt-2 font-medium  rounded-lg grid-col-5">
           <div className="relative mx-5">
             <p className="font-bold px-4 text-[#233a95] hover:text-[#4BB62E]">
@@ -377,7 +401,7 @@ const PageNavBar = () => {
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

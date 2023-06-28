@@ -7,7 +7,7 @@ const MoreCategoriesCard = ({category}:any) => {
                 <Image
                     src={category.image}
                     alt="item1"
-                    className="object-fill w-full h-full rounded-md"
+                    className="object-contain w-full h-full rounded-md"
                     width={450}
                     height={400}
                 />

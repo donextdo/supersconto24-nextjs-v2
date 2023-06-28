@@ -13,6 +13,9 @@ import Link from "next/link";
 // import ProductPopup from "./ProductPopup";
 import axios from "axios";
 import ProductPopup from "./ProductPopup";
+import Swal from "sweetalert2";
+import {useSearchParams} from "next/navigation";
+import {convertPrice} from "../../../../../utils/baseUrl";
 // import baseUrl from "../../../utils/baseUrl";
 // import { http } from "../../../utils/request";
 
@@ -27,6 +30,32 @@ export const ProductCard: FC<Props> = ({ product }) => {
   const dispatch = useDispatch();
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const [proId, setProId] = useState("");
+  const [count, setCount] = useState(0);
+  const searchParams = useSearchParams()
+  const rates = useSelector((state: RootState) => state.siteData.currencyRates)
+  const [localeRate, setLocaleRate] = useState(0)
+  const [targetRate, setTargetRate] = useState(0)
+
+  useEffect(() => {
+    console.log(rates)
+      if (rates?.rates){
+        const currency = searchParams.get("currency") ?? "EUR"
+        console.log(rates, rates.rates[currency])
+        setLocaleRate(rates.rates["EUR"])
+        setTargetRate(rates.rates[currency])
+      }
+  }, [rates, searchParams])
+
+
+  useEffect(()=>{
+    const cartItemsString = localStorage.getItem('cartItems');
+    const items = cartItemsString ? JSON.parse(cartItemsString) : [];
+    const itemone = items.find(
+      (item:any) => item._id === product._id
+    );
+    setCount(itemone?.count ?? 0)
+    console.log(itemone)
+  },[count])
 
 
   let id:any;
@@ -53,7 +82,7 @@ let totalAmount = 0
   },[dispatch]);
 
   useEffect(()=>{
-    // console.log(product)
+    console.log('products',product)
   },[])
 
   useEffect(() => {
@@ -63,40 +92,72 @@ let totalAmount = 0
   }, []);
 
   const handleIncrement = (product: Product) => {
-    // setQuantity(quantity + 1);
-    const newQuantity = (product.count || 0) + 1;
-    dispatch(updateItemQuantity({ itemId: product._id, count: newQuantity }));
-    dispatch(
-      updateProductQuantity({ productId: product._id, count: newQuantity })
-    );
-    dispatch(calSubTotal(totalAmount))
+    const cartItemsString = localStorage.getItem('cartItems');
+  const items = cartItemsString ? JSON.parse(cartItemsString) : [];
+
+  const itemIndex = items.findIndex((item:any) => item._id === product._id);
+  
+  console.log(product,items,itemIndex)
+    if (itemIndex != -1) {
+      items[itemIndex].count += 1;
+      localStorage.setItem('cartItems', JSON.stringify(items));
+      setCount(items[itemIndex].count)
+    }
+
+    // dispatch(calSubTotal(totalAmount))
 
   };
 
   const handleDecrement = (product: Product) => {
-    // setQuantity(quantity - 1);
-    const newQuantity = Math.max((product.count || 0) - 1, 0);
-    dispatch(updateItemQuantity({ itemId: product._id, count: newQuantity }));
-    dispatch(
-      updateProductQuantity({ productId: product._id, count: newQuantity })
-    );
-    if (product.count === 1) {
-      // dispatch(removeFromCart(id))
-      // setIsAddToCart(false)
-    }
+    const cartItemsString = localStorage.getItem('cartItems');
+    const items = cartItemsString ? JSON.parse(cartItemsString) : [];
+  
+    const itemIndex = items.findIndex((item:any) => item._id === product._id);
+      if (itemIndex !=-1) {
+        if (items[itemIndex].count > 0) { // Check if count is greater than 0
+          items[itemIndex].count -= 1;
+          localStorage.setItem('cartItems', JSON.stringify(items));
+          setCount(items[itemIndex].count);
+        }
+
+      }
+    
+   
     dispatch(calSubTotal(totalAmount))
 
   };
 
   const handleaddToCart = (product: Product) => {
 
-    dispatch(addItem(product));
-    const newQuantity = (product.count || 0) + 1;
-    dispatch(
-      updateProductQuantity({ productId: product._id, count: newQuantity })
-    );
-    console.log(totalAmount);
+    const cartItemsString = localStorage.getItem('cartItems');
+    const items = cartItemsString ? JSON.parse(cartItemsString) : [];
+  
+    const itemIndex = items.findIndex((item:any) => item._id === product._id);
+  
+      if (itemIndex === -1) {
+        const newItem = { ...product, count: 1 };
+        items.push(newItem);
+        localStorage.setItem('cartItems', JSON.stringify(items));
+        setCount(newItem.count)
+      } else {
+        items[itemIndex].count += 1;
+        localStorage.setItem('cartItems', JSON.stringify(items));
+        setCount(items[itemIndex].count)
+      }
+  
     dispatch(calSubTotal(totalAmount))
+    Swal.fire({
+      title:
+        '<span style="font-size: 18px">Item has been added to your card</span>',
+      width: 400,
+      timer: 1500,
+      // padding: '3',
+      color: "white",
+      background: "#00B853",
+      showConfirmButton: false,
+      heightAuto: true,
+      position: "bottom-end",
+    });
 
   };
 
@@ -112,7 +173,7 @@ let totalAmount = 0
 
   let discountprice;
   discountprice = product.unit_price * (product.discount/100)
-let newprice=product.unit_price-discountprice
+let newprice = product.unit_price-discountprice
 
 const handleWishlist = async (product: any) => {
   // const wishlist = JSON.parse(localStorage.getItem('wishlist'));
@@ -162,7 +223,7 @@ for (let i = 1; i <= product.review; i++) {
 for (let i = 1; i <= (5-product.review); i++) {
   graystars.push(<FaStar />);
 }
-
+  console.log(convertPrice(product.unit_price,localeRate,targetRate))
   return (
     <>
     <div
@@ -170,12 +231,9 @@ for (let i = 1; i <= (5-product.review); i++) {
       key={product._id}
     >
       <div className="absolute max-w-[88.41px] max-h-[49px] flex flex-col items-start gap-1 p-2">
-        {isDiscount && (
+        {product.discount && (
           <div className=" font-semibold max-w-[45.39px] max-h-[24px] px-4 py-1 bg-sky-400 text-white rounded text-[10px] flex items-center justify-center">
-            {(product.discount as unknown as ReactElement) != undefined
-              ? (product.discount as unknown as ReactElement)
-              : 0}
-            %
+           {product.discount as unknown as ReactElement}%
           </div>
         )}
         {product.isRecommended && (
@@ -241,30 +299,31 @@ for (let i = 1; i <= (5-product.review); i++) {
           <p className="text-md text-gray-400 flex">{graystars}</p>
         </div>
         <div className=" flex flex-row items-center">
-          {isDiscount && (
+          
             <span className="text-gray-400 text-sm line-through mr-2 my-1 font-[1.125rem]">
-              ${product.unit_price.toFixed(2) as unknown as ReactElement}
+              ${convertPrice(product.unit_price,localeRate,targetRate).toFixed(2) as unknown as ReactElement}
             </span>
-          )}
+            {product.discount && (
           <span className="my-1 text-red-700 text-lg font-semibold">
-            ${newprice.toFixed(2)}
+            ${convertPrice(newprice,localeRate,targetRate).toFixed(2)}
           </span>
+            )}
         </div>
       </div>
 
       {/* add to cart and count */}
       <div className="mx-4 border-black text-black py-2 px-4 mt-1 rounded-full md:invisible group-hover:visible md:group-hover:-translate-y-3 md:group-hover:ease-in transition duration-150">
-        {(product.count == undefined || product.count < 1) && (
+        {(count == undefined || count < 1) && (
           <button
             type="button"
-            className=" bg-blue-900 text-white h-8  rounded-full w-full "
+            className=" bg-primary text-white h-8  rounded-full w-full "
             onClick={() => handleaddToCart(product)}
           >
             Add to cart
           </button>
         )}
 
-        {product.count >= 1 && (
+        {count >= 1 && (
           <div className="max-h-[34px] w-full flex grid-cols-3 h-10">
             <button
               type="button"
@@ -274,7 +333,7 @@ for (let i = 1; i <= (5-product.review); i++) {
               -
             </button>
             <div className="max-h-[34px] flex items-center justify-center w-full text-center border-y">
-              {product.count || 0}
+              {count || 0}
             </div>
             <button
               type="button"

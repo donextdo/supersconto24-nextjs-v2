@@ -1,40 +1,42 @@
 'use client'
 import Image from "next/image"
-import { useEffect, useRef, useState } from "react"
-import { useSelector } from "react-redux"
-import { RootState } from "../../redux/store"
+import {useEffect, useRef, useState} from "react"
+import {useSelector} from "react-redux"
+import {RootState} from "../../redux/store"
 import Link from "next/link"
-import { SlHandbag } from "react-icons/sl"
-import { FaAngleLeft } from "react-icons/fa"
+import {SlHandbag} from "react-icons/sl"
+import {FaAngleLeft} from "react-icons/fa"
 import nextArrow from '../../../../../public/arrow-next.svg'
 import prevArrow from '../../../../../public/arrow-prev.svg'
 import Draggable from "../Draggable/Draggable"
 import AddToCartModal from "../../features/cart/AddCartModal"
 import ProductPopup from "../../features/product/ProductPopup"
+import CartPopup from "@/app/[lang]/features/cart/popup-cart/CartPopup";
+import logo from "../../../../../assets/logo/logo.png";
 
 
 interface Props {
     catalog?: any
     params?: {
         catalogId: string;
-      };
+    };
 }
 
-const CatalogCarousel: React.FC<Props> = ({ catalog, params }) => {
-    
+const CatalogCarousel: React.FC<Props> = ({catalog, params}) => {
+
     console.log(params)
     const [pages, setPages] = useState([])
-    const [showModal, setShowModal] = useState({ show: false, item: null })
+    const [showModal, setShowModal] = useState({show: false, item: null})
     const [settings, setSettings] = useState({
         dots: true,
         infinite: true,
         speed: 500,
         slidesToShow: 2,
         slidesToScroll: 2,
-        nextArrow: <NextArrowCircle />,
-        prevArrow: <PrevArrowCircle />,
+        nextArrow: <NextArrowCircle/>,
+        prevArrow: <PrevArrowCircle/>,
     })
-    const [windowInfo, setWindowInfo] = useState({ width: 0, height: 0 })
+    const [windowInfo, setWindowInfo] = useState({width: 0, height: 0})
     const [showCart, setShowCart] = useState(false);
     const ref = useRef<HTMLDivElement>(null);
     const [changecolor, setChangecolor] = useState(false)
@@ -42,9 +44,8 @@ const CatalogCarousel: React.FC<Props> = ({ catalog, params }) => {
     const totalCount = useSelector((state: RootState) => state.cart.totalCount);
 
 
-
     useEffect(() => {
-        console.log(catalog);
+        console.log("catalog : ",catalog);
         if (catalog) {
             setPages(catalog.pages)
             if (catalog.pages.length === 1) {
@@ -83,13 +84,8 @@ const CatalogCarousel: React.FC<Props> = ({ catalog, params }) => {
     //   }
     //   return `${count} (${totol})`
     // }
-    let originalDate :any
-    if (catalog && catalog.length > 0 && catalog && catalog.expiredate) {
-         originalDate = new Date(catalog.expiredate);
-        // Rest of your code using originalDate
-      } 
-    const formattedDate = new Date(originalDate).toLocaleDateString("en-GB")
-    // console.log(formattedDate);
+
+    const formattedDate = new Date(catalog.expiredate).toLocaleDateString("en-GB")
 
     const handleCart = () => {
         setShowCart(!showCart)
@@ -107,17 +103,19 @@ const CatalogCarousel: React.FC<Props> = ({ catalog, params }) => {
         setCart(false);
     };
 
-    console.log("qqq",showModal)
+    console.log("qqq", catalog)
     return (
         <div className="catalog-page">
             <div className="catalog-header">
-                {/* <div className='flex justify-between mx-2 items-center py-4'>
+                <div className='flex justify-between mx-2 items-center py-4'>
                     <div className='ml-12 '>
-                        <Link href="/"><Image src="#" alt="LOGO" className='h-11 sm:h-9 md:h-11 w-auto' width={10} height={10}></Image> </Link>
-                        </div>
+                        <Link href="/">
+                            <Image src={logo} alt="LOGO" className='h-11 sm:h-9 md:h-11 w-auto'/>
+                        </Link>
+                    </div>
                     <div className='text-center'>
                         <p>{catalog.title}</p>
-                        <p>Expire Date -{formattedDate}</p>
+                        <p>Expire Date - {formattedDate}</p>
                     </div>
                     <div
                         className="relative mr-2"
@@ -128,22 +126,23 @@ const CatalogCarousel: React.FC<Props> = ({ catalog, params }) => {
                             className="border border-[#fff1ee] bg-[#fff1ee] rounded-full p-2"
                             onClick={handleClick}
                         >
-                            <SlHandbag className="text-2xl text-[#ea2b0f]" />
+                            <SlHandbag className="text-2xl text-[#ea2b0f]"/>
                         </button>
 
-                        {cart && <CartPopup setCart={setCart} />}
+                        {cart && <CartPopup setCart={setCart}/>}
                         {totalCount > 0 && (
-                            <div className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full h-5 w-5 flex items-center justify-center">
+                            <div
+                                className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full h-5 w-5 flex items-center justify-center">
                                 {totalCount}
                             </div>
                         )}
                     </div>
 
-                    {showCart &&
-                        <NavbarCartModal ref={ref} />
-                    }
+                    {/*{showCart &&*/}
+                    {/*    <NavbarCartModal ref={ref} />*/}
+                    {/*}*/}
 
-                </div> */}
+                </div>
             </div>
             <div className="catalog-component">
 
@@ -177,13 +176,14 @@ const CatalogCarousel: React.FC<Props> = ({ catalog, params }) => {
                     ))
                 }
             </Slider>*/}
-                <Draggable pages={pages} setShowModal={setShowModal} changecolor={changecolor} />
+                <Draggable pages={pages} setShowModal={setShowModal} changecolor={changecolor}/>
 
-                {showModal.show && showModal.item && <ProductPopup proId={showModal.item} setChangecolor={setChangecolor}
-                    setProductPopup={() => setShowModal(prevState => ({
-                        ...prevState,
-                        show: false
-                    }))} />}
+                {showModal.show && showModal.item &&
+                    <ProductPopup proId={showModal.item} setChangecolor={setChangecolor}
+                                  setProductPopup={() => setShowModal(prevState => ({
+                                      ...prevState,
+                                      show: false
+                                  }))}/>}
 
             </div>
         </div>
@@ -208,7 +208,7 @@ export default CatalogCarousel;
 
 // }
 
-export function NextArrowCircle({ className, style, onClick }: any) {
+export function NextArrowCircle({className, style, onClick}: any) {
     return (
         <div
             className={`${className}`}
@@ -216,12 +216,12 @@ export function NextArrowCircle({ className, style, onClick }: any) {
             onClick={onClick}
             draggable={false}
         >
-            <Image fill src={nextArrow} alt={""} />
+            <Image fill src={nextArrow} alt={""}/>
         </div>
     );
 }
 
-export function PrevArrowCircle({ className, style, onClick }: any) {
+export function PrevArrowCircle({className, style, onClick}: any) {
     return (
         <div
             className={`${className}`}
@@ -229,7 +229,7 @@ export function PrevArrowCircle({ className, style, onClick }: any) {
             onClick={onClick}
             draggable={false}
         >
-            <Image fill src={prevArrow} alt={""} />
+            <Image fill src={prevArrow} alt={""}/>
         </div>
     );
 }

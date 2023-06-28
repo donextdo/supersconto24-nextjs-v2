@@ -35,7 +35,7 @@ const NewsLettertwo = () => {
   }
 
   return (
-    <div className=" bg-[#233a95] w-full">
+    <div className=" bg-green-600 w-full">
       <div className="px-5 sm:px-5 lg:px-10 2xl:px-40">
         <div className="grid lg:grid-cols-2">
           <div className="lg:self-center">
@@ -68,7 +68,7 @@ const NewsLettertwo = () => {
                 </span>
                 <button
                   type="submit"
-                  className="absolute top-1/2 transform -translate-y-1/2 right-2 bg-[#233a95] py-2 px-4 text-white rounded-md lg:py-[15px]"
+                  className="absolute top-1/2 transform -translate-y-1/2 right-2 bg-primary py-2 px-4 text-white rounded-md lg:py-[15px]"
                 >
                   Subscribe
                 </button>

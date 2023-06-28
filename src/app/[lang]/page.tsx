@@ -6,12 +6,19 @@ import Image from 'next/image'
 import { Locale } from "../../../i18n-config";
 import { getDictionary } from "../../../get-dictionary";
 import ShopsList from './components/Shops/ShopsList';
-import { ImageOne } from './components/ImageAds/ImageOne';
+import { ImageFive, ImageFour, ImageOne, ImageThree, ImageTwo } from './components/ImageAds/ImageOne';
 import MoreCategoriesList from './components/MoreCategories/MoreCategoriesList';
 import NewsLettertwo from './components/NewsLetter2/NewsLettertwo';
 import LatestFlyers from './components/LatestFlyers/LatestFlyers';
+import FeaturedFlyer from './components/FeaturedFlyer/FeaturedFlyer';
+import ContactAds from './components/ImageAds/ContactAds';
+import FirstPurchaceAds from './components/ImageAds/FirstPurchaceAds';
+import {Metadata} from "next";
 
-export default async function Home({ params: { lang } }: { params: { lang: Locale } }) {
+export const metadata: Metadata = {
+    title: "Supersconto | Home"
+}
+export default async function page({ params: { lang } }: { params: { lang: Locale } }) {
     const dictionary = await getDictionary(lang)
     console.log("render page", dictionary)
 
@@ -50,7 +57,7 @@ export default async function Home({ params: { lang } }: { params: { lang: Local
 
             <div className='w-full flex flex-row gap-4'>
                 <div className='w-96 hidden xl:block'>
-                    <ImageOne />
+                    <ContactAds />
                 </div>
                 <div className='w-full'>
                     <div className='mt-8'>
@@ -61,12 +68,41 @@ export default async function Home({ params: { lang } }: { params: { lang: Local
 
             </div>
 
+            <div className='w-full flex flex-row gap-4'>
+                <div className='w-96 hidden xl:block'>
+                    <ImageOne />
+                </div>
+                <div className='w-full'>
+                    <div className='mt-8'>
+                        <FeaturedFlyer />
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div className='mt-8'>
+                <LatestFlyers />
+            </div>
+
             <div className='mt-8'>
                 <ShopsList />
             </div>
 
             <div className='mt-8'>
-                <LatestFlyers locale={lang} dictionary={dictionary.mainFlyer}/>
+                <FirstPurchaceAds />
+            </div>
+
+            <div className='mt-8 w-full flex flex-row gap-4'>
+                <div className='w-96  hidden lg:block'>
+                    <ImageFive />
+                </div>
+                <div className='grid grid-cols-1 lg:grid-cols-2 gap-4 w-full '>
+
+                    <ImageThree />
+                    <ImageFour />
+                </div>
+
             </div>
 
             <div className='mt-8'>

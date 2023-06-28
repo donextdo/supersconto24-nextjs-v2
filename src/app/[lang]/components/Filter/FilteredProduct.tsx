@@ -55,11 +55,8 @@ const FilteredProduct = ({
         }
 
         const response = await axios.get(url);
-        console.log("fffffffffffffff : ", response.data);
         const products = response.data;
-        console.log("response.data: ", response.data);
         setProduct(products);
-        console.log("filter productttttttttttttttttt : ", product);
       } catch (error) {
         console.error(error);
       }

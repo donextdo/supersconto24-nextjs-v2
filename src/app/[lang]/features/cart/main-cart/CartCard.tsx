@@ -8,28 +8,48 @@ import { FaPlus, FaMinus } from "react-icons/fa";
 import { GrFormClose } from "react-icons/gr";
 import { IoCloseSharp, IoClose } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
+import baseUrl from "../../../../../../utils/baseUrl";
 
-const CartCard = ({ item, index, totalAmount }: any) => {
+const CartCard = ({ item, index, totalAmount, setCount }: any) => {
     const dispatch = useDispatch()
     const cartItems = useSelector((state: RootState) => state.cart.items);
     let totalAmount1 = useSelector((state: RootState) => state.cart.totalAmount);
 
 
 
+
     const handleCheckboxChange = () => {
 
     }
-    const handleIncrement = (item: Product) => {
-        const newQuantity = (item.count || 0) + 1;
-        dispatch(updateItemQuantity({ itemId: item._id, count: newQuantity }));
-        dispatch(updateProductQuantity({ productId: item._id, count: newQuantity }))
+    const handleIncrement = (product: Product) => {
+        const cartItemsString = localStorage.getItem('cartItems');
+        const items = cartItemsString ? JSON.parse(cartItemsString) : [];
+      
+        const itemIndex = items.findIndex((item:any) => item._id === product._id);
+        
+          if (itemIndex !=-1) {     
+            items[itemIndex].count += 1;
+            localStorage.setItem('cartItems', JSON.stringify(items));
+            setCount(items[itemIndex].count)
+            
+          }
         dispatch(calSubTotal(totalAmount))
     };
 
-    const handleDecrement = (item: Product) => {
-        const newQuantity = Math.max((item.count || 0) - 1, 0);
-        dispatch(updateItemQuantity({ itemId: item._id, count: newQuantity }));
-        dispatch(updateProductQuantity({ productId: item._id, count: newQuantity }))
+    const handleDecrement = (product: Product) => {
+        const cartItemsString = localStorage.getItem('cartItems');
+        const items = cartItemsString ? JSON.parse(cartItemsString) : [];
+      
+        const itemIndex = items.findIndex((item:any) => item._id === product._id);
+        console.log(itemIndex)
+          if (itemIndex != -1) {
+            if (items[itemIndex].count > 0) { // Check if count is greater than 0
+                items[itemIndex].count -= 1;
+                localStorage.setItem('cartItems', JSON.stringify(items));
+                setCount(items[itemIndex].count);
+              }
+    
+          }
         dispatch(calSubTotal(totalAmount))
 
     };
@@ -55,9 +75,15 @@ const CartCard = ({ item, index, totalAmount }: any) => {
     }
     let newprice = item.unit_price - discountprice
 
-    let subtotal = (item.count) * (newprice)
+    
+
+    const p1: Product  = cartItems.find((c1) => c1._id === item._id) !
+
+    let subtotal = (p1.count) * (newprice)
+    console.log(p1)
 
     return (
+        
         <div className="grid grid-cols-4 sm:grid-cols-12 grid-2 gap-1 border-b border-[#71778e] py-3 h-28 items-center relative bg-white" key={index} >
             <div className="h-[95px] sm:col-span-2">
                 <Image
@@ -82,7 +108,7 @@ const CartCard = ({ item, index, totalAmount }: any) => {
                 <button className="p-2 bg-[#edeef5] rounded-full w-[30px] flex items-center" onClick={() => handleDecrement(item)}>
                     <FaMinus className="text-xs" />
                 </button>
-                <p className="text-sm flex items-center justify-center w-7 mx-1">{item.count
+                <p className="text-sm flex items-center justify-center w-7 mx-1">{p1?.count
                     || 0}</p>
                 <button className="p-2 bg-[#edeef5] rounded-full w-[30px] flex items-center" onClick={() => handleIncrement(item)}>
                     <FaPlus className="text-xs " />

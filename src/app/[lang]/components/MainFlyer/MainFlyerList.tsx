@@ -1,7 +1,7 @@
 "use client"
 import {useCallback, useEffect, useState} from "react";
-import {useSearchParams, useRouter} from "next/navigation";
-import baseUrl, {axiosRequest} from "../../../../../utils/baseUrl";
+import {useSearchParams, useRouter, usePathname} from "next/navigation";
+import baseUrl, {axiosRequest, updateParamValue} from "../../../../../utils/baseUrl";
 import axios from "axios";
 import flyer1 from '../../../../../assets/flyers/flyer_1.jpg'
 import flyer2 from '../../../../../assets/flyers/flyer_2.jpg'
@@ -12,6 +12,9 @@ import flyer6 from '../../../../../assets/flyers/flyer_6.jpg'
 import flyer7 from '../../../../../assets/flyers/flyer_7.jpg'
 import MainFlyerCard from "./MainFlyerCard";
 import Link from "next/link";
+import { useDispatch, useSelector } from "react-redux";
+import { addFlyer } from "./FlyerSlice";
+import { RootState } from "../../redux/store";
 
 
 type MainFlyerListType = {
@@ -23,19 +26,23 @@ type MainFlyerListType = {
 
 const MainFlyerList = (({dictionary, locale}: MainFlyerListType) => {
     const [coordinates, setCoordinates] = useState<any>()
-    const [productList, setProductList] = useState<any>()
+    // const [productList, setProductList] = useState<any>()
+    const [visible, setVisible] = useState(8)
+    const productList = useSelector((state: RootState) => state.flyer.flyers);
+    const dispatch = useDispatch()
+    const pathname = usePathname()
     const searchParams = useSearchParams()!
     const router = useRouter()
     const makeRequest = axiosRequest();
 
-    const createQueryString = useCallback(
+    /*const createQueryString = useCallback(
         (name: string, value: string) => {
-            const params = new URLSearchParams()
+            const params = new URLSearchParams(searchParams.toString())
             params.set(name, value)
             return params.toString()
         },
         [searchParams]
-    )
+    )*/
 
     useEffect(() => {
         console.log("init runs")
@@ -43,15 +50,22 @@ const MainFlyerList = (({dictionary, locale}: MainFlyerListType) => {
     }, [])
 
 
-    useEffect(() => {
-        console.log(coordinates)
-        if (coordinates) {
-            const query = {
-                lat: coordinates.latitude,
-                long: coordinates.longitude
-            }
 
-            router.push(`/?${createQueryString("lat", query.lat)}&${createQueryString("long", query.long)}`, {shallow: false})
+    useEffect(() => {
+        console.log(pathname)
+        if (coordinates) {
+            // const query = {
+            //     lat: coordinates.latitude,
+            //     long: coordinates.longitude
+            // }
+
+            // router.push(`${pathname}?${createQueryString("lat", query.lat)}&${createQueryString("long", query.long)}`, {shallow: false})
+
+            const data = [
+                { key: 'lat', value: coordinates.latitude },
+                { key: 'long', value: coordinates.longitude },
+            ];
+            router.push(updateParamValue(data), {shallow: false})
         }
 
     }, [coordinates])
@@ -62,7 +76,9 @@ const MainFlyerList = (({dictionary, locale}: MainFlyerListType) => {
             .then(data => {
                 // Handle the response
 
-                setProductList(data)
+                // setProductList(data)
+                dispatch(addFlyer(data))
+
                 console.log(data);
             })
             .catch(error => {
@@ -83,13 +99,17 @@ const MainFlyerList = (({dictionary, locale}: MainFlyerListType) => {
 
     console.log("render", productList)
 
+    const showMoreItem = () => {
+        setVisible((prevValue)=>prevValue + 8)
+    }
+
     return (
         <div>
-            <div className='w-full h-[70vh] grid grid-cols-2 gap-x-4 gap-y-5
+            <div className='w-full h-[48vh] grid grid-cols-2 gap-x-4 gap-y-5
 overflow-y-scroll overflow-x-hidden scrollbar-w-2 sm:grid-cols-4
 xxl:grid-cols-4 pt-4'>
 
-                {productList?.map((flyer: any, index: number) => (
+                {productList?.slice(0,visible).map((flyer: any, index: number) => (
                 <Link href={`/catalog-preview/${flyer._id}`} key={index}>
                     <MainFlyerCard key={index} flyer={flyer}/>
                     </Link>
@@ -97,8 +117,8 @@ xxl:grid-cols-4 pt-4'>
             </div>
 
             <button
-                className="w-full  bg-primary py-2 px-6 text-base font-medium text-white rounded-md hover:bg-primary/80" onClick={()=>{
-                    router.push(`/ordermessage?orderId=6492f48e189f0b6f28326db8`);
+                className="w-full  bg-[#F5F5F5] py-2 px-6 text-base font-medium text-[#898989] rounded-md hover:bg-[#E7E7E7]" onClick={()=>{
+                    setVisible((prevValue)=>prevValue + 8)
                 }}>
                 {dictionary.loadMore}
             </button>
