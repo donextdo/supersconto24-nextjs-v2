@@ -16,6 +16,7 @@ import { RootState } from "@/app/[lang]/redux/store";
 import baseUrl from "../../../../../../utils/baseUrl";
 import CaPopup from "@/app/[lang]/components/NewProduct/CaPopup";
 import CartCard from "./CartCard";
+import { Product } from "../../product/product";
 
 
 // import { PDFDocument, StandardFonts } from 'pdf-lib';
@@ -31,7 +32,16 @@ interface CartType {
 }
 
 const Cart: FC<CartType> = () => {
-    const cartItems = useSelector((state: RootState) => state.cart.items);
+    const [cartItems, setCartItems] = useState<Product[]>([]);
+    const [count, setCount] = useState(0);
+
+    useEffect(() => {
+        const cartItemsString = localStorage.getItem('cartItems');
+        const parsedCartItems = cartItemsString ? JSON.parse(cartItemsString) : [];
+        setCartItems(parsedCartItems);
+       
+    }, [count]);
+
     let totalAmount1 = useSelector((state: RootState) => state.cart.totalAmount);
 
     const [selectedValue, setSelectedValue] = useState("Ship");
@@ -47,6 +57,8 @@ const Cart: FC<CartType> = () => {
     const [zipCode, setZipCode] = useState('');
     const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('');
+    const [cartObj, setCartObj] = useState<any>([]);
+
     let id: any;
     if (typeof localStorage !== 'undefined') {
         id = localStorage.getItem("id");
@@ -177,7 +189,7 @@ const Cart: FC<CartType> = () => {
         //     pathname: '/checkout',
         //     query: shippingObj,
         //   }}> </Link>
-        
+
     }
 
     const handlecoupon = async () => {
@@ -208,6 +220,58 @@ const Cart: FC<CartType> = () => {
         //   pdf.save('My Shopping List.pdf');
         // });
     };
+
+    // const items: [string] =
+    // JSON.parse(localStorage.getItem("cartItems")!) ?? [];
+    useEffect(() => {
+        fetchCart();
+    }, []);
+
+    async function fetchCart() {
+        if (cartItems.length > 0) {
+            fetch(`${baseUrl}/catelog/item/find-list`, {
+                method: "post",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    items: cartItems.map((i: any) => i._id),
+                }),
+            })
+                .then((response) => response.json())
+                .then((responseJson) => {
+                    const cloneResponse = [...responseJson];
+                    console.log(cloneResponse);
+                    cloneResponse.map((item) => {
+                        const itemone: any = cartItems.find((p) => p._id === item._id);
+                        item.cartQuantity = itemone?.quantity ? itemone?.quantity : 0;
+                    });
+                    setCartObj(groupBy([...cloneResponse], (v) => v.shop_id.shop_name));
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+
+    }
+
+
+
+    const groupBy = (
+        x: any[],
+        f: (arg0: any, arg1: any, arg2: any) => string | number
+    ) => x.reduce((a, b, i) => ((a[f(b, i, x)] ||= []).push(b), a), {});
+
+    //   const categorizedProducts = cartObj.reduce((acc:any, product:any) => {
+    //     const shopName = product.shop_id.shop_name;
+    //     if (!acc[shopName]) {
+    //       acc[shopName] = [];
+    //     }
+    //     acc[shopName].push(product);
+    //     return acc;
+    //   }, {});
+
+
+    console.log(cartObj)
+
     return (
         <div className="container mx-auto xl:px-40 px-5 mt-24 mb-20">
             <div>
@@ -233,14 +297,17 @@ const Cart: FC<CartType> = () => {
                             </div>
 
                             {/* products */}
-                            <div>
-                                {cartItems.map((item, index) => (
-
-                                    <CartCard item={item} key={index} totalAmount={totalAmount}/>
-                                    
-                                ))}
-
-                            </div>
+                            {Object.keys(cartObj).map((shop) => (
+                                <div key={shop}>
+                                    <div>{shop}</div>
+                                    {cartObj[shop]
+                                        .sort((a: any, b: any) => a.product_name.localeCompare(b.product_name))
+                                        .map((item: any, index: number) => (
+                                            <CartCard item={item} key={index} totalAmount={totalAmount}
+                                            setCount={setCount} />
+                                        ))}
+                                </div>
+                            ))}
                         </div>
 
                         <section className="flex justify-between mt-6">
@@ -252,7 +319,7 @@ const Cart: FC<CartType> = () => {
                             </div>
 
                             <div className="inline-flex gap-2">
-                                <button className="bg-[#233a95] text-white py-2.5 px-4 rounded-md text-xs h-11" onClick={handleDownload}>Download</button>
+                                {/* <button className="bg-[#233a95] text-white py-2.5 px-4 rounded-md text-xs h-11" onClick={handleDownload}>Download</button> */}
                                 <button className="bg-[#233a95] text-white py-2.5 px-4 rounded-md text-xs h-11" onClick={handlePrint}>Print</button>
                                 <button className="bg-[#233a95] text-white py-2.5 px-4 rounded-md text-xs h-11 w-[104px] hidden md:block" onClick={handleClear}>Remove All</button>
                             </div>
@@ -328,8 +395,8 @@ const Cart: FC<CartType> = () => {
                                 </tbody>
                             </table>
 
-                            <Link href={{pathname: '/checkout', query: { shippingObj:JSON.stringify(shippingObj)}}}>   
-                            <button className="bg-primary text-white py-2.5  rounded-md text-sm h-[50px] w-full text-center mt-4" onClick={handleCheckout}>Proceed to checkout</button>
+                            <Link href={{ pathname: '/checkout', query: { shippingObj: JSON.stringify(shippingObj) } }}>
+                                <button className="bg-primary text-white py-2.5  rounded-md text-sm h-[50px] w-full text-center mt-4" onClick={handleCheckout}>Proceed to checkout</button>
                             </Link>
 
                         </div>
@@ -346,7 +413,7 @@ const Cart: FC<CartType> = () => {
                         <tbody>
                             <tr>
                                 <td className="border-b border-[#e4e5ee] py-3 font-semibold text-[13px]">Subtotal</td>
-                                <td className="border-b border-[#e4e5ee] py-3 text-[15px] text-right">${totalAmount}</td>
+                                <td className="border-b border-[#e4e5ee] py-3 text-[15px] text-right">${totalAmount.toFixed(2)}</td>
                             </tr>
                             <tr>
                                 <td rowSpan={4} className="text-[13px] font-semibold border-b border-[#e4e5ee]">Shipping</td>
@@ -374,7 +441,7 @@ const Cart: FC<CartType> = () => {
                             </tr>
                             <tr>
                                 <td className="border-b border-[#e4e5ee] text-[13px] font-semibold pb-4">Total</td>
-                                <td className="border-b border-[#e4e5ee] text-right font-semibold text-xl py-4">${total}</td>
+                                <td className="border-b border-[#e4e5ee] text-right font-semibold text-xl py-4">${total.toFixed(2)}</td>
                             </tr>
                         </tbody>
                     </table>
