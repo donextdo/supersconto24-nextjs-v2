@@ -1,8 +1,13 @@
-import axios, {AxiosRequestConfig, AxiosResponse, CancelTokenSource, isCancel,} from "axios";
+import axios, {
+  AxiosRequestConfig,
+  AxiosResponse,
+  CancelTokenSource,
+  isCancel,
+} from "axios";
 
-// const baseUrl = "http://localhost:3000/v1/api";
+const baseUrl = "http://localhost:3000/v1/api";
 
-const baseUrl = "https://api.supersconto24.com/v1/api";
+// const baseUrl = "https://api.supersconto24.com/v1/api";
 
 type AxiosRequestType = { url: string; data?: any; method?: string };
 export const axiosRequest = () => {
@@ -41,13 +46,20 @@ export const axiosRequest = () => {
 };
 
 export function updateParamValue(data: any) {
-  const params = window.location.href.indexOf("?") !== -1 ? window.location.href.slice(window.location.href.indexOf("?") + 1).split("&"): []
+  const params =
+    window.location.href.indexOf("?") !== -1
+      ? window.location.href
+          .slice(window.location.href.indexOf("?") + 1)
+          .split("&")
+      : [];
 
   const updatedParams = [...params];
 
   data.forEach((item: any) => {
     const { key, value } = item;
-    const paramIndex = updatedParams.findIndex((param) => param.startsWith(`${key}=`));
+    const paramIndex = updatedParams.findIndex((param) =>
+      param.startsWith(`${key}=`)
+    );
 
     if (paramIndex !== -1) {
       updatedParams[paramIndex] = `${key}=${value}`;
@@ -58,8 +70,11 @@ export function updateParamValue(data: any) {
 
   return `${window.location.pathname}?${updatedParams.join("&")}`;
 }
-export function convertPrice(priceLocal: number, localBasedOneUSD: number,targetBasedOnUSD: number) {
-
+export function convertPrice(
+  priceLocal: number,
+  localBasedOneUSD: number,
+  targetBasedOnUSD: number
+) {
   // Convert EUR to USD
   const priceUSD = priceLocal / localBasedOneUSD;
 

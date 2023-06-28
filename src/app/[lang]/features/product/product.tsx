@@ -51,21 +51,21 @@ export interface Product {
   description: string;
   productQuantity: number;
   skuNumber: string;
-  count:number;
-  newprice:number;
+  count: number;
+  newprice: number;
   type: string;
   review: number;
-  mfgDate:string;
-  life:string;
-  category:string;
-  tags:string;
-  speacialtag:string;
-  additionalInformation: string
-  isNewArrival: boolean
-  isBestSeller : boolean
-  imageArray: string
-  product_name:string;
-  product_description:string;
-  unit_price:number;
-  product_image:string;
+  mfgDate: string;
+  life: string;
+  category: string;
+  tags: string;
+  speacialtag: string;
+  additionalInformation: string;
+  isNewArrival: boolean;
+  isBestSeller: boolean;
+  imageArray: string;
+  product_name: string;
+  product_description: string;
+  unit_price: number;
+  product_image: string;
 }
