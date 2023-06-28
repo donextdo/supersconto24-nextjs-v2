@@ -70,18 +70,4 @@ export function updateParamValue(data: any) {
 
   return `${window.location.pathname}?${updatedParams.join("&")}`;
 }
-export function convertPrice(
-  priceLocal: number,
-  localBasedOneUSD: number,
-  targetBasedOnUSD: number
-) {
-  // Convert EUR to USD
-  const priceUSD = priceLocal / localBasedOneUSD;
-
-  // Convert USD to Target
-  const priceLKR = priceUSD * targetBasedOnUSD;
-
-  // Round the result to two decimal places
-  return Math.round(priceLKR * 100) / 100;
-}
 export default baseUrl;

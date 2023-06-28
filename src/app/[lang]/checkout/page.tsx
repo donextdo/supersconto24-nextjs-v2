@@ -9,6 +9,7 @@ import { AppDispatch, RootState } from "@/app/[lang]/redux/store";
 import CheckoutSidebar from "@/app/[lang]/components/Checkout/CheckoutSidebar";
 import { Locale } from "../../../../i18n-config";
 import { Product } from "../features/product/product";
+import useCurrency from "@/app/[lang]/components/Hooks/useCurrencyHook";
 
 export interface OrderObj {
   userId: string;
@@ -49,6 +50,15 @@ const Checkout = async () => {
   const [phoneError, setPhoneError] = useState("");
   const [formError, setFormError] = useState("");
 
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  // const [ratio, targetRate, localeRate] = useCurrency(
+  //   "EUR",
+  //   searchParams.get("currency") ?? "EUR"
+  // );
+
   const [ship, setShip] = useState({
     shippingAddress: {
       apartment: "",
@@ -64,10 +74,6 @@ const Checkout = async () => {
       zipCode: "",
     },
   });
-
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
 
   //  const { cartshippingFirstName, cartshippingLastName, cartshippingCompanyName, cartshippingcountry, cartshippingstreet, cartshippingapartment, cartshippingtown, cartshippingstate, cartshippingzipCode, cartshippingphone, cartshippingEmail } = router.query;
   const shippingObj = searchParams.get("shippingObj");
@@ -103,22 +109,31 @@ const Checkout = async () => {
     }
   }, []);
 
-  useEffect(() => {
-    let discountprice;
-    let newprice;
-    cartItems.forEach((item) => {
-      if (item.discount) {
-        discountprice = item.unit_price * (item.discount / 100);
-        console.log("discountprice : ", discountprice);
-        newprice = item.unit_price - discountprice;
-      } else {
-        newprice = item.unit_price;
-        console.log("newprice : ", newprice);
-      }
-      let subtotal = item.count * newprice;
-      setTotalPrice(subtotal);
-    });
-  }, [cartItems]);
+  // useEffect(() => {
+  //   let discountprice;
+  //   let newprice;
+  //   cartItems.forEach((item) => {
+  //     if (item.discount) {
+  //       discountprice = item.unit_price * (item.discount / 100);
+  //       console.log("discountprice : ", discountprice);
+  //       newprice = item.unit_price - discountprice;
+  //     } else {
+  //       newprice = item.unit_price;
+  //       console.log("newprice : ", newprice);
+  //     }
+  //     let subtotal = item.count * newprice;
+
+  //     setTotalPrice(subtotal);
+  //   });
+  // }, [cartItems]);
+
+  // useEffect(() => {
+  //   console.log("currency checkout: ", cartItems[0].unit_price * ratio, {
+  //     ratio,
+  //     targetRate,
+  //     localeRate,
+  //   });
+  // }, [cartItems]);
 
   const dispatch = useDispatch<AppDispatch>();
 

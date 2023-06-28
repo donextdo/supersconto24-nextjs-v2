@@ -206,6 +206,7 @@ const Cart: FC<CartType> = () => {
   // JSON.parse(localStorage.getItem("cartItems")!) ?? [];
   useEffect(() => {
     fetchCart();
+    console.log({ cartItems });
   }, [cartItems]);
 
   async function fetchCart() {

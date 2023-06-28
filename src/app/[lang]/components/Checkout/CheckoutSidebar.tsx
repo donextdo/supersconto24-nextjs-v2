@@ -1,6 +1,14 @@
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import useCurrency from "../Hooks/useCurrencyHook";
 
 const CheckoutSidebar = ({ item }: any) => {
+  const searchParams = useSearchParams();
+  const [ratio, targetRate, localeRate] = useCurrency(
+    "EUR",
+    searchParams.get("currency") ?? "EUR"
+  );
+
   // useEffect(() => {
   //   console.log("item.subtotal : ", item);
 
@@ -41,12 +49,14 @@ const CheckoutSidebar = ({ item }: any) => {
       {item.discount > 0 ? (
         <td className=" py-3 text-[15px] text-right">
           Rs{" "}
-          {(item.unit_price - (item.unit_price / 100) * item.discount) *
-            item.count}
+          {(
+            (item.unit_price - (item.unit_price / 100) * item.discount) *
+            item.count
+          ).toFixed(2)}
         </td>
       ) : (
         <td className=" py-3 text-[15px] text-right">
-          Rs {item.unit_price * item.count}
+          Rs {(item.unit_price * item.count).toFixed(2)}
         </td>
       )}
     </tr>
