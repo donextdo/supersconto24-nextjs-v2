@@ -4,10 +4,6 @@ import useCurrency from "../Hooks/useCurrencyHook";
 
 const CheckoutSidebar = ({ item }: any) => {
   const searchParams = useSearchParams();
-  const [ratio, targetRate, localeRate] = useCurrency(
-    "EUR",
-    searchParams.get("currency") ?? "EUR"
-  );
 
   // useEffect(() => {
   //   console.log("item.subtotal : ", item);

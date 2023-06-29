@@ -7,9 +7,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import baseUrl from "../../../../utils/baseUrl";
 import { AppDispatch, RootState } from "@/app/[lang]/redux/store";
 import CheckoutSidebar from "@/app/[lang]/components/Checkout/CheckoutSidebar";
-import { Locale } from "../../../../i18n-config";
 import { Product } from "../features/product/product";
-import useCurrency from "@/app/[lang]/components/Hooks/useCurrencyHook";
 
 export interface OrderObj {
   userId: string;
@@ -24,18 +22,18 @@ export interface OrderObj {
 }
 
 const Checkout = async () => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [companyName, setCompanyName] = useState("");
-  const [country, setCountry] = useState("");
-  const [streetAddress, setStreetAddress] = useState("");
-  const [apartment, setApartment] = useState("");
-  const [townCity, setTownCity] = useState("");
-  const [state, setState] = useState("");
-  const [zipCode, setZipCode] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
-  const [note, setNote] = useState("");
+  const [firstName, setFirstName] = useState("yyyy");
+  const [lastName, setLastName] = useState("tttt");
+  const [companyName, setCompanyName] = useState("ttt");
+  const [country, setCountry] = useState("ttt");
+  const [streetAddress, setStreetAddress] = useState("tttt");
+  const [apartment, setApartment] = useState("ttt");
+  const [townCity, setTownCity] = useState("ttt");
+  const [state, setState] = useState("ttt");
+  const [zipCode, setZipCode] = useState("23456");
+  const [phone, setPhone] = useState("0703499272");
+  const [email, setEmail] = useState("thisara@gmail.com");
+  const [note, setNote] = useState("eeee");
 
   const [emailError, setEmailError] = useState("");
   const [firstNameError, setFirstNameError] = useState("");
@@ -101,10 +99,10 @@ const Checkout = async () => {
     if (typeof window !== "undefined") {
       const cartItemsString = localStorage.getItem("cartItems");
       const cartItemsArray = cartItemsString ? JSON.parse(cartItemsString) : [];
-      console.log("cart item details: ", cartItemsArray);
+      // console.log("cart item details: ", cartItemsArray);
       if (cartItemsArray) {
         setCartItems(cartItemsArray);
-        console.log("cart item detailssss: ", cartItems);
+        //  console.log("cart item detailssss: ", cartItems);
       }
     }
   }, []);
@@ -285,21 +283,24 @@ const Checkout = async () => {
   async function fetchData() {
     try {
       const res = await axios.get(`${baseUrl}/users/${id}`);
-      console.log(res.data);
+      //console.log({ res });
       const data = res.data;
-      setFirstName(data.billingAddress.billingFirstName);
-      setLastName(data.billingAddress.billingLastName);
-      setCompanyName(data.billingAddress.billingCompanyName);
-      setCountry(data.billingAddress.country);
-      setStreetAddress(data.billingAddress.street);
-      setApartment(data.billingAddress.apartment);
-      setTownCity(data.billingAddress.town);
-      setState(data.billingAddress.state);
-      setZipCode(data.billingAddress.zipCode);
-      setPhone(data.billingAddress.billingPhone);
-      setEmail(data.billingAddress.billingEmail);
-    } catch (err) {
-      console.log(err);
+      console.log({ data });
+      if (data.billingAddress) {
+        setFirstName(data.billingAddress.billingFirstName);
+        setLastName(data.billingAddress.billingLastName);
+        setCompanyName(data.billingAddress.billingCompanyName);
+        setCountry(data.billingAddress.country);
+        setStreetAddress(data.billingAddress.street);
+        setApartment(data.billingAddress.apartment);
+        setTownCity(data.billingAddress.town);
+        setState(data.billingAddress.state);
+        setZipCode(data.billingAddress.zipCode);
+        setPhone(data.billingAddress.billingPhone);
+        setEmail(data.billingAddress.billingEmail);
+      }
+    } catch (error) {
+      console.log({ error });
     }
   }
 
@@ -310,10 +311,12 @@ const Checkout = async () => {
   async function fetchData2() {
     try {
       const res = await axios.get(`${baseUrl}/users/${id}`);
-      console.log(res.data);
-      setShip(res.data);
+      //console.log(res.data);
+      if (res.data) {
+        setShip(res.data);
+      }
     } catch (err) {
-      console.log(err);
+      console.log({ err });
     }
   }
 
@@ -337,6 +340,7 @@ const Checkout = async () => {
       items: cartItems.map((item: any) => ({
         productId: item._id,
         orderquantity: item.count,
+        shopId: item.shop_id,
       })),
       billingAddress: {
         billingFirstName: firstName,
@@ -378,10 +382,10 @@ const Checkout = async () => {
             },
     };
 
-    console.log(orderObj);
+    //console.log(orderObj);
     try {
       const response = await axios.post(`${baseUrl}/neworder/place`, orderObj);
-      console.log(response.data); // do something with the response data
+      //console.log(response.data); // do something with the response data
       if (response.status == 201) {
         const orderData = {
           orderId: response.data.orderId,
@@ -397,8 +401,8 @@ const Checkout = async () => {
         // const newParams = params.toString();
         router.push(`/en/ordermessage?orderId=${response.data.orderId}`);
       }
-    } catch (error) {
-      console.log(error); // handle the error
+    } catch (err) {
+      console.log({ err }); // handle the error
     }
   };
 
@@ -424,6 +428,7 @@ const Checkout = async () => {
                 <label className="text-[13px]">First Name *</label>
                 <input
                   type="text"
+                  id="firstName"
                   className="w-full px-4 h-11 bg-gray-100 rounded-md mt-2 "
                   value={firstName}
                   onChange={handleFirstNameChange}

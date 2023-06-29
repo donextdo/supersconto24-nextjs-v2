@@ -17,8 +17,8 @@ const initialState: OrderState = {
   error: null,
 };
 
-const PRODUCTS_URL = `${baseUrl}/orders/get`;
-const PRODUCTS_URL_SET = `${baseUrl}/orders/place`;
+const PRODUCTS_URL = `${baseUrl}/neworder/get`;
+const PRODUCTS_URL_SET = `${baseUrl}/neworder/place`;
 
 export const insertOrderAsync = createAsyncThunk(
   "order/insertOrderAsync",
