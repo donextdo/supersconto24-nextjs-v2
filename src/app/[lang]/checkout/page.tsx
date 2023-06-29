@@ -156,6 +156,7 @@ const Checkout = async () => {
 
   const handleFirstNameChange = (e: any) => {
     const newFirstName = e.target.value;
+    console.log({ newFirstName });
     setFirstName(newFirstName);
     if (newFirstName === "") {
       setFirstNameError("First name cannot be empty");
@@ -388,7 +389,7 @@ const Checkout = async () => {
       //console.log(response.data); // do something with the response data
       if (response.status == 201) {
         const orderData = {
-          orderId: response.data.orderId,
+          orderId: response.data.orderNumber,
           message: response.data.messsage,
         };
         // router.push({
@@ -399,7 +400,7 @@ const Checkout = async () => {
         // const params = new URLSearchParams(searchParams);
         // params.set('countryCode', newCode);
         // const newParams = params.toString();
-        router.push(`/en/ordermessage?orderId=${response.data.orderId}`);
+        router.push(`/en/ordermessage?orderId=${response.data.orderNumber}`);
       }
     } catch (err) {
       console.log({ err }); // handle the error
