@@ -7,7 +7,7 @@ import { GrFormClose } from "react-icons/gr";
 import { IoCloseSharp, IoClose } from "react-icons/io5";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
-import { calSubTotal, removeAll } from "../cartSlice";
+import { calSubTotal } from "../cartSlice";
 import axios from "axios";
 // import baseUrl from "../../../../utils/baseUrl";
 import { useRouter } from "next/navigation";
@@ -18,6 +18,9 @@ import CaPopup from "@/app/[lang]/components/NewProduct/CaPopup";
 import CartCard from "./CartCard";
 import { Product } from "../../product/product";
 import useCurrency from "@/app/[lang]/components/Hooks/useCurrencyHook";
+import { HiOutlineDocumentDownload } from "react-icons/hi";
+import { TfiEmail } from "react-icons/tfi";
+import { BsPrinter } from "react-icons/bs";
 
 // import { PDFDocument, StandardFonts } from 'pdf-lib';
 // import fs from 'fs';
@@ -82,8 +85,8 @@ const Cart: FC<CartType> = () => {
 
   useEffect(() => {
     console.log(cartItems);
-    dispatch(calSubTotal(totalAmount));
-  });
+    dispatch(calSubTotal(12));
+  },[]);
 
   useEffect(() => {
     fetchData();
@@ -126,8 +129,8 @@ const Cart: FC<CartType> = () => {
   }
   useEffect(() => {
     //console.log(cartItems);
-    dispatch(calSubTotal(totalAmount));
-  });
+ dispatch(calSubTotal(12));
+  },[]);
 
   const [total, setTotal] = useState(totalAmount + 5);
 
@@ -140,7 +143,8 @@ const Cart: FC<CartType> = () => {
   }
 
   const handleClear = () => {
-    dispatch(removeAll());
+    localStorage.setItem('cartItems', '[]');
+    dispatch(calSubTotal(12));
   };
 
   function handleClick() {
@@ -228,7 +232,7 @@ const Cart: FC<CartType> = () => {
             const itemone: any = cartItems.find((p) => p._id === item._id);
             item.cartQuantity = itemone?.quantity ? itemone?.quantity : 0;
           });
-          setCartObj(groupBy([...cloneResponse], (v) => v.shop_id.shop_name));
+          setCartObj(groupBy([...cloneResponse], (v) => v.shop_id.shop_name + " - " +  v.shop_id.address.address));
         })
         .catch((error) => {
           console.error("error : ", error);
@@ -287,7 +291,7 @@ const Cart: FC<CartType> = () => {
               {/* products */}
               {Object.keys(cartObj).map((shop) => (
                 <div key={shop}>
-                  <div>{shop}</div>
+                  <div className="text-sm font-semibold my-2">{shop}</div>
                   {cartObj[shop]
                     .sort((a: any, b: any) =>
                       a.product_name.localeCompare(b.product_name)
@@ -299,6 +303,7 @@ const Cart: FC<CartType> = () => {
                         key={index}
                         totalAmount={totalAmount}
                         setCount={setCount}
+                        
                       />
                     ))}
                 </div>
@@ -322,12 +327,14 @@ const Cart: FC<CartType> = () => {
               </div>
 
               <div className="inline-flex gap-2">
-                {/* <button className="bg-[#233a95] text-white py-2.5 px-4 rounded-md text-xs h-11" onClick={handleDownload}>Download</button> */}
+                <button className="bg-[#233a95] text-white py-2.5 px-4 rounded-md text-xs h-11" onClick={handleDownload}><HiOutlineDocumentDownload className=" h-4 w-4"/></button>
+                <button className="bg-[#233a95] text-white py-2.5 px-4 rounded-md text-xs h-11" onClick={handleDownload}><TfiEmail className=" h-4 w-4"/></button>
+                
                 <button
                   className="bg-[#233a95] text-white py-2.5 px-4 rounded-md text-xs h-11"
                   onClick={handlePrint}
                 >
-                  Print
+                  <BsPrinter className=" h-4 w-4"/>
                 </button>
                 <button
                   className="bg-[#233a95] text-white py-2.5 px-4 rounded-md text-xs h-11 w-[104px] hidden md:block"

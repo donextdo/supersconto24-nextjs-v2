@@ -35,9 +35,7 @@ const ContactForm: React.FC<Props> = () => {
             Send Us
           </h2>
           <p className="text-[14px] mt-2 text-gray-600 text-center px-5">
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Expedita
-            quaerat unde quam dolor culpa veritatis inventore, aut commodi eum
-            veniam vel.
+       
           </p>
           <hr className="mt-16 mb-16 sm:sm:mb-10 md:mx-10" />
         </div>

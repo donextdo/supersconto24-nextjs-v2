@@ -8,7 +8,7 @@ import Link from "next/link";
 import { BsList } from "react-icons/bs";
 import Image from "next/image";
 import logo from "../../../../../assets/logo/logo.png";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/[lang]/redux/store";
 // import getConfig from "next/config";
 import { Location } from "../Location/Location";
@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import CartPopup from "@/app/[lang]/features/cart/popup-cart/CartPopup";
 import useCurrency from "@/app/[lang]/components/Hooks/useCurrencyHook";
+import { addProduct } from "../../features/cart/cartSlice";
 
 
 const Header = () => {
@@ -30,6 +31,8 @@ const Header = () => {
   const [totalQuantity, setTotalQuantity] = useState(0)
   const {getPrice} = useCurrency()
 
+  const dispatch = useDispatch()
+
   useEffect(() => {
     localStorage.setItem('totalCount', totalCount.toString());
   }, [totalCount]);
@@ -38,12 +41,21 @@ const Header = () => {
     const cartItemsString = localStorage.getItem('cartItems');
     const cartItemsArray = cartItemsString ? JSON.parse(cartItemsString) : [];
     if (cartItemsArray.length > 0){
-      const sum = cartItemsArray.reduce((accumulator: any, currentValue: any) => accumulator + (currentValue.count * currentValue.unit_price), 0);
+      const sum = cartItemsArray.reduce((accumulator:any, currentValue:any) => {
+        const updatedUnitPrice = currentValue.unit_price - (currentValue.unit_price * (currentValue.discount / 100));
+        console.log((currentValue.unit_price * (currentValue.discount / 100)))
+        return accumulator + (currentValue.count * updatedUnitPrice);
+      }, 0);
+      
       const sumQuantity = cartItemsArray.reduce((accumulator: any, currentValue: any) => accumulator + currentValue.count, 0);
       setTotalPrice(sum)
       setTotalQuantity(sumQuantity)
+      
     }
-  },[]);
+    
+    
+    console.log("head total",totalAmount)
+  },[totalAmount]);
 
   const handleClick = () => {
     setCart(!cart)

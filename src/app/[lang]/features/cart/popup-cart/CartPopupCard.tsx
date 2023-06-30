@@ -2,7 +2,7 @@ import Image from "next/image";
 import product from '../../../assets/product/product.jpg'
 import {IoClose} from "react-icons/io5";
 import {useDispatch} from "react-redux";
-import {removeItem} from "../cartSlice";
+// import {removeItem} from "../cartSlice";
 
 const CartPopupCard = ({item, setCartItems, getPrice}: any) => {
     const dispatch = useDispatch()

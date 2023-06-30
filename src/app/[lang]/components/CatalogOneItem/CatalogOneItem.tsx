@@ -42,6 +42,34 @@ const CatalogCarousel: React.FC<Props> = ({catalog, params}) => {
     const [changecolor, setChangecolor] = useState(false)
     const [cart, setCart] = useState(false);
     const totalCount = useSelector((state: RootState) => state.cart.totalCount);
+  const totalAmount = useSelector((state: RootState) => state.cart.totalAmount);
+  const [totalPrice, setTotalPrice] = useState(0)
+  const [totalQuantity, setTotalQuantity] = useState(0)
+
+  useEffect(() => {
+    localStorage.setItem('totalCount', totalCount.toString());
+  }, [totalCount]);
+
+  useEffect(() => {
+    const cartItemsString = localStorage.getItem('cartItems');
+    const cartItemsArray = cartItemsString ? JSON.parse(cartItemsString) : [];
+    if (cartItemsArray.length > 0){
+      const sum = cartItemsArray.reduce((accumulator:any, currentValue:any) => {
+        const updatedUnitPrice = currentValue.unit_price - (currentValue.unit_price * (currentValue.discount / 100));
+        return accumulator + (currentValue.count * updatedUnitPrice);
+      }, 0);
+
+      const sumQuantity = cartItemsArray.reduce((accumulator: any, currentValue: any) => accumulator + currentValue.count, 0);
+      setTotalPrice(sum)
+      setTotalQuantity(sumQuantity)
+      
+    }
+    
+    
+    console.log("head total",totalAmount)
+  },[totalAmount]);
+
+
 
 
     useEffect(() => {
@@ -114,8 +142,8 @@ const CatalogCarousel: React.FC<Props> = ({catalog, params}) => {
                         </Link>
                     </div>
                     <div className='text-center'>
-                        <p>{catalog.title}</p>
-                        <p>Expire Date - {formattedDate}</p>
+                        <p className="font-semibold">{catalog.title}</p>
+                        <p className="text-sm">Expire Date - {formattedDate}</p>
                     </div>
                     <div
                         className="relative mr-2"
@@ -130,10 +158,10 @@ const CatalogCarousel: React.FC<Props> = ({catalog, params}) => {
                         </button>
 
                         {cart && <CartPopup setCart={setCart}/>}
-                        {totalCount > 0 && (
+                        {totalQuantity > 0 && (
                             <div
                                 className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full h-5 w-5 flex items-center justify-center">
-                                {totalCount}
+                                {totalQuantity}
                             </div>
                         )}
                     </div>

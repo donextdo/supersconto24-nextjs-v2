@@ -1,7 +1,6 @@
 import {
   calSubTotal,
-  removeItem,
-  updateItemQuantity,
+
 } from "@/app/[lang]/features/cart/cartSlice";
 import { Product } from "@/app/[lang]/features/product/product";
 import { updateProductQuantity } from "@/app/[lang]/features/product/productSlice";
@@ -43,6 +42,7 @@ const CartCard = ({ item, index, totalAmount, setCount,getPrice }: any) => {
   }, []);
 
   const handleCheckboxChange = () => {};
+
   const handleIncrement = (product: Product) => {
     console.log({ product });
     const cartItemsString = localStorage.getItem("cartItems");
@@ -57,7 +57,7 @@ const CartCard = ({ item, index, totalAmount, setCount,getPrice }: any) => {
       setCount(items[itemIndex].count);
       console.log({ setCount });
     }
-    dispatch(calSubTotal(totalAmount));
+    dispatch(calSubTotal(12));
   };
 
   const handleDecrement = (product: Product) => {
@@ -76,7 +76,7 @@ const CartCard = ({ item, index, totalAmount, setCount,getPrice }: any) => {
         setCount(items[itemIndex].count);
       }
     }
-    dispatch(calSubTotal(totalAmount));
+    dispatch(calSubTotal(12));
   };
   useEffect(() => {
     const cartItemsString = localStorage.getItem("cartItems");
@@ -86,8 +86,22 @@ const CartCard = ({ item, index, totalAmount, setCount,getPrice }: any) => {
   }, []);
 
   const handleDelete = (_id: string) => {
-    dispatch(removeItem(_id));
-    dispatch(calSubTotal(totalAmount));
+    const cartItemsString = localStorage.getItem('cartItems');
+    const items = cartItemsString ? JSON.parse(cartItemsString) : [];
+
+
+    const filteredCartItems = items.filter((item:any) => item._id !== _id);
+
+    if (filteredCartItems.length == 0) {
+      localStorage.removeItem("cartItems");
+      dispatch(calSubTotal(12));
+    } else {
+      localStorage.setItem("cartItems", JSON.stringify(filteredCartItems));
+      dispatch(calSubTotal(12));
+    }
+    // setCartObj(filteredCartItems)
+    
+
   };
 
   useEffect(() => {

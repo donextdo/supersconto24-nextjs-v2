@@ -6,7 +6,7 @@ import { FC, useState } from "react";
 import Image from "next/image";
 import { RootState } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { addItem, calSubTotal, updateItemQuantity } from "../cart/cartSlice";
+import { calSubTotal  } from "../cart/cartSlice";
 import { updateProductQuantity } from "./productSlice";
 import { Product } from "./product";
 import Link from "next/link";
@@ -28,14 +28,20 @@ export const ProductCard: FC<Props> = ({ product }) => {
   const [productPopup, setProductPopup] = useState(false);
   const [wishlist, setWishlist] = useState([]);
   const dispatch = useDispatch();
-  const cartItems = useSelector((state: RootState) => state.cart.items);
+  
   const [proId, setProId] = useState("");
   const [count, setCount] = useState(0);
   const {getPrice} = useCurrency();
 
+  const [cartItems, setCartItems] = useState<Product[]>([]);
+    
+
+    
+
   useEffect(() => {
     const cartItemsString = localStorage.getItem("cartItems");
     const items = cartItemsString ? JSON.parse(cartItemsString) : [];
+    setCartItems(items);
     const itemone = items.find((item: any) => item._id === product._id);
     setCount(itemone?.count ?? 0);
     console.log(itemone);
@@ -61,7 +67,7 @@ export const ProductCard: FC<Props> = ({ product }) => {
     totalAmount += subtotal;
   }
   useEffect(() => {
-    dispatch(calSubTotal(totalAmount));
+    dispatch(calSubTotal(12));
   }, [dispatch]);
 
   useEffect(() => {
@@ -87,6 +93,7 @@ export const ProductCard: FC<Props> = ({ product }) => {
       setCount(items[itemIndex].count);
     }
 
+    dispatch(calSubTotal(12));
     // dispatch(calSubTotal(totalAmount))
   };
 
@@ -104,7 +111,7 @@ export const ProductCard: FC<Props> = ({ product }) => {
       }
     }
 
-    dispatch(calSubTotal(totalAmount));
+    dispatch(calSubTotal(12));
   };
 
   const handleaddToCart = (product: Product) => {
@@ -118,13 +125,15 @@ export const ProductCard: FC<Props> = ({ product }) => {
       items.push(newItem);
       localStorage.setItem("cartItems", JSON.stringify(items));
       setCount(newItem.count);
+      dispatch(calSubTotal(12));
     } else {
       items[itemIndex].count += 1;
       localStorage.setItem("cartItems", JSON.stringify(items));
       setCount(items[itemIndex].count);
+      dispatch(calSubTotal(12));
     }
 
-    dispatch(calSubTotal(totalAmount));
+    
     Swal.fire({
       title:
         '<span style="font-size: 18px">Item has been added to your card</span>',
@@ -275,11 +284,18 @@ export const ProductCard: FC<Props> = ({ product }) => {
             <p className="text-md text-gray-400 flex">{graystars}</p>
           </div>
           <div className=" flex flex-row items-center">
-            <span className="text-gray-400 text-sm line-through mr-2 my-1 font-[1.125rem]">
+          {product.discount ? (
+              <span className="text-gray-400 text-sm line-through mr-2 my-1 font-[1.125rem]">
               {
                 getPrice(product.unit_price) as unknown as ReactElement
               }
             </span>
+            ):<span className="text-gray-400 text-sm  mr-2 my-1 font-[1.125rem]">
+            {
+              getPrice(product.unit_price) as unknown as ReactElement
+            }
+          </span>}
+            
             {product.discount && (
               <span className="my-1 text-red-700 text-lg font-semibold">
                 {getPrice(newprice)}

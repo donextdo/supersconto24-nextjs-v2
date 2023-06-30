@@ -1,13 +1,13 @@
 "use client";
 import axios from "axios";
-import {useEffect, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-import {usePathname, useRouter, useSearchParams} from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import baseUrl from "../../../../utils/baseUrl";
-import {AppDispatch, RootState} from "@/app/[lang]/redux/store";
+import { AppDispatch, RootState } from "@/app/[lang]/redux/store";
 import CheckoutSidebar from "@/app/[lang]/components/Checkout/CheckoutSidebar";
-import {Product} from "../features/product/product";
+import { Product } from "../features/product/product";
 import useCurrency from "@/app/[lang]/components/Hooks/useCurrencyHook";
 
 export interface OrderObj {
@@ -54,7 +54,7 @@ const Checkout = () => {
     const searchParams = useSearchParams();
     const [totalPrice, setTotalPrice] = useState(0);
     const [selectedRadio, setSelectedRadio] = useState("");
-    const {getPrice} = useCurrency();
+    const { getPrice } = useCurrency();
 
     const [ship, setShip] = useState({
         shippingAddress: {
@@ -112,7 +112,7 @@ const Checkout = () => {
 
     const handleFirstNameChange = (e: any) => {
         const newFirstName = e.target.value;
-        console.log({newFirstName});
+        console.log({ newFirstName });
         setFirstName(newFirstName);
         if (newFirstName === "") {
             setFirstNameError("First name cannot be empty");
@@ -236,7 +236,7 @@ const Checkout = () => {
             const res = await axios.get(`${baseUrl}/users/${id}`);
             //console.log({ res });
             const data = res.data;
-            console.log({data});
+            console.log({ data });
             if (data) {
                 setShip(data);
                 if (data.billingAddress) {
@@ -255,7 +255,7 @@ const Checkout = () => {
             }
 
         } catch (error) {
-            console.log({error});
+            console.log({ error });
         }
     }
 
@@ -265,6 +265,7 @@ const Checkout = () => {
 
     const handleOrder = async (event: any) => {
         event.preventDefault();
+        const id = localStorage.getItem("id")
 
         const orderObj = {
             userId: id ? id : "",
@@ -306,7 +307,7 @@ const Checkout = () => {
             },
         };
 
-        //console.log(orderObj);
+        console.log(orderObj);
         try {
             const response = await axios.post(`${baseUrl}/neworder/place`, orderObj);
             //console.log(response.data); // do something with the response data
@@ -480,7 +481,7 @@ const Checkout = () => {
                         </div>
 
                         <div className="flex gap-1 border-b border-[#e4e5ee] py-3">
-                            <input type="checkbox" name="address" id="address"/>
+                            <input type="checkbox" name="address" id="address" />
                             <p className="text-[13px] font-semibold">SHIP TO A DIFFERENT ADDRESS?</p>
                         </div>
 
@@ -498,47 +499,47 @@ const Checkout = () => {
                 <div>
                     <div className="w-[400px] border-2 border-[#233a95] p-7 rounded-md ml-8 hidden xl:block bg-white">
                         <h2 className="font-semibold mb-3">YOUR ORDER</h2>
-                        <hr/>
+                        <hr />
                         <table className="w-full">
                             <tbody>
-                            <tr>
-                                <td className="border-b border-[#e4e5ee] py-3 font-semibold text-[13px] text-[#c2c2d3]">
-                                    Product
-                                </td>
-                                <td className="border-b border-[#e4e5ee] py-3 font-semibold text-[13px] text-right text-[#c2c2d3]">
-                                    Subtotal
-                                </td>
-                            </tr>
+                                <tr>
+                                    <td className="border-b border-[#e4e5ee] py-3 font-semibold text-[13px] text-[#c2c2d3]">
+                                        Product
+                                    </td>
+                                    <td className="border-b border-[#e4e5ee] py-3 font-semibold text-[13px] text-right text-[#c2c2d3]">
+                                        Subtotal
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                         {/* load items and total  map method*/}
                         <table className="w-full">
                             <tbody>
-                            {cartItems.map((item: any, index: number) => (
-                                <CheckoutSidebar getPrice={getPrice} item={item} key={index}/>
-                            ))}
+                                {cartItems.map((item: any, index: number) => (
+                                    <CheckoutSidebar getPrice={getPrice} item={item} key={index} />
+                                ))}
                             </tbody>
                         </table>
 
                         <table className="w-full">
                             <tbody>
-                            <tr>
-                                <td className="text-[13px] font-semibold border-y border-[#e4e5ee] text-[#71778e]">
-                                    Subtotal
-                                </td>
-                                <td className=" py-3 text-[15px] text-right border-y border-[#e4e5ee]">
-                                    {getPrice(totalAmount)}
-                                </td>
-                            </tr>
-                            <tr>
-                                {/* <td rowSpan={2} className="text-[13px] font-semibold border-b border-[#e4e5ee] text-[#71778e]">Shipping</td>
+                                <tr>
+                                    <td className="text-[13px] font-semibold border-y border-[#e4e5ee] text-[#71778e]">
+                                        Subtotal
+                                    </td>
+                                    <td className=" py-3 text-[15px] text-right border-y border-[#e4e5ee]">
+                                        {getPrice(totalAmount)}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    {/* <td rowSpan={2} className="text-[13px] font-semibold border-b border-[#e4e5ee] text-[#71778e]">Shipping</td>
                                 <td className="text-right text-[13px] py-3">Flat rate: <span className="inline-flex text-[#d51243] text-sm gap-2">$5.00<input type="radio" name="vendor" value="Vendor 1"
                                 //  onChange={handleCheckboxChange} 
                                 />
                                 </span></td> */}
-                            </tr>
-                            <tr>
-                                {/* <td className="text-[13px] pb-5 text-right border-b border-[#e4e5ee]">
+                                </tr>
+                                <tr>
+                                    {/* <td className="text-[13px] pb-5 text-right border-b border-[#e4e5ee]">
                                     <label className="inline-flex -gap-1"><span className="mr-2">Local pickup</span>
                                     <input
                                         type="radio"
@@ -548,15 +549,15 @@ const Checkout = () => {
                                     />
                                 </label>
                                 </td> */}
-                            </tr>
-                            <tr>
-                                <td className="border-b border-[#e4e5ee] text-[13px] font-semibold py-4 text-[#71778e]">
-                                    Total
-                                </td>
-                                <td className="border-b border-[#e4e5ee] text-right font-semibold text-xl py-4 ">
-                                    {getPrice(totalAmount)}
-                                </td>
-                            </tr>
+                                </tr>
+                                <tr>
+                                    <td className="border-b border-[#e4e5ee] text-[13px] font-semibold py-4 text-[#71778e]">
+                                        Total
+                                    </td>
+                                    <td className="border-b border-[#e4e5ee] text-right font-semibold text-xl py-4 ">
+                                        {getPrice(totalAmount)}
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
 
@@ -619,32 +620,32 @@ const Checkout = () => {
                             your experience throughout this website, and for other purposes
                             described in our{" "}
                             <span className="text-primary underline underline-offset-1 font-semibold">
-                privacy policy.
-              </span>
+                                privacy policy.
+                            </span>
                         </p>
 
                         <div className="flex gap-2 mt-4">
-                            <input type="checkbox" name="address" id="address"/>
+                            <input type="checkbox" name="address" id="address" />
                             <p className="text-xs">
                                 I have read and agree to the website{" "}
                                 <span className="text-primary underline underline-offset-1">
-                  terms and conditions*{" "}
-                </span>
+                                    terms and conditions*{" "}
+                                </span>
                             </p>
                         </div>
 
                         {firstName == "" ||
-                        lastName == "" ||
-                        companyName == "" ||
-                        country == "" ||
-                        streetAddress == "" ||
-                        apartment == "" ||
-                        townCity == "" ||
-                        state == "" ||
-                        zipCode == "" ||
-                        phone == "" ||
-                        email == "" ||
-                        cartItems.length == 0 ? (
+                            lastName == "" ||
+                            companyName == "" ||
+                            country == "" ||
+                            streetAddress == "" ||
+                            apartment == "" ||
+                            townCity == "" ||
+                            state == "" ||
+                            zipCode == "" ||
+                            phone == "" ||
+                            email == "" ||
+                            cartItems.length == 0 ? (
                             <button
                                 className="bg-primary opacity-50 text-white py-2.5 rounded-md text-sm h-[50px] w-full text-center mt-6 font-semibold"
                                 onClick={handleOrder}
@@ -668,73 +669,73 @@ const Checkout = () => {
             <div>
                 <div className="w-full border-2 border-[#233a95] mt-10 p-4 rounded-md xl:hidden">
                     <h2 className="font-semibold mb-3">YOUR ORDER</h2>
-                    <hr/>
+                    <hr />
                     <table className="w-full">
                         <tbody>
-                        <tr>
-                            <td className="border-b border-[#e4e5ee] py-3 font-semibold text-[13px] text-[#c2c2d3]">
-                                Product
-                            </td>
-                            <td className="border-b border-[#e4e5ee] py-3 font-semibold text-[13px] text-right text-[#c2c2d3]">
-                                Subtotal
-                            </td>
-                        </tr>
+                            <tr>
+                                <td className="border-b border-[#e4e5ee] py-3 font-semibold text-[13px] text-[#c2c2d3]">
+                                    Product
+                                </td>
+                                <td className="border-b border-[#e4e5ee] py-3 font-semibold text-[13px] text-right text-[#c2c2d3]">
+                                    Subtotal
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                     {/* load items and total  map method*/}
                     <table className="w-full">
                         <tbody>
-                        {cartItems.map((item: any, index: number) => (
-                            <CheckoutSidebar getPrice={getPrice} item={item} key={index}/>
-                        ))}
+                            {cartItems.map((item: any, index: number) => (
+                                <CheckoutSidebar getPrice={getPrice} item={item} key={index} />
+                            ))}
                         </tbody>
                     </table>
 
                     <table className="w-full">
                         <tbody>
-                        <tr>
-                            <td className="text-[13px] font-semibold border-y border-[#e4e5ee] text-[#71778e]">
-                                Subtotal
-                            </td>
-                            <td className=" py-3 text-[15px] text-right border-y border-[#e4e5ee]">
-                                ${totalAmount.toFixed(2)}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td
-                                rowSpan={2}
-                                className="text-[13px] font-semibold border-b border-[#e4e5ee] text-[#71778e]"
-                            >
-                                Shipping
-                            </td>
-                            <td className="text-right text-[13px] py-3">
-                                Flat rate:{" "}
-                                <span className="inline-flex text-[#d51243] text-sm gap-2">
-                    $5.00
-                    <input type="radio" name="vendor" value="Vendor 1"/>
-                  </span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="text-[13px] pb-5 text-right border-b border-[#e4e5ee]">
-                                {/* <label className="inline-flex -gap-1"><span className="mr-2">Local pickup</span>
+                            <tr>
+                                <td className="text-[13px] font-semibold border-y border-[#e4e5ee] text-[#71778e]">
+                                    Subtotal
+                                </td>
+                                <td className=" py-3 text-[15px] text-right border-y border-[#e4e5ee]">
+                                    ${totalAmount.toFixed(2)}
+                                </td>
+                            </tr>
+                            <tr>
+                                {/* <td
+                                    rowSpan={2}
+                                    className="text-[13px] font-semibold border-b border-[#e4e5ee] text-[#71778e]"
+                                >
+                                    Shipping
+                                </td>
+                                <td className="text-right text-[13px] py-3">
+                                    Flat rate:{" "}
+                                    <span className="inline-flex text-[#d51243] text-sm gap-2">
+                                        $5.00
+                                        <input type="radio" name="vendor" value="Vendor 1" />
+                                    </span>
+                                </td> */}
+                            </tr>
+                            <tr>
+                                {/* <td className="text-[13px] pb-5 text-right border-b border-[#e4e5ee]">
+                                    <label className="inline-flex -gap-1"><span className="mr-2">Local pickup</span>
                                 <input
                                     type="radio"
                                     name="vendor"
                                     value="Vendor 1"
                                 
                                 />
-                            </label> */}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="border-b border-[#e4e5ee] text-[13px] font-semibold py-4 text-[#71778e]">
-                                Total
-                            </td>
-                            <td className="border-b border-[#e4e5ee] text-right font-semibold text-xl py-4 ">
-                                ${totalAmount.toFixed(2)}
-                            </td>
-                        </tr>
+                            </label>
+                                </td> */}
+                            </tr>
+                            <tr>
+                                <td className="border-b border-[#e4e5ee] text-[13px] font-semibold py-4 text-[#71778e]">
+                                    Total
+                                </td>
+                                <td className="border-b border-[#e4e5ee] text-right font-semibold text-xl py-4 ">
+                                    ${totalAmount.toFixed(2)}
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
 
@@ -757,7 +758,7 @@ const Checkout = () => {
                         </p>
                     )}
 
-                    <div className="flex gap-6 mt-3.5">
+                    {/* <div className="flex gap-6 mt-3.5">
                         <input
                             type="radio"
                             name="bank"
@@ -773,7 +774,7 @@ const Checkout = () => {
                             Please send a check to Store Name, Store Street, Store Town, Store
                             State / County, Store Postcode.
                         </p>
-                    )}
+                    )} */}
 
                     <div className="flex gap-6 mt-3.5">
                         <input
@@ -797,21 +798,21 @@ const Checkout = () => {
                         experience throughout this website, and for other purposes described
                         in our{" "}
                         <span className="text-primary underline underline-offset-1 font-semibold">
-              privacy policy.
-            </span>
+                            privacy policy.
+                        </span>
                     </p>
 
                     {firstName == "" ||
-                    lastName == "" ||
-                    companyName == "" ||
-                    country == "" ||
-                    streetAddress == "" ||
-                    apartment == "" ||
-                    townCity == "" ||
-                    state == "" ||
-                    zipCode == "" ||
-                    phone == "" ||
-                    email == "" ? (
+                        lastName == "" ||
+                        companyName == "" ||
+                        country == "" ||
+                        streetAddress == "" ||
+                        apartment == "" ||
+                        townCity == "" ||
+                        state == "" ||
+                        zipCode == "" ||
+                        phone == "" ||
+                        email == "" ? (
                         <button
                             className="bg-primary opacity-50 text-white py-2.5 rounded-md text-sm h-[50px] w-full text-center mt-6 font-semibold"
                             onClick={handleOrder}

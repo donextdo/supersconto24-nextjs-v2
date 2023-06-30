@@ -51,8 +51,8 @@ const CartPopup = ({setCart}: any) => {
     useEffect(() => {
         // console.log(totalAmount)
         // totalAmount1 = totalAmount
-        dispatch(calSubTotal(totalAmount));
-    });
+        dispatch(calSubTotal(12));
+    },[]);
 
     return (
         <>

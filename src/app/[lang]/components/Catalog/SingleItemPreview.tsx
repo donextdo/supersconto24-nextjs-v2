@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from "next/image";
 import marked from '../../../../../assets/right/marked.png'
 import {useDispatch, useSelector} from 'react-redux';
@@ -30,7 +30,16 @@ const SingleItemPreview: React.FC<Props> = ({
 
                                             }) => {
 
-    const products = useSelector((state: RootState) => state.cart.items) as Product[];
+    // const products = useSelector((state: RootState) => state.cart.items) as Product[];
+
+    const [products, setProducts] = useState<Product[]>([]);
+    
+
+    useEffect(() => {
+        const cartItemsString = localStorage.getItem("cartItems");
+        const cartItemsArray = cartItemsString ? JSON.parse(cartItemsString) : [];
+        setProducts(cartItemsArray);
+    }, []);
 
     console.log({width, height, imageWidth, imageHeight, coordinates, products})
 

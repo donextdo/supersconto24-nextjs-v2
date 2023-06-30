@@ -27,7 +27,7 @@ import { updateProductQuantity } from "../../features/product/productSlice";
 import Description from "../../components/ViewItem/Details/Description";
 import Review from "../../components/ViewItem/Details/Review";
 import AdditionalInformation from "../../components/ViewItem/Details/AdditionalInformation";
-import { addItems } from "../../features/cart/cartSlice";
+import { calSubTotal } from "../../features/cart/cartSlice";
 import Swal from "sweetalert2";
 
 // interface ItemData {
@@ -261,11 +261,15 @@ const ItemPages = ({ params }: IProps) => {
 
     const handleIncrement = (data: Product) => {
         setCount(count + 1);
+        dispatch(calSubTotal(12));
+
     };
 
     const handleDecrement = (data: Product) => {
         if (count > 0) {
             setCount(count - 1);
+            dispatch(calSubTotal(12));
+
         }
     };
 
@@ -280,9 +284,13 @@ const ItemPages = ({ params }: IProps) => {
             const newItem = { ...data, count: count };
             items.push(newItem);
             localStorage.setItem('cartItems', JSON.stringify(items));
+            dispatch(calSubTotal(12));
+
         } else {
             items[itemIndex].count += count;
             localStorage.setItem('cartItems', JSON.stringify(items));
+            dispatch(calSubTotal(12));
+
         }
         Swal.fire({
             title:
@@ -586,9 +594,17 @@ const ItemPages = ({ params }: IProps) => {
                             <div className="col-span-4 grid grid-cols-1 xl:grid-cols-2 gap-4 w-full ">
                                 <div className=" w-full">
                                     <div className=" flex flex-row">
-                                        <span className="text-gray-400 line-through mr-2 my-1 font-[1.125rem] flex items-center justify-center">
-                                            Rs {data?.unit_price.toFixed(2)}
-                                        </span>
+                                        {data.discount ? (
+                                            <span className="text-gray-400 text-sm line-through mr-2 my-1 font-[1.125rem]">
+                                                Rs {
+                                                    (data.unit_price) as unknown as ReactElement
+                                                }
+                                            </span>
+                                        ) : <span className="text-gray-400 text-sm  mr-2 my-1 font-[1.125rem]">
+                                            Rs {
+                                                (data.unit_price) as unknown as ReactElement
+                                            }
+                                        </span>}
 
                                         {data.discount && (
                                             <span className="my-1 text-red-700 text-lg font-semibold">

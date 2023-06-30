@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import { Product } from "./product";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,7 +10,7 @@ import { updateProductQuantity } from "./productSlice";
 import { FaHeart, FaStar } from "react-icons/fa";
 import { BsCheckLg } from "react-icons/bs";
 import { IoClose } from "react-icons/io5";
-import { addItems } from "../cart/cartSlice";
+import { calSubTotal } from "../cart/cartSlice";
 import Swal from "sweetalert2";
 import useCurrency from "@/app/[lang]/components/Hooks/useCurrencyHook";
 
@@ -21,7 +21,7 @@ interface Review {
     body: string;
     submittedDate: string;
     _id: string;
-    reviewStatus:string
+    reviewStatus: string
     // other properties
 }
 
@@ -75,7 +75,7 @@ const ProductPopup = ({ setProductPopup, proId }: any) => {
     const router = useRouter();
     let [newQuantity, setNewQuantity] = useState<number>(1)
     const [count, setCount] = useState(1);
-    const {getPrice} = useCurrency()
+    const { getPrice } = useCurrency()
 
 
 
@@ -141,12 +141,16 @@ const ProductPopup = ({ setProductPopup, proId }: any) => {
 
     const handleIncrement = (data: Product) => {
         setCount(count + 1);
+        dispatch(calSubTotal(12));
+
     };
 
     const handleDecrement = (data: Product) => {
         if (count > 0) {
             setCount(count - 1);
         }
+        dispatch(calSubTotal(12));
+
     };
 
     const handleWishlist = async (data: any) => {
@@ -220,13 +224,17 @@ const ProductPopup = ({ setProductPopup, proId }: any) => {
             const newItem = { ...data, count: count };
             items.push(newItem);
             localStorage.setItem('cartItems', JSON.stringify(items));
+            dispatch(calSubTotal(12));
+
         } else {
             items[itemIndex].count += count;
             localStorage.setItem('cartItems', JSON.stringify(items));
+            dispatch(calSubTotal(12));
+
         }
         Swal.fire({
             title:
-              '<span style="font-size: 18px">Item has been added to your card</span>',
+                '<span style="font-size: 18px">Item has been added to your card</span>',
             width: 400,
             timer: 1500,
             // padding: '3',
@@ -235,12 +243,12 @@ const ProductPopup = ({ setProductPopup, proId }: any) => {
             showConfirmButton: false,
             heightAuto: true,
             position: "bottom-end",
-          });
+        });
     };
 
-     let discountprice;
-  discountprice = data.unit_price * (data.discount/100)
-let newprice=data.unit_price-discountprice
+    let discountprice;
+    discountprice = data.unit_price * (data.discount / 100)
+    let newprice = data.unit_price - discountprice
 
     const handleClick = (image: any) => {
         setMainImage(image);
@@ -358,13 +366,23 @@ let newprice=data.unit_price-discountprice
                         <div className=" w-full ">
                             <div className=" w-full">
                                 <div className=" flex flex-row">
-                                    <span className="text-gray-400 line-through mr-2 my-1 font-[1.125rem] flex items-center justify-center">
-                                        {getPrice(data?.unit_price)}
-                                    </span>
+                                    {data.discount ? (
+                                        <span className="text-gray-400 text-sm line-through mr-2 my-1 font-[1.125rem]">
+                                            {
+                                                getPrice(data.unit_price) as unknown as ReactElement
+                                            }
+                                        </span>
+                                    ) : <span className="text-gray-400 text-sm  mr-2 my-1 font-[1.125rem]">
+                                        {
+                                            getPrice(data.unit_price) as unknown as ReactElement
+                                        }
+                                    </span>}
 
-                                    <span className="my-1 text-red-700 text-[1.625rem] font-semibold">
-                                        {getPrice(newprice)}
-                                    </span>
+                                    {data.discount && (
+                                        <span className="my-1 text-red-700 text-lg font-semibold">
+                                            ${newprice.toFixed(2)}
+                                        </span>
+                                    )}
                                 </div>
                                 {data?.quantity > 0 ? (
                                     <div className="font-medium py-2 px-2 mt-2 max-h-[26px] max-w-[68.35px] bg-emerald-100 text-green-600 rounded-full text-[.75rem] flex items-center justify-center uppercase tracking-tighter">
