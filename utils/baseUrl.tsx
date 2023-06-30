@@ -74,8 +74,11 @@ export function updateParamValue(data: any) {
 export const setCookie = (c_name: string, c_value: string, exDays: number) => {
   const date = new Date();
   date.setDate(date.getDate() + exDays);
-  document.cookie = encodeURIComponent(c_name)
-      + "=" + encodeURIComponent(c_value)
-      + (!exDays ? "" : "; expires=" + date.toUTCString()) + "path=/;";
-}
+  document.cookie =
+    encodeURIComponent(c_name) +
+    "=" +
+    encodeURIComponent(c_value) +
+    (!exDays ? "" : "; expires=" + date.toUTCString()) +
+    "path=/;";
+};
 export default baseUrl;
