@@ -16,6 +16,7 @@ import { Location } from "../Location/Location";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import CartPopup from "@/app/[lang]/features/cart/popup-cart/CartPopup";
+import useCurrency from "@/app/[lang]/components/Hooks/useCurrencyHook";
 
 
 const Header = () => {
@@ -27,6 +28,7 @@ const Header = () => {
   const router = useRouter();
   const [totalPrice, setTotalPrice] = useState(0)
   const [totalQuantity, setTotalQuantity] = useState(0)
+  const {getPrice} = useCurrency()
 
   useEffect(() => {
     localStorage.setItem('totalCount', totalCount.toString());
@@ -98,7 +100,7 @@ const Header = () => {
                 </button>
               </Link>
             </div>
-            <div className="mr-4">Rs {totalPrice.toFixed(2)}</div>
+            <div className="mr-4">{getPrice(totalPrice)}</div>
             <div
               className="relative"
               onMouseEnter={handleEnter}

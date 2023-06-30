@@ -14,7 +14,8 @@ import MainFlyerCard from "./MainFlyerCard";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { addFlyer } from "./FlyerSlice";
-import { RootState } from "../../redux/store";
+import {AppDispatch, RootState} from "../../redux/store";
+import {getExchangeRates} from "@/app/[lang]/features/site-data/siteDataSlice";
 
 
 type MainFlyerListType = {
@@ -29,7 +30,7 @@ const MainFlyerList = (({dictionary, locale}: MainFlyerListType) => {
     // const [productList, setProductList] = useState<any>()
     const [visible, setVisible] = useState(8)
     const productList = useSelector((state: RootState) => state.flyer.flyers);
-    const dispatch = useDispatch()
+    const dispatch = useDispatch<AppDispatch>()
     const pathname = usePathname()
     const searchParams = useSearchParams()!
     const router = useRouter()
@@ -110,7 +111,7 @@ overflow-y-scroll overflow-x-hidden scrollbar-w-2 sm:grid-cols-4
 xxl:grid-cols-4 pt-4'>
 
                 {productList?.slice(0,visible).map((flyer: any, index: number) => (
-                <Link href={`/catalog-preview/${flyer._id}`} key={index}>
+                <Link target="_blank" href={`/catalog-preview/${flyer._id}`} key={index}>
                     <MainFlyerCard key={index} flyer={flyer}/>
                     </Link>
                 ))}

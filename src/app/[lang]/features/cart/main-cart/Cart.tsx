@@ -17,6 +17,7 @@ import baseUrl from "../../../../../../utils/baseUrl";
 import CaPopup from "@/app/[lang]/components/NewProduct/CaPopup";
 import CartCard from "./CartCard";
 import { Product } from "../../product/product";
+import useCurrency from "@/app/[lang]/components/Hooks/useCurrencyHook";
 
 // import { PDFDocument, StandardFonts } from 'pdf-lib';
 // import fs from 'fs';
@@ -30,6 +31,7 @@ interface CartType {
 const Cart: FC<CartType> = () => {
   const [cartItems, setCartItems] = useState<Product[]>([]);
   const [count, setCount] = useState(0);
+  const {getPrice} = useCurrency()
 
   useEffect(() => {
     const cartItemsString = localStorage.getItem("cartItems");
@@ -292,6 +294,7 @@ const Cart: FC<CartType> = () => {
                     )
                     .map((item: any, index: number) => (
                       <CartCard
+                          getPrice={getPrice}
                         item={item}
                         key={index}
                         totalAmount={totalAmount}
@@ -347,7 +350,7 @@ const Cart: FC<CartType> = () => {
                       Subtotal
                     </td>
                     <td className="border-b border-[#e4e5ee] py-3 text-[15px] text-right">
-                      ${totalAmount.toFixed(2)}
+                      {getPrice(totalAmount)}
                     </td>
                   </tr>
                   {/* <tr>
@@ -425,7 +428,7 @@ const Cart: FC<CartType> = () => {
                       Total
                     </td>
                     <td className="border-y border-[#e4e5ee] text-right font-semibold text-xl py-4">
-                      ${totalAmount.toFixed(2)}
+                      {getPrice(totalAmount)}
                     </td>
                   </tr>
                 </tbody>
@@ -434,7 +437,7 @@ const Cart: FC<CartType> = () => {
               <Link
                 href={{
                   pathname: "/checkout",
-                  query: { shippingObj: JSON.stringify(shippingObj) },
+                  // query: { shippingObj: JSON.stringify(shippingObj) },
                 }}
               >
                 <button

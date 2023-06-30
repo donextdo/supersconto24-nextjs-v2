@@ -5,9 +5,9 @@ import axios, {
   isCancel,
 } from "axios";
 
-const baseUrl = "http://localhost:3000/v1/api";
+// const baseUrl = "http://localhost:3000/v1/api";
 
-// const baseUrl = "https://api.supersconto24.com/v1/api";
+const baseUrl = "https://api.supersconto24.com/v1/api";
 
 type AxiosRequestType = { url: string; data?: any; method?: string };
 export const axiosRequest = () => {
@@ -69,5 +69,13 @@ export function updateParamValue(data: any) {
   });
 
   return `${window.location.pathname}?${updatedParams.join("&")}`;
+}
+
+export const setCookie = (c_name: string, c_value: string, exDays: number) => {
+  const date = new Date();
+  date.setDate(date.getDate() + exDays);
+  document.cookie = encodeURIComponent(c_name)
+      + "=" + encodeURIComponent(c_value)
+      + (!exDays ? "" : "; expires=" + date.toUTCString()) + "path=/;";
 }
 export default baseUrl;

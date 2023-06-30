@@ -2,7 +2,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import useCurrency from "../Hooks/useCurrencyHook";
 
-const CheckoutSidebar = ({ item }: any) => {
+const CheckoutSidebar = ({ item, getPrice }: any) => {
   const searchParams = useSearchParams();
 
   // useEffect(() => {
@@ -44,15 +44,12 @@ const CheckoutSidebar = ({ item }: any) => {
       </td>
       {item.discount > 0 ? (
         <td className=" py-3 text-[15px] text-right">
-          Rs{" "}
-          {(
-            (item.unit_price - (item.unit_price / 100) * item.discount) *
-            item.count
-          ).toFixed(2)}
+            {/*{((item.unit_price - (item.unit_price / 100) * item.discount) *item.count)}*/}
+          {getPrice((item.unit_price - (item.unit_price / 100) * item.discount) *item.count)}
         </td>
       ) : (
         <td className=" py-3 text-[15px] text-right">
-          Rs {(item.unit_price * item.count).toFixed(2)}
+          {getPrice(item.unit_price * item.count)}
         </td>
       )}
     </tr>
