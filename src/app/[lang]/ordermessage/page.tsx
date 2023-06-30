@@ -73,7 +73,7 @@ const OrderMessage = () => {
         items: [
           {
             productId: 0,
-            orderquantity: 1,
+            orderquantity: 0,
             productDetails: {
               name: "",
               brand: "",

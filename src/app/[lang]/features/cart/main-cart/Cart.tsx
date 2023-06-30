@@ -39,6 +39,7 @@ const Cart: FC<CartType> = () => {
         const cartItemsString = localStorage.getItem('cartItems');
         const parsedCartItems = cartItemsString ? JSON.parse(cartItemsString) : [];
         setCartItems(parsedCartItems);
+       console.log({parsedCartItems})
        
     }, [count]);
 
@@ -225,7 +226,7 @@ const Cart: FC<CartType> = () => {
     // JSON.parse(localStorage.getItem("cartItems")!) ?? [];
     useEffect(() => {
         fetchCart();
-    }, []);
+    }, [cartItems]);
 
     async function fetchCart() {
         if (cartItems.length > 0) {
@@ -238,8 +239,8 @@ const Cart: FC<CartType> = () => {
             })
                 .then((response) => response.json())
                 .then((responseJson) => {
+                    console.log("halo",responseJson);
                     const cloneResponse = [...responseJson];
-                    console.log(cloneResponse);
                     cloneResponse.map((item) => {
                         const itemone: any = cartItems.find((p) => p._id === item._id);
                         item.cartQuantity = itemone?.quantity ? itemone?.quantity : 0;
