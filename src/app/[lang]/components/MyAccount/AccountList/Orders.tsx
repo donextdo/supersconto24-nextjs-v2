@@ -17,8 +17,8 @@ interface Order {
   totalprice: number;
   date: string;
   status: string;
-  address:string;
-  payment:string;
+  address: string;
+  payment: string;
   items: {
     productDetails: {
       name: string;
@@ -68,7 +68,7 @@ const Orders = () => {
     totalprice: 0,
     date: "",
     status: "",
-    payment:"",
+    payment: "",
     address: "",
     items: [
       {
@@ -115,7 +115,6 @@ const Orders = () => {
   const dispatch = useDispatch<AppDispatch>();
   const orderList = useSelector((state: RootState) => state.order.orders);
   console.log(orderList);
-  
 
   let id: string | null;
   if (localStorage.getItem("id") !== null) {
@@ -130,7 +129,7 @@ const Orders = () => {
   const handleView = async (orderId: any) => {
     setHideOrder(false);
     try {
-      const res = await axios.get(`${baseUrl}/orders/${orderId}`);
+      const res = await axios.get(`${baseUrl}/neworder/${orderId}`);
       console.log(res.data);
       setOrder(res.data);
     } catch (err) {
@@ -280,7 +279,7 @@ const Orders = () => {
                   Payment method:
                 </div>
                 <div className="w-1/3 text-sm px-2 py-2 border border-gray-300 ">
-                {order?.payment}
+                  {order?.payment}
                 </div>
               </div>
               <div className="flex  ">

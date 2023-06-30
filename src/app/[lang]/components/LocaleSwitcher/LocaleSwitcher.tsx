@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation'
 import { i18n } from "../../../../../i18n-config";
 import { useRouter } from "next/navigation";
 import { useState } from 'react';
+import {setCookie} from "../../../../../utils/baseUrl";
 
 export default function LocaleSwitcher({handleLanguageSelect}:any) {
     const pathName = usePathname()
@@ -14,13 +15,7 @@ export default function LocaleSwitcher({handleLanguageSelect}:any) {
         segments[1] = locale
         return segments.join('/')
     }
-    const setCookie = (c_name: string, c_value: string, exDays: number) => {
-        const date = new Date();
-        date.setDate(date.getDate() + exDays);
-        document.cookie = encodeURIComponent(c_name)
-            + "=" + encodeURIComponent(c_value)
-            + (!exDays ? "" : "; expires=" + date.toUTCString()) + "path=/;";
-    }
+
 
     // const [isOpen, setIsOpen] = useState(false);
     // const [selectedLanguage, setSelectedLanguage] = useState('');
