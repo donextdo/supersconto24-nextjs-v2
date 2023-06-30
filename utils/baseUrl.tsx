@@ -2,7 +2,6 @@ import axios, {
   AxiosRequestConfig,
   AxiosResponse,
   CancelTokenSource,
-  Canceler,
   isCancel,
 } from "axios";
 
@@ -46,4 +45,29 @@ export const axiosRequest = () => {
   };
 };
 
+export function updateParamValue(data: any) {
+  const params =
+    window.location.href.indexOf("?") !== -1
+      ? window.location.href
+          .slice(window.location.href.indexOf("?") + 1)
+          .split("&")
+      : [];
+
+  const updatedParams = [...params];
+
+  data.forEach((item: any) => {
+    const { key, value } = item;
+    const paramIndex = updatedParams.findIndex((param) =>
+      param.startsWith(`${key}=`)
+    );
+
+    if (paramIndex !== -1) {
+      updatedParams[paramIndex] = `${key}=${value}`;
+    } else {
+      updatedParams.push(`${key}=${value}`);
+    }
+  });
+
+  return `${window.location.pathname}?${updatedParams.join("&")}`;
+}
 export default baseUrl;

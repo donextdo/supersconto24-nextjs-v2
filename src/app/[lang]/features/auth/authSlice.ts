@@ -1,6 +1,4 @@
-import {createSlice} from '@reduxjs/toolkit';
-import {createAsyncThunk} from '@reduxjs/toolkit';
-import {boolean} from "zod";
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import baseUrl, {axiosRequest} from "../../../../../utils/baseUrl";
 
 const makeRequest = axiosRequest();

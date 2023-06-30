@@ -6,6 +6,8 @@ import {useRouter, useSearchParams} from "next/navigation";
 import PlacesServiceStatus = google.maps.places.PlacesServiceStatus;
 import AutocompletePrediction = google.maps.places.AutocompletePrediction;
 import PlaceResult = google.maps.places.PlaceResult;
+import {updateParamValue} from "../../../../../utils/baseUrl";
+import { BiCurrentLocation } from "react-icons/bi";
 
 interface LocationType {
     dollar_min: any;
@@ -105,7 +107,12 @@ export const Location = () => {
                     setSelectedLocation(formattedAddress!)
 
                     console.log("Formatted Address: ", {formattedAddress, lat, lng});
-                    router.push(`/?${createQueryString("lat", lat ?? null)}&${createQueryString("long", lng ?? null)}`, {shallow: false})
+                    // router.push(`/?${createQueryString("lat", lat ?? null)}&${createQueryString("long", lng ?? null)}`, {shallow: false})
+                    const data = [
+                        { key: 'lat', value: lat },
+                        { key: 'long', value: lng },
+                    ];
+                    router.push(updateParamValue(data), {shallow: false})
                     setShowModal(false)
 
                 }
@@ -137,7 +144,12 @@ export const Location = () => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(({coords}) => {
                 getAddressFromCoordinates(coords.latitude, coords.longitude)
-                router.push(`/?${createQueryString("lat", String(coords.latitude))}&${createQueryString("long", String(coords.longitude))}`, {shallow: false})
+                const data = [
+                    { key: 'lat', value: coords.latitude },
+                    { key: 'long', value: coords.longitude },
+                ];
+                router.push(updateParamValue(data), {shallow: false})
+                // router.push(`/?${createQueryString("lat", String(coords.latitude))}&${createQueryString("long", String(coords.longitude))}`, {shallow: false})
             });
         }
     }
@@ -202,7 +214,7 @@ export const Location = () => {
                             <div>
                                 <div className="mt-3  sm:mt-5 ">
                                     <h3 className="text-lg leading-6 font-medium text-gray-900">
-                                        Choose your pickup location
+                                        Search your pickup location
                                     </h3>
                                     <h2 className="text-xs leading-6 text-gray-500">
                                         Enter your address and we will specify the offer for your
@@ -233,11 +245,11 @@ export const Location = () => {
                                     <div
                                         className="flex items-center justify-between px-2 py-4 bg-white text-gray-700 text-sm cursor-pointer"
                                         onClick={() => getMyLocation()}>
-                                        <div className="hover:text-[#233a95]">
-                                            Get Current Location
-                                        </div>
+                                        <button className="hover:text-black hover:opacity-80 flex items-center gap-1 rounded-full border border-gray-200 px-2 h-9 bg-[#4285f4] text-white">
+                                            Get Current Location <BiCurrentLocation className="text-lg text-black"/>
+                                        </button>
                                         <div
-                                            className="rounded-full text-gray-400 font-semibold w-20 px-2 text-xs h-8 border border-gray-200 flex justify-center items-center"
+                                            className="rounded-full text-gray-400 font-semibold w-20 px-3 text-xs h-8 border border-gray-200 flex justify-center items-center"
                                             onClick={() => {
                                                 setSearchTerm("")
                                                 setResult([])

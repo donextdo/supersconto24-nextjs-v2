@@ -13,8 +13,12 @@ import LatestFlyers from './components/LatestFlyers/LatestFlyers';
 import FeaturedFlyer from './components/FeaturedFlyer/FeaturedFlyer';
 import ContactAds from './components/ImageAds/ContactAds';
 import FirstPurchaceAds from './components/ImageAds/FirstPurchaceAds';
+import {Metadata} from "next";
 
-export default async function Home({ params: { lang } }: { params: { lang: Locale } }) {
+export const metadata: Metadata = {
+    title: "Supersconto | Home"
+}
+export default async function page({ params: { lang } }: { params: { lang: Locale } }) {
     const dictionary = await getDictionary(lang)
     console.log("render page", dictionary)
 
