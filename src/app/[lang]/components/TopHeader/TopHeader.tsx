@@ -8,7 +8,7 @@ import {AppDispatch} from "@/app/[lang]/redux/store";
 import {getExchangeRates} from "@/app/[lang]/features/site-data/siteDataSlice";
 import {castDraft} from "immer";
 import {usePathname, useRouter, useSearchParams} from "next/navigation";
-import {updateParamValue} from "../../../../../utils/baseUrl";
+import {setCookie, updateParamValue} from "../../../../../utils/baseUrl";
 
 const TopHeader = ({lang}: { lang: string }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -28,7 +28,7 @@ const TopHeader = ({lang}: { lang: string }) => {
         if (currency==="USD" || currency==="EUR") {
             setSelectedCurrency(currency)
         }
-    }, [])
+    }, [searchParams])
 
     /*const createQueryString = useCallback(
         (name: string, value: string) => {
@@ -41,11 +41,12 @@ const TopHeader = ({lang}: { lang: string }) => {
     )*/
 
     useEffect(() => {
-        dispatch(getExchangeRates())
+        // dispatch(getExchangeRates())
 
         const data = [
             { key: 'currency', value: selectedCurrency }
         ];
+        setCookie('currency', selectedCurrency, 365)
         router.push(updateParamValue(data))
 
     }, [selectedCurrency])

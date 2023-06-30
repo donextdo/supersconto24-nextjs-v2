@@ -1,24 +1,37 @@
 import {useSelector} from "react-redux";
 import {RootState} from "@/app/[lang]/redux/store";
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
+import {useSearchParams} from "next/navigation";
 
-type UseCurrencyTypes = { ratio: number, targetRate: number, localeRate: number }
-const useCurrency = (locale = "EUR", target = "EUR"): number[] => {
+type UseCurrencyTypes = { ratio: number, targetRate: number, localeRate: number, getPrice: Function, formatter: Intl.NumberFormat }
+const useCurrency = (locale = "EUR"):UseCurrencyTypes  => {
+    const searchParams = useSearchParams();
     const rates = useSelector((state: RootState) => state.siteData.currencyRates)
     const [localeRate, setLocaleRate] = useState(0)
     const [targetRate, setTargetRate] = useState(0)
     const [ratio, setRatio] = useState(0)
-console.log({locale , target})
+
     useEffect(() => {
         if (rates?.rates) {
-            console.log(rates, rates.rates[locale],rates.rates[target])
             setLocaleRate(rates.rates[locale])
-            setTargetRate(rates.rates[target] ?? 0)
-            setRatio((1 / rates.rates[locale])* (rates.rates[target] ?? 0))
+            setTargetRate(rates.rates[searchParams.get("currency") ?? "EUR"] ?? 0)
+            setRatio((1 / rates.rates[locale]) * (rates.rates[searchParams.get("currency") ?? "EUR"] ?? 0))
         }
-    }, [locale, rates])
+    }, [locale, rates, searchParams])
 
-    return [ratio, targetRate, localeRate]
+    const formatter = useMemo(() => {
+        return new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: searchParams.get("currency") ?? "EUR"
+        });
+
+    }, [searchParams])
+
+    const getPrice = (price: number) => {
+        return formatter.format(price * ratio)
+    }
+
+    return {ratio, targetRate, localeRate, getPrice, formatter}
 
 
 }

@@ -14,7 +14,7 @@ import { IoCloseSharp, IoClose } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import baseUrl from "../../../../../../utils/baseUrl";
 
-const CartCard = ({ item, index, totalAmount, setCount }: any) => {
+const CartCard = ({ item, index, totalAmount, setCount,getPrice }: any) => {
   const dispatch = useDispatch();
   //   const cartItems = useSelector((state: RootState) => state.cart.items);
   let totalAmount1 = useSelector((state: RootState) => state.cart.totalAmount);
@@ -129,7 +129,7 @@ const CartCard = ({ item, index, totalAmount, setCount }: any) => {
       <div className="col-span-2 sm:col-span-4 text-sm  ">
         {item.product_name}
       </div>
-      <div className="col-span-1 hidden sm:block">{newprice.toFixed(2)}</div>
+      <div className="col-span-1 hidden sm:block">{getPrice(newprice)}</div>
       <div className="flex sm:col-span-2">
         <button
           className="p-2 bg-[#edeef5] rounded-full w-[30px] flex items-center"
@@ -147,7 +147,7 @@ const CartCard = ({ item, index, totalAmount, setCount }: any) => {
           <FaPlus className="text-xs " />
         </button>
       </div>
-      <div className="col-span-2 hidden sm:block">{subtotal.toFixed(2)}</div>
+      <div className="col-span-2 hidden sm:block">{getPrice(subtotal)}</div>
       <div className="col-span-1 hidden sm:block">
         <button
           className="bg-[#e5e7eb] rounded-full p-1"

@@ -12,6 +12,7 @@ import { BsCheckLg } from "react-icons/bs";
 import { IoClose } from "react-icons/io5";
 import { addItems } from "../cart/cartSlice";
 import Swal from "sweetalert2";
+import useCurrency from "@/app/[lang]/components/Hooks/useCurrencyHook";
 
 
 interface Review {
@@ -74,6 +75,7 @@ const ProductPopup = ({ setProductPopup, proId }: any) => {
     const router = useRouter();
     let [newQuantity, setNewQuantity] = useState<number>(1)
     const [count, setCount] = useState(1);
+    const {getPrice} = useCurrency()
 
 
 
@@ -357,11 +359,11 @@ let newprice=data.unit_price-discountprice
                             <div className=" w-full">
                                 <div className=" flex flex-row">
                                     <span className="text-gray-400 line-through mr-2 my-1 font-[1.125rem] flex items-center justify-center">
-                                        {data?.unit_price.toFixed(2)}
+                                        {getPrice(data?.unit_price)}
                                     </span>
 
                                     <span className="my-1 text-red-700 text-[1.625rem] font-semibold">
-                                        Rs {newprice.toFixed(2)}
+                                        {getPrice(newprice)}
                                     </span>
                                 </div>
                                 {data?.quantity > 0 ? (
