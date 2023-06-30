@@ -401,6 +401,8 @@ const Checkout = async () => {
         // params.set('countryCode', newCode);
         // const newParams = params.toString();
         router.push(`/en/ordermessage?orderId=${response.data.orderNumber}`);
+      } else if (response.status == 404) {
+        alert(response.data.message);
       }
     } catch (err) {
       console.log({ err }); // handle the error
