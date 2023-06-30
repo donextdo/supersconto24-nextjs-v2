@@ -8,6 +8,8 @@ import baseUrl from "../../../../utils/baseUrl";
 import { AppDispatch, RootState } from "@/app/[lang]/redux/store";
 import CheckoutSidebar from "@/app/[lang]/components/Checkout/CheckoutSidebar";
 import { Product } from "../features/product/product";
+import useCurrency from "@/app/[lang]/components/Hooks/useCurrencyHook";
+import Swal from "sweetalert2";
 
 export interface OrderObj {
   userId: string;
@@ -21,19 +23,19 @@ export interface OrderObj {
   }[];
 }
 
-const Checkout = async () => {
-  const [firstName, setFirstName] = useState("yyyy");
-  const [lastName, setLastName] = useState("tttt");
-  const [companyName, setCompanyName] = useState("ttt");
-  const [country, setCountry] = useState("ttt");
-  const [streetAddress, setStreetAddress] = useState("tttt");
-  const [apartment, setApartment] = useState("ttt");
-  const [townCity, setTownCity] = useState("ttt");
-  const [state, setState] = useState("ttt");
-  const [zipCode, setZipCode] = useState("23456");
-  const [phone, setPhone] = useState("0703499272");
-  const [email, setEmail] = useState("thisara@gmail.com");
-  const [note, setNote] = useState("eeee");
+const Checkout = () => {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [companyName, setCompanyName] = useState("");
+  const [country, setCountry] = useState("");
+  const [streetAddress, setStreetAddress] = useState("");
+  const [apartment, setApartment] = useState("");
+  const [townCity, setTownCity] = useState("");
+  const [state, setState] = useState("");
+  const [zipCode, setZipCode] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [note, setNote] = useState("");
 
   const [emailError, setEmailError] = useState("");
   const [firstNameError, setFirstNameError] = useState("");
@@ -51,11 +53,9 @@ const Checkout = async () => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-
-  // const [ratio, targetRate, localeRate] = useCurrency(
-  //   "EUR",
-  //   searchParams.get("currency") ?? "EUR"
-  // );
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [selectedRadio, setSelectedRadio] = useState("");
+  const { getPrice } = useCurrency();
 
   const [ship, setShip] = useState({
     shippingAddress: {
@@ -73,16 +73,6 @@ const Checkout = async () => {
     },
   });
 
-  //  const { cartshippingFirstName, cartshippingLastName, cartshippingCompanyName, cartshippingcountry, cartshippingstreet, cartshippingapartment, cartshippingtown, cartshippingstate, cartshippingzipCode, cartshippingphone, cartshippingEmail } = router.query;
-  const shippingObj = searchParams.get("shippingObj");
-  const parsedObject =
-    typeof shippingObj === "string" ? JSON.parse(shippingObj) : undefined;
-  // console.log(parsedObject);
-
-  // const cartItems = useSelector((state: RootState) => state.cart.items);
-
-  //display product
-  // const [cartItems, setCartItems] = useState<Product[]>([]);
   const [cartItems, setCartItems] = useState<Product[]>(() => {
     if (typeof localStorage !== "undefined") {
       const cartItemsString = localStorage.getItem("cartItems");
@@ -92,8 +82,6 @@ const Checkout = async () => {
       return [];
     }
   });
-
-  const [totalPrice, setTotalPrice] = useState(0);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -107,43 +95,10 @@ const Checkout = async () => {
     }
   }, []);
 
-  // useEffect(() => {
-  //   let discountprice;
-  //   let newprice;
-  //   cartItems.forEach((item) => {
-  //     if (item.discount) {
-  //       discountprice = item.unit_price * (item.discount / 100);
-  //       console.log("discountprice : ", discountprice);
-  //       newprice = item.unit_price - discountprice;
-  //     } else {
-  //       newprice = item.unit_price;
-  //       console.log("newprice : ", newprice);
-  //     }
-  //     let subtotal = item.count * newprice;
-
-  //     setTotalPrice(subtotal);
-  //   });
-  // }, [cartItems]);
-
-  // useEffect(() => {
-  //   console.log("currency checkout: ", cartItems[0].unit_price * ratio, {
-  //     ratio,
-  //     targetRate,
-  //     localeRate,
-  //   });
-  // }, [cartItems]);
-
   const dispatch = useDispatch<AppDispatch>();
+  let id: string;
+  // let id: any;
 
-  let id: any;
-  if (typeof localStorage !== "undefined") {
-    id = localStorage.getItem("id");
-  }
-
-  //     let discountprice;
-  //     discountprice = item.price * (item.discount/100)
-  //   let newprice=item.price-discountprice
-  //   item.price - (item.price * (item.discount/100))
   const handleEmailChange = (e: any) => {
     const newEmail = e.target.value;
     setEmail(newEmail);
@@ -251,18 +206,6 @@ const Checkout = async () => {
     }
   };
 
-  // form handle submit for example
-  // const handleSubmit = (e:any) => {
-  //     e.preventDefault();
-  //     // perform form submission or validation here
-  //     if (emailError || phoneError) {
-  //         setFormError('Please fix the errors and try again');
-  //       } else {
-  //         // perform form submission
-  //         console.log('Form submitted!');
-  //       }
-  // };
-
   let totalAmount = 0;
   let subtotal = 0;
   for (let i = 0; i < cartItems.length; i++) {
@@ -278,57 +221,46 @@ const Checkout = async () => {
   }
 
   useEffect(() => {
-    fetchData();
+    const id = localStorage.getItem("id");
+    if (id) {
+      id && fetchData(id);
+    }
   }, []);
 
-  async function fetchData() {
+  async function fetchData(id: string) {
     try {
       const res = await axios.get(`${baseUrl}/users/${id}`);
       //console.log({ res });
       const data = res.data;
       console.log({ data });
-      if (data.billingAddress) {
-        setFirstName(data.billingAddress.billingFirstName);
-        setLastName(data.billingAddress.billingLastName);
-        setCompanyName(data.billingAddress.billingCompanyName);
-        setCountry(data.billingAddress.country);
-        setStreetAddress(data.billingAddress.street);
-        setApartment(data.billingAddress.apartment);
-        setTownCity(data.billingAddress.town);
-        setState(data.billingAddress.state);
-        setZipCode(data.billingAddress.zipCode);
-        setPhone(data.billingAddress.billingPhone);
-        setEmail(data.billingAddress.billingEmail);
+      if (data) {
+        setShip(data);
+        if (data.billingAddress) {
+          setFirstName(data.billingAddress.billingFirstName);
+          setLastName(data.billingAddress.billingLastName);
+          setCompanyName(data.billingAddress.billingCompanyName);
+          setCountry(data.billingAddress.country);
+          setStreetAddress(data.billingAddress.street);
+          setApartment(data.billingAddress.apartment);
+          setTownCity(data.billingAddress.town);
+          setState(data.billingAddress.state);
+          setZipCode(data.billingAddress.zipCode);
+          setPhone(data.billingAddress.billingPhone);
+          setEmail(data.billingAddress.billingEmail);
+        }
       }
     } catch (error) {
       console.log({ error });
     }
   }
 
-  useEffect(() => {
-    fetchData2();
-  }, []);
-
-  async function fetchData2() {
-    try {
-      const res = await axios.get(`${baseUrl}/users/${id}`);
-      //console.log(res.data);
-      if (res.data) {
-        setShip(res.data);
-      }
-    } catch (err) {
-      console.log({ err });
-    }
-  }
-
-  const [selectedRadio, setSelectedRadio] = useState("");
   const handleCheckboxChange = (e: any) => {
     setSelectedRadio(e.target.value);
   };
 
   const handleOrder = async (event: any) => {
     event.preventDefault();
-
+    const id = localStorage.getItem("id");
     const orderObj = {
       userId: id ? id : "",
       totalprice: totalAmount,
@@ -357,55 +289,113 @@ const Checkout = async () => {
         billingEmail: email,
         note: note,
       },
-      shippingAddress:
-        parsedObject?.cartshippingcountry &&
-        parsedObject?.cartshippingtown &&
-        parsedObject?.cartshippingzipCode
-          ? {
-              shippingFirstName: parsedObject?.cartshippingFirstName,
-              shippingLastName: parsedObject?.cartshippingLastName,
-              shippingCompanyName: parsedObject?.cartshippingCompanyName,
-              country: parsedObject?.cartshippingcountry,
-              street: parsedObject?.cartshippingstreet,
-              town: parsedObject?.cartshippingtown,
-              zipCode: parsedObject?.cartshippingzipCode,
-              shippingPhone: parsedObject?.cartshippingphone,
-            }
-          : {
-              shippingFirstName: ship.shippingAddress?.shippingFirstName,
-              shippingLastName: ship.shippingAddress?.shippingLastName,
-              shippingCompanyName: ship.shippingAddress?.shippingCompanyName,
-              country: ship.shippingAddress?.country,
-              street: ship.shippingAddress?.street,
-              town: ship.shippingAddress?.town,
-              zipCode: ship.shippingAddress?.zipCode,
-              shippingPhone: ship.shippingAddress?.shippingphone,
-            },
+      shippingAddress: {
+        shippingFirstName: ship.shippingAddress?.shippingFirstName,
+        shippingLastName: ship.shippingAddress?.shippingLastName,
+        shippingCompanyName: ship.shippingAddress?.shippingCompanyName,
+        country: ship.shippingAddress?.country,
+        street: ship.shippingAddress?.street,
+        town: ship.shippingAddress?.town,
+        zipCode: ship.shippingAddress?.zipCode,
+        shippingPhone: ship.shippingAddress?.shippingphone,
+      },
     };
 
     //console.log(orderObj);
     try {
       const response = await axios.post(`${baseUrl}/neworder/place`, orderObj);
-      //console.log(response.data); // do something with the response data
-      if (response.status == 201) {
-        const orderData = {
-          orderId: response.data.orderNumber,
-          message: response.data.messsage,
-        };
-        // router.push({
-        //     pathname: '/orderMessage',
-        //     query: orderData,
-        //   });
+      if (response) {
+        //console.log(response.data); // do something with the response data
+        if (response.status == 201) {
+          Swal.fire({
+            title: `<span style="font-size: 18px">${response.data.message}</span>`,
+            width: 400,
+            timer: 2000,
+            // padding: '3',
+            color: "white",
+            background: "#00B853",
+            showConfirmButton: false,
+            heightAuto: true,
+            position: "bottom",
+          });
+          const orderData = {
+            orderId: response.data.orderNumber,
+            message: response.data.messsage,
+          };
+          // router.push({
+          //     pathname: '/orderMessage',
+          //     query: orderData,
+          //   });
 
-        // const params = new URLSearchParams(searchParams);
-        // params.set('countryCode', newCode);
-        // const newParams = params.toString();
-        router.push(`/en/ordermessage?orderId=${response.data.orderNumber}`);
-      } else if (response.status == 404) {
-        alert(response.data.message);
+          // const params = new URLSearchParams(searchParams);
+          // params.set('countryCode', newCode);
+          // const newParams = params.toString();
+          router.push(`/ordermessage?orderId=${response.data.orderNumber}`);
+        }
       }
-    } catch (err) {
-      console.log({ err }); // handle the error
+    } catch (error: any) {
+      if (error.response) {
+        const statusCode = error.response.status;
+        console.log(statusCode);
+        switch (statusCode) {
+          case 400:
+            Swal.fire({
+              title: `<span style="font-size: 18px">${error.response.data.message}</span>`,
+              width: 400,
+              timer: 2000,
+              // padding: '3',
+              color: "white",
+              background: "#c30010",
+              showConfirmButton: false,
+              heightAuto: true,
+              position: "bottom",
+            });
+            console.log(error.response.data.message);
+            break;
+          case 404:
+            Swal.fire({
+              title: `<span style="font-size: 18px">${error.response.data.message}</span>`,
+              width: 400,
+              timer: 2000,
+              // padding: '3',
+              color: "white",
+              background: "#c30010",
+              showConfirmButton: false,
+              heightAuto: true,
+              position: "bottom",
+            });
+            console.log(error.response.data.message);
+            break;
+          case 500:
+            Swal.fire({
+              title: `<span style="font-size: 18px">${error.response.data.message}</span>`,
+              width: 400,
+              timer: 2000,
+              // padding: '3',
+              color: "white",
+              background: "#c30010",
+              showConfirmButton: false,
+              heightAuto: true,
+              position: "bottom",
+            });
+            console.log(error.response.data.message);
+            break;
+
+          default:
+            Swal.fire({
+              title: `<span style="font-size: 18px">${error.response.data.message}</span>`,
+              width: 400,
+              timer: 2000,
+              // padding: '3',
+              color: "white",
+              background: "#c30010",
+              showConfirmButton: false,
+              heightAuto: true,
+              position: "bottom",
+            });
+            console.log(error.response.data.message);
+        }
+      }
     }
   };
 
@@ -463,7 +453,9 @@ const Checkout = async () => {
               value={companyName}
               onChange={handleCompanyNameChange}
             />
-            {/* {companyNameError && <div className='text-red-500'>{companyNameError}</div>} */}
+            {companyNameError && (
+              <div className="text-red-500">{companyNameError}</div>
+            )}
 
             <div className="flex flex-col mt-4 mb-4">
               <label className="text-[13px] ">Country / Region *</label>
@@ -558,10 +550,12 @@ const Checkout = async () => {
               </div>
             </div>
 
-            {/* <div className="flex gap-1 border-b border-[#e4e5ee] py-3">
-                        <input type="checkbox" name="address" id="address" />
-                        <p className="text-[13px] font-semibold">SHIP TO A DIFFERENT ADDRESS?</p>
-                    </div> */}
+            <div className="flex gap-1 border-b border-[#e4e5ee] py-3">
+              <input type="checkbox" name="address" id="address" />
+              <p className="text-[13px] font-semibold">
+                SHIP TO A DIFFERENT ADDRESS?
+              </p>
+            </div>
 
             <p className="text-[13px] mt-6">Order notes (optional)</p>
 
@@ -594,7 +588,11 @@ const Checkout = async () => {
             <table className="w-full">
               <tbody>
                 {cartItems.map((item: any, index: number) => (
-                  <CheckoutSidebar item={item} key={index} />
+                  <CheckoutSidebar
+                    getPrice={getPrice}
+                    item={item}
+                    key={index}
+                  />
                 ))}
               </tbody>
             </table>
@@ -606,7 +604,7 @@ const Checkout = async () => {
                     Subtotal
                   </td>
                   <td className=" py-3 text-[15px] text-right border-y border-[#e4e5ee]">
-                    ${totalAmount.toFixed(2)}
+                    {getPrice(totalAmount)}
                   </td>
                 </tr>
                 <tr>
@@ -633,7 +631,7 @@ const Checkout = async () => {
                     Total
                   </td>
                   <td className="border-b border-[#e4e5ee] text-right font-semibold text-xl py-4 ">
-                    ${totalAmount.toFixed(2)}
+                    {getPrice(totalAmount)}
                   </td>
                 </tr>
               </tbody>
@@ -764,7 +762,7 @@ const Checkout = async () => {
           <table className="w-full">
             <tbody>
               {cartItems.map((item: any, index: number) => (
-                <CheckoutSidebar item={item} key={index} />
+                <CheckoutSidebar getPrice={getPrice} item={item} key={index} />
               ))}
             </tbody>
           </table>

@@ -31,11 +31,7 @@ export const ProductCard: FC<Props> = ({ product }) => {
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const [proId, setProId] = useState("");
   const [count, setCount] = useState(0);
-  const searchParams = useSearchParams();
-  const [ratio, targetRate, localeRate] = useCurrency(
-    "EUR",
-    searchParams.get("currency") ?? "EUR"
-  );
+  const {getPrice} = useCurrency();
 
   useEffect(() => {
     const cartItemsString = localStorage.getItem("cartItems");
@@ -202,11 +198,6 @@ export const ProductCard: FC<Props> = ({ product }) => {
   for (let i = 1; i <= 5 - product.review; i++) {
     graystars.push(<FaStar />);
   }
-  console.log("card icon : ", product.unit_price * ratio, {
-    ratio,
-    targetRate,
-    localeRate,
-  });
   return (
     <>
       <div
@@ -285,16 +276,13 @@ export const ProductCard: FC<Props> = ({ product }) => {
           </div>
           <div className=" flex flex-row items-center">
             <span className="text-gray-400 text-sm line-through mr-2 my-1 font-[1.125rem]">
-              $
               {
-                (product.unit_price * ratio).toFixed(
-                  2
-                ) as unknown as ReactElement
+                getPrice(product.unit_price) as unknown as ReactElement
               }
             </span>
             {product.discount && (
               <span className="my-1 text-red-700 text-lg font-semibold">
-                ${(newprice * ratio).toFixed(2)}
+                {getPrice(newprice)}
               </span>
             )}
           </div>
