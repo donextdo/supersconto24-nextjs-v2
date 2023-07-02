@@ -91,6 +91,8 @@ const AllCategories = () => {
     }
   }, [pathname]);
 
+  
+
   return (
     <div className="">
       <button

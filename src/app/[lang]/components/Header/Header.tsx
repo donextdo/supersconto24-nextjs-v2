@@ -1,28 +1,31 @@
 'use client'
-import {SearchItem} from "../Search/Search";
-import {AiOutlineUser} from "react-icons/ai";
-import {SlHandbag} from "react-icons/sl";
+import { SearchItem } from "../Search/Search";
+import { AiOutlineUser } from "react-icons/ai";
+import { SlHandbag } from "react-icons/sl";
 import Link from "next/link";
-import {BsList} from "react-icons/bs";
+import { BsList } from "react-icons/bs";
 import Image from "next/image";
 import logo from "../../../../../assets/logo/logo.png";
 // import getConfig from "next/config";
-import {Location} from "../Location/Location";
+import { Location } from "../Location/Location";
 // import SideNavBar from "../SideNavBar/SideNavbar";
-import React, {useState} from "react";
+import React, { useState } from "react";
 import CartPopup from "@/app/[lang]/features/cart/popup-cart/CartPopup";
 import useCurrency from "@/app/[lang]/components/Hooks/useCurrencyHook";
 import useCartItemsHook from "@/app/[lang]/components/Hooks/useCartItemsHook";
-import {BiCurrentLocation} from "react-icons/bi";
-import {updateParamValue} from "../../../../../utils/baseUrl";
-import {useRouter} from "next/navigation";
+import { BiCurrentLocation } from "react-icons/bi";
+import { updateParamValue } from "../../../../../utils/baseUrl";
+import { useRouter } from "next/navigation";
+import SideNavBar from "../SideNavBar/SideNavBar";
 
 const Header = () => {
     const [cart, setCart] = useState(false);
     const [showSideNavbar, setShowSideNavbar] = useState(false)
-    const {getPrice} = useCurrency()
-    const {cartCount, cartAmount} = useCartItemsHook()
+    const { getPrice } = useCurrency()
+    const { cartCount, cartAmount } = useCartItemsHook()
     const router = useRouter()
+ 
+
 
     const handleClick = () => {
         setCart(!cart)
@@ -40,12 +43,12 @@ const Header = () => {
 
     function getMyLocation() {
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(({coords}) => {
+            navigator.geolocation.getCurrentPosition(({ coords }) => {
                 const data = [
-                    {key: 'lat', value: coords.latitude},
-                    {key: 'long', value: coords.longitude},
+                    { key: 'lat', value: coords.latitude },
+                    { key: 'long', value: coords.longitude },
                 ];
-                router.push(updateParamValue(data), {shallow: false})
+                router.push(updateParamValue(data), { shallow: false })
             });
         }
     }
@@ -73,26 +76,26 @@ const Header = () => {
                         </Link>
                     </div>
                     <div className="flex justify-start items-center basis-1/4 lg:visible md:visible invisible">
-                        <Location/>
+                        <Location />
                     </div>
                     <div className="flex justify-start items-center font-semibold">
                         <div className="mx-4">
                             <a onClick={() => getMyLocation()}>
                                 <button className="border rounded-full p-2">
-                                    <BiCurrentLocation className="text-lg text-black"/>
+                                    <BiCurrentLocation className="text-lg text-black" />
                                 </button>
                             </a>
                         </div>
                     </div>
                     <div className="basis-2/4 search-bar">
-                        <SearchItem/>
+                        <SearchItem />
                     </div>
 
                     <div className="basis-1/4 flex  justify-end items-center font-semibold">
                         <div className="mx-4">
                             <a onClick={() => window.location.href = '/account'}>
                                 <button className="border rounded-full p-2">
-                                    <AiOutlineUser className="text-2xl"/>
+                                    <AiOutlineUser className="text-2xl" />
                                 </button>
                             </a>
                         </div>
@@ -106,10 +109,10 @@ const Header = () => {
                                 className="border border-[#fff1ee] bg-[#fff1ee] rounded-full p-2"
                                 onClick={handleClick}
                             >
-                                <SlHandbag className="text-2xl text-[#ea2b0f]"/>
+                                <SlHandbag className="text-2xl text-[#ea2b0f]" />
                             </button>
 
-                            {cart && <CartPopup/>}
+                            {cart && <CartPopup />}
                             {cartCount > 0 && (
                                 <div
                                     className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full h-5 w-5 flex items-center justify-center">
@@ -129,8 +132,11 @@ const Header = () => {
                 <div className="flex justify-between items-center h-14 px-2">
                     <div>
                         <button className="text-3xl" onClick={handleSideNavbar}>
-                            <BsList/>
+                            <BsList />
                         </button>
+                        {showSideNavbar && (
+                            <SideNavBar setShowSideNavbar={setShowSideNavbar} handleSideNavbar={handleSideNavbar} />
+                        )}
                     </div>
                     <div className="h-[50px] w-40 sm:col-span-2">
                         <Link href="/">
@@ -157,9 +163,9 @@ const Header = () => {
                             className="border border-[#fff1ee] bg-[#fff1ee] rounded-full p-2"
                             onClick={handleClick}
                         >
-                            <SlHandbag className="text-2xl text-[#ea2b0f]"/>
+                            <SlHandbag className="text-2xl text-[#ea2b0f]" />
                         </button>
-                        {cart && <CartPopup/>}
+                        {cart && <CartPopup />}
                         {cartCount > 0 && (
                             <div
                                 className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full h-5 w-5 flex items-center justify-center">

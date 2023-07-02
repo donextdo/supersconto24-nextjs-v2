@@ -90,7 +90,7 @@ const TopHeader = ({lang}: { lang: string }) => {
                                 </li>
                                 <li>
                                     <Link href="/wishlist">
-                                        {/* <p>Wishlist</p> */}
+                                        <p>Wishlist</p>
                                     </Link>
                                 </li>
                                 <li>
