@@ -1,18 +1,14 @@
-
-import { ReactElement, useEffect, useState } from "react";
-import { Product } from "./product";
-import { useRouter } from "next/navigation";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
+'use client'
+import React, {ReactElement, useEffect, useMemo, useState} from "react";
+import {MainCategory, Product, SubCategory} from "./product";
 import axios from "axios";
 import baseUrl from "../../../../../utils/baseUrl";
-import { updateProductQuantity } from "./productSlice";
-import { FaHeart, FaStar } from "react-icons/fa";
-import { BsCheckLg } from "react-icons/bs";
-import { IoClose } from "react-icons/io5";
-import { calSubTotal } from "../cart/cartSlice";
+import {FaStar} from "react-icons/fa";
+import {BsCheckLg} from "react-icons/bs";
+import {IoClose} from "react-icons/io5";
 import Swal from "sweetalert2";
 import useCurrency from "@/app/[lang]/components/Hooks/useCurrencyHook";
+import useCartItemsHook from "@/app/[lang]/components/Hooks/useCartItemsHook";
 
 
 interface Review {
@@ -27,69 +23,60 @@ interface Review {
 
 const ProductPopup = ({ setProductPopup, proId }: any) => {
     const [data, setData] = useState<Product>({
-        _id: '',
-        isRecommended: false,
-        isDiscount: false,
-        isOrganic: false,
-        isFavourite: false,
-        discount: 0,
-        rating: 0,
-        front: '',
-        back: '',
-        side: '',
-        title: '',
-        isAvailable: false,
-        price: 0,
-        quantity: 0,
-        brand: '',
-        description: '',
-        productQuantity: 0,
-        skuNumber: '',
-        count: 0,
-        newprice: 0,
-        type: '',
-        review: 0,
-        mfgDate: "",
-        life: "",
+        product_category: "",
+        product_sub_category: "",
+        _id: "",
+        additionalInformation: "",
+        back: "",
+        brand: "",
         category: "",
-        tags: "",
-        speacialtag: "",
-        additionalInformation: '',
-        isBestSeller: false,
-        isNewArrival: false,
+        count: 0,
+        description: "",
+        discount: 0,
+        front: "",
         imageArray: "",
-        product_name: "",
+        isAvailable: false,
+        isBestSeller: false,
+        isDiscount: false,
+        isFavourite: false,
+        isNewArrival: false,
+        isOrganic: false,
+        isRecommended: false,
+        life: "",
+        mfgDate: "",
+        newprice: 0,
+        price: 0,
+        productQuantity: 0,
         product_description: "",
-        unit_price: 0,
-        product_image: ""
-
+        product_image: "",
+        product_name: "",
+        quantity: 0,
+        rating: 0,
+        review: 0,
+        side: "",
+        skuNumber: "",
+        speacialtag: "",
+        tags: "",
+        title: "",
+        type: "",
+        unit_price: 0
     })
-    const [mainImage, setMainImage] = useState(data?.front);
-    let id: any;
-    if (typeof localStorage !== 'undefined') {
-        id = localStorage.getItem("id");
-    }
     const [allreview, setAllreview] = useState<Array<Review>>([])
     const [tag, setTag] = useState([]);
-    const [myCategory, setMyCategory] = useState([]);
-    const router = useRouter();
-    let [newQuantity, setNewQuantity] = useState<number>(1)
+    const [subCategory, setSubCategory] = useState<SubCategory>({_id: "", mainCategoryId: "", name: ""})
+    const [mainCategory, setMainCategory] = useState<MainCategory>({_id: "", name: ""})
     const [count, setCount] = useState(1);
     const { getPrice } = useCurrency()
-
-
-
-
-    const dispatch = useDispatch()
-    const products = useSelector((state: RootState) => state.product.products) as Product[];
-
+    const {cartItems, addProductToCart, removeProductFromCart} = useCartItemsHook()
 
     useEffect(() => {
-        fetchData();
-        console.log(proId)
+        getCategory();
+        getSubCategory();
+        findSingleProduct();
+        getReviews();
     }, []);
 
-    async function fetchData() {
+    async function findSingleProduct() {
         try {
             const res = await axios.get(`${baseUrl}/catelog/item/find/${proId}`);
             console.log(res)
@@ -100,35 +87,26 @@ const ProductPopup = ({ setProductPopup, proId }: any) => {
             console.log(err);
         }
     }
-
-    let findcategory: any
-    if (data && data.category && data.category.length > 0) {
-        findcategory = data.category[0];
-    } else {
-        findcategory = undefined;
-    }
-    console.log(findcategory)
-
-    useEffect(() => {
-        if (findcategory) {
-            fetchData2();
-        }
-    }, [findcategory]);
-
-    async function fetchData2() {
+    async function getCategory() {
         try {
-            const res = await axios.get(`${baseUrl}/categories/get/${findcategory}`);
+            const res = await axios.get(`${baseUrl}/category/categories/${data.product_category}`);
             console.log(res.data)
-            setMyCategory(res.data);
+            setMainCategory(res.data);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+    async function getSubCategory() {
+        try {
+            const res = await axios.get(`${baseUrl}/category/subcategories/${data.product_sub_category}`);
+            console.log(res.data)
+            setSubCategory(res.data);
         } catch (err) {
             console.log(err);
         }
     }
 
-    useEffect(() => {
-        fetchData3();
-    }, []);
-    async function fetchData3() {
+    async function getReviews() {
         try {
             const res = await axios.get(`${baseUrl}/reviews/getReview/${proId}`);
             setAllreview(res.data);
@@ -137,101 +115,20 @@ const ProductPopup = ({ setProductPopup, proId }: any) => {
         }
     }
 
-    const item: Product | undefined = products.find((item) => item._id === proId);
-
-    const handleIncrement = (data: Product) => {
-        setCount(count + 1);
-        dispatch(calSubTotal(12));
-
+    const handleIncrement = (product: Product) => {
+        addProductToCart({...product, count: 1})
+        setCount(prevState => prevState + 1)
     };
 
-    const handleDecrement = (data: Product) => {
-        if (count > 0) {
-            setCount(count - 1);
-        }
-        dispatch(calSubTotal(12));
-
+    const handleDecrement = (product: Product) => {
+        removeProductFromCart({...product, count: 1})
+        setCount(prevState => prevState - 1)
     };
 
-    const handleWishlist = async (data: any) => {
 
-        if (id) {
-            const whishListObj = {
-                whishList: [
-                    {
-                        productId: data._id,
-                        front: data.front,
-                        title: data.title,
-                        price: data.price,
-                        date: new Date().toLocaleDateString("en-US", {
-                            month: "long",
-                            day: "numeric",
-                            year: "numeric",
-                        }),
-                        quantity: data.quantity,
-                    },
-                ],
-            };
+    const handleAddToCart = (data: any) => {
+        addProductToCart({...data, count: 1})
 
-            try {
-
-                //authentication session handle
-                const token = localStorage.getItem("token"); // Retrieve the token from local storage or wherever it's stored
-                if (!token) {
-                    localStorage.removeItem("token");
-                    localStorage.removeItem("id");
-                    alert("Session expired")
-                    router.push("/account");
-                    return;
-                }
-
-                const config = {
-                    headers: {
-                        Authorization: token,
-                    },
-                };
-
-                const response = await axios.post(
-                    `${baseUrl}/users/wishList/${id}`,
-                    whishListObj,
-                    config,
-
-                );
-
-
-                console.log(response.data); // do something with the response data
-            } catch (error) {
-                console.log(error); // handle the error 
-                localStorage.removeItem("token");
-                localStorage.removeItem("id");
-                alert("Session expired")
-                router.push("/account");
-
-            }
-        } else {
-            router.push("/account");
-        }
-
-    }
-
-    const handleaddToCart = (data: any) => {
-        const cartItemsString = localStorage.getItem('cartItems');
-        const items = cartItemsString ? JSON.parse(cartItemsString) : [];
-
-        const itemIndex = items.findIndex((item: any) => item._id === data._id);
-
-        if (itemIndex === -1) {
-            const newItem = { ...data, count: count };
-            items.push(newItem);
-            localStorage.setItem('cartItems', JSON.stringify(items));
-            dispatch(calSubTotal(12));
-
-        } else {
-            items[itemIndex].count += count;
-            localStorage.setItem('cartItems', JSON.stringify(items));
-            dispatch(calSubTotal(12));
-
-        }
         Swal.fire({
             title:
                 '<span style="font-size: 18px">Item has been added to your card</span>',
@@ -246,32 +143,35 @@ const ProductPopup = ({ setProductPopup, proId }: any) => {
         });
     };
 
-    let discountprice;
-    discountprice = data.unit_price * (data.discount / 100)
-    let newprice = data.unit_price - discountprice
+    const {discountedPrice, newPrice} = useMemo(() => {
+        const discountedPrice = data.unit_price * (data.discount / 100);
+        const newPrice = data.unit_price - discountedPrice;
+        return {discountedPrice, newPrice}
+    }, [data])
 
-    const handleClick = (image: any) => {
-        setMainImage(image);
-    };
+    const {yellowStars, grayStars} = useMemo(() => {
+        const yellowStars = []
+        const grayStars = []
+        for (let i = 1; i <= data.review; i++) {
+            yellowStars.push(<FaStar key={`yellow-star-${i}`}/>);
+        }
+        for (let i = 1; i <= 5 - data.review; i++) {
+            grayStars.push(<FaStar key={`gray-star-${i}`}/>);
+        }
+        return {yellowStars, grayStars}
 
-    const handleclose = () => {
+    }, [data])
+
+    const handleClose = () => {
         setProductPopup(false)
     }
 
-    let yellowstars = [];
-    let graystars = [];
-
-    for (let i = 1; i <= data.review; i++) {
-        yellowstars.push(<FaStar />);
-    }
-    for (let i = 1; i <= 5 - data.review; i++) {
-        graystars.push(<FaStar />);
-    }
+    console.log({mainCategory, subCategory})
     return (
-        <div className="fixed inset-0 z-50 grid place-items-center bg-slate-900 bg-opacity-50">
-            <div className="py-6 px-4 mx-2 flex gap-6 flex-col relative bg-white shadow-md rounded-md w-full lg:w-[1024px]">
-                <div className="flex justify-end px-2"><button onClick={handleclose} className="bg-[#c2c2d3] rounded-full w-8 h-8 flex justify-center items-center"><IoClose className="text-white" /></button></div>
-                <div className=" bg-white  rounded-md px-6 mt-4 ">
+        <div className="fixed inset-0 z-50 grid place-items-center bg-slate-900 bg-opacity-80">
+            <div className="py-4 px-4 mx-2 flex flex-col relative bg-white shadow-md rounded-md w-full lg:w-[880px]">
+                <div className="absolute top-4 right-4"><button onClick={handleClose} className="bg-[#c2c2d3] rounded-full w-8 h-8 flex justify-center items-center"><IoClose className="text-white" /></button></div>
+                {data.product_name ? <div className=" bg-white  rounded-md px-6 mt-4 ">
                     <div className="w-full mb-[1.875rem]">
                         <h1 className=" capitalize text-[1.5rem] font-semibold">
                             {data.product_name}
@@ -282,15 +182,17 @@ const ProductPopup = ({ setProductPopup, proId }: any) => {
 
                             <div className="text-gray-400 mx-3">|</div>
                             <span className="text-gray-400 ">
-                                <div className="flex flex-row max-h-[18px] max-w-[130.49px] items-center justify-center">
+                                <div
+                                    className="flex flex-row max-h-[18px] max-w-[130.49px] items-center justify-center">
                                     <p className="text-md text-yellow-400 flex">
-                                        {yellowstars}
+                                        {yellowStars}
                                     </p>
-                                    <p className="text-md text-gray-400 flex">{graystars}</p>
+                                    <p className="text-md text-gray-400 flex">{grayStars}</p>
                                 </div>
                             </span>
                             <span className="ml-1">
-                                <div className="uppercase  text-gray-400 font-semibold ml-2 text-[11px] flex items-center justify-center">
+                                <div
+                                    className="uppercase  text-gray-400 font-semibold ml-2 text-[11px] flex items-center justify-center">
                                     {allreview.length} REVIEW
                                 </div>
                             </span>
@@ -301,23 +203,27 @@ const ProductPopup = ({ setProductPopup, proId }: any) => {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-2 w-full min-h-[600px]">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 w-full min-h-[420px]">
                         <div>
                             <div className="relative  max-h-[579.2px] max-w-[466.66px] ">
-                                <div className="absolute max-w-[88.41px] max-h-[49px] flex flex-col items-start gap-1 p-2">
+                                <div
+                                    className="absolute max-w-[88.41px] max-h-[49px] flex flex-col items-start gap-1 p-2">
                                     {data?.discount && (
-                                        <div className=" font-semibold max-w-[45.39px] max-h-[24px] px-4 py-1 bg-sky-400 text-white rounded text-[10px] flex items-center justify-center">
-                                            {data?.discount != undefined ? data.discount : 0}%
+                                        <div
+                                            className=" font-semibold max-w-[45.39px] max-h-[24px] px-4 py-1 bg-sky-400 text-white rounded text-[10px] flex items-center justify-center">
+                                            {data.discount}%
                                         </div>
                                     )}
 
                                     {data?.speacialtag == "organic" && (
-                                        <div className=" font-semibold px-2 py-1 bg-emerald-100 text-green-600 rounded-full text-[10px] flex items-center justify-center uppercase tracking-tighter">
+                                        <div
+                                            className=" font-semibold px-2 py-1 bg-emerald-100 text-green-600 rounded-full text-[10px] flex items-center justify-center uppercase tracking-tighter">
                                             {data.speacialtag}
                                         </div>
                                     )}
                                     {data?.speacialtag == "Recommended" && (
-                                        <div className=" font-semibold px-2 py-1 bg-gray-500 text-white rounded text-[10px] flex items-center justify-center uppercase tracking-tighter">
+                                        <div
+                                            className=" font-semibold px-2 py-1 bg-gray-500 text-white rounded text-[10px] flex items-center justify-center uppercase tracking-tighter">
                                             {data.speacialtag}
                                         </div>
                                     )}
@@ -326,41 +232,11 @@ const ProductPopup = ({ setProductPopup, proId }: any) => {
                                     <img
                                         width={390}
                                         height={436}
-                                        src={mainImage || data?.product_image}
+                                        src={data?.product_image}
                                         alt="mainImage"
                                     />
                                 </div>
 
-                                {/* <div className="flex items-center justify-center row min-h-[63px] max-w-[421.2px] md:min-h-[67px] md:max-w-[444.66px]">
-                                    <div className="flex items-center justify-center min-w-[67px] min-h-[67px] lg:min-w-[67px] lg:min-h-[67px] md:min-w-[94.4px] md:min-h-[94.4px]  border border-gray-400 mr-2 hover:cursor-pointer"
-                                        onClick={() => handleClick(data?.side)}
-                                    >
-                                        <img
-                                            width={67}
-                                            height={67}
-                                            src={data?.side}
-                                            alt="Man looking at item at a store"
-                                        />
-                                    </div>
-                                    <div className="flex items-center justify-center min-w-[67px] min-h-[67px] lg:min-w-[67px] lg:min-h-[67px] md:min-w-[94.4px] md:min-h-[94.4px]   border border-gray-400 mr-2 hover:cursor-pointer"
-                                        onClick={() => handleClick(data?.front)}>
-                                        <img
-                                            width={67}
-                                            height={67}
-                                            src={data?.front}
-                                            alt="Man looking at item at a store"
-                                        />
-                                    </div>
-                                    <div className="flex items-center justify-center min-w-[67px] min-h-[67px] lg:min-w-[67px] lg:min-h-[67px] md:min-w-[94.4px] md:min-h-[94.4px]   border border-gray-400 hover:cursor-pointer"
-                                        onClick={() => handleClick(data?.back)}>
-                                        <img
-                                            width={67}
-                                            height={67}
-                                            src={data?.back}
-                                            alt="Man looking at item at a store"
-                                        />
-                                    </div>
-                                </div> */}
                             </div>
                         </div>
                         <div className=" w-full ">
@@ -380,16 +256,18 @@ const ProductPopup = ({ setProductPopup, proId }: any) => {
 
                                     {data.discount && (
                                         <span className="my-1 text-red-700 text-lg font-semibold">
-                                            ${newprice.toFixed(2)}
+                                            {getPrice(newPrice)}
                                         </span>
                                     )}
                                 </div>
                                 {data?.quantity > 0 ? (
-                                    <div className="font-medium py-2 px-2 mt-2 max-h-[26px] max-w-[68.35px] bg-emerald-100 text-green-600 rounded-full text-[.75rem] flex items-center justify-center uppercase tracking-tighter">
+                                    <div
+                                        className="font-medium py-2 px-2 mt-2 max-h-[26px] max-w-[68.35px] bg-emerald-100 text-green-600 rounded-full text-[.75rem] flex items-center justify-center uppercase tracking-tighter">
                                         In Stock
                                     </div>
                                 ) : (
-                                    <div className="font-medium py-2 px-2 mt-2 max-h-[26px] w-[100px] bg-red-100 text-red-600 rounded-full text-[.75rem] flex items-center justify-center uppercase tracking-tighter">
+                                    <div
+                                        className="font-medium py-2 px-2 mt-2 max-h-[26px] w-[100px] bg-red-100 text-red-600 rounded-full text-[.75rem] flex items-center justify-center uppercase tracking-tighter">
                                         Out of Stock
                                     </div>
                                 )}
@@ -399,10 +277,9 @@ const ProductPopup = ({ setProductPopup, proId }: any) => {
                                         {data.product_description}
                                     </p>
                                 </div>
-                                {/* <div className="fixed bottom-0 left-0 right-0 md:relative md:flex md:flex-row md:items-center md:justify-between md:max-w-[130px] md:mx-auto md:mt-10 md:mb-4 md:px-4">
-                            <div className="w-full flex items-center justify-between min-h-[44px] md:min-h-auto md:flex-1 md:grid md:grid-cols-3"> */}
                                 <div className="hidden lg:block">
-                                    <div className=" w-full lg:min-h-[44px] md:relative md:flex md:flex-row md:w-auto lg:max-w-[130px] md:min-h-[44px] md:max-w-[130px] mt-10 flex flex-row">
+                                    <div
+                                        className=" w-full lg:min-h-[44px] md:relative md:flex md:flex-row md:w-auto lg:max-w-[130px] md:min-h-[44px] md:max-w-[130px] mt-10 flex flex-row">
 
                                         <div className=" w-full flex grid-cols-3 min-h-[44px] min-w-[130px]">
                                             <button
@@ -413,15 +290,10 @@ const ProductPopup = ({ setProductPopup, proId }: any) => {
                                                 -
                                             </button>
 
-
                                             <div className=" flex items-center justify-center w-full text-center ">
 
                                                 {count}
                                             </div>
-
-                                            {/* <div className=" flex items-center justify-center w-full text-center ">
-                                                {data.count}
-                                            </div> */}
 
                                             <button
                                                 type="button"
@@ -434,28 +306,10 @@ const ProductPopup = ({ setProductPopup, proId }: any) => {
                                         <button
                                             type="button"
                                             className=" bg-blue-900 text-white min-h-[34px] min-w-[140px] rounded-full  ml-4"
-                                            onClick={() => handleaddToCart(data)}
+                                            onClick={() => handleAddToCart(data)}
                                         >
                                             Add to cart
                                         </button>
-                                    </div>
-                                </div>
-                                <div className="flex flex-row mt-10  ">
-                                    <div className="max-h-[33px] max-w-[135px] bg-white border border-gray-600 rounded-[2.0625rem] hover:cursor-pointer">
-                                        {/* <button className="flex flex-row px-3 py-2" onClick={() => handleWishlist(data)}>
-                                            <FaHeart className="h-[15px] w-[15px] text-gray-500"></FaHeart>
-                                            <span className="text-[10.5px] ml-2 tracking-[-0.05em] text-gray-500 font-semibold uppercase">
-                                                ADD TO WISHLIST
-                                            </span>
-                                        </button> */}
-                                    </div>
-                                    <div className="ml-4 flex flex-row items-center justify-center">
-                                        {/* <button type="button" className="flex flex-row ">
-                                        <TbArrowsDownUp className="h-[15px] w-[15px] text-gray-500"></TbArrowsDownUp>
-                                        <span className="text-[11px] ml-2 tracking-[-0.05em] text-gray-500 font-semibold uppercase">
-                                            compare
-                                        </span>
-                                    </button> */}
                                     </div>
                                 </div>
                                 <div className="max-h-[66px]  mt-6">
@@ -463,7 +317,8 @@ const ProductPopup = ({ setProductPopup, proId }: any) => {
 
                                         <div className="flex flex-row text-[.75rem] place-items-start mb-1">
                                             <div className="mr-2">
-                                                <BsCheckLg className="h-[15px] w-[15px] text-green-600 stroke-[1px]"></BsCheckLg>
+                                                <BsCheckLg
+                                                    className="h-[15px] w-[15px] text-green-600 stroke-[1px]"></BsCheckLg>
                                             </div>
                                             <div className="">
                                                 Type: <span className="">{data.type}</span>
@@ -474,7 +329,8 @@ const ProductPopup = ({ setProductPopup, proId }: any) => {
                                     {data.mfgDate && (
                                         <div className="flex flex-row text-[.75rem] place-items-start mb-1">
                                             <div className="mr-2 ">
-                                                <BsCheckLg className="h-[15px] w-[15px] text-green-600 stroke-[1px]"></BsCheckLg>
+                                                <BsCheckLg
+                                                    className="h-[15px] w-[15px] text-green-600 stroke-[1px]"></BsCheckLg>
                                             </div>
 
                                             <div className="">
@@ -486,7 +342,8 @@ const ProductPopup = ({ setProductPopup, proId }: any) => {
                                     {data.life && (
                                         <div className="flex flex-row text-[.75rem] place-items-start mb-1">
                                             <div className="mr-2">
-                                                <BsCheckLg className="h-[15px] w-[15px] text-green-600 stroke-[1px]"></BsCheckLg>
+                                                <BsCheckLg
+                                                    className="h-[15px] w-[15px] text-green-600 stroke-[1px]"></BsCheckLg>
                                             </div>
 
                                             <div className="">
@@ -496,25 +353,28 @@ const ProductPopup = ({ setProductPopup, proId }: any) => {
                                         </div>
                                     )}
                                 </div>
-                                <hr className="max-w-[330px] mt-6"></hr>
+                                {/*<hr className="max-w-[330px] mt-6"></hr>*/}
                                 <div className="mt-6 max-h-[72.8px] max-w-[308.33px]">
-                                    {myCategory.length > 0 && (
-                                        <div className="flex flex-row">
+                                    {/*<div className="flex items-center justify-between max-h-[72.8px] mt-6">
                                             <span className="text-gray-400 text-xs capitalize">
-                                                Category:
-                                                {myCategory.map((cat: any, index) => (
-                                                    <a
-                                                        key={index}
-                                                        href=""
-                                                        rel="tag"
-                                                        className="ml-2 text-gray-600 text-xs capitalize"
-                                                    >
-                                                        {cat.name}
+                                                Category: <a
+                                                href=""
+                                                rel="tag"
+                                                className="ml-2 text-gray-600 text-xs capitalize"
+                                            >
+                                                        {mainCategory.name}
                                                     </a>
-                                                ))}
                                             </span>
-                                        </div>
-                                    )}
+                                        <span className="text-gray-400 text-xs capitalize">
+                                                Sub category: <a
+                                                href=""
+                                                rel="tag"
+                                                className="ml-2 text-gray-600 text-xs capitalize"
+                                            >
+                                                        {subCategory.name}
+                                                    </a>
+                                            </span>
+                                    </div>*/}
 
                                     {tag.length > 0 && (
                                         <div className="flex">
@@ -544,7 +404,9 @@ const ProductPopup = ({ setProductPopup, proId }: any) => {
                         </div>
                     </div>
 
-                </div>
+                </div> : <div className="h-[50vh] flex justify-center items-center">
+                    <h3>Loading...</h3>
+                </div>}
             </div>
         </div>
     );

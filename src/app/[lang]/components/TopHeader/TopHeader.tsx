@@ -84,9 +84,9 @@ const TopHeader = ({lang}: { lang: string }) => {
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link onClick={handleAccount} href={""}>
+                                    <a onClick={handleAccount}>
                                         <p>My account</p>
-                                    </Link>
+                                    </a>
                                 </li>
                                 <li>
                                     <Link href="/wishlist">

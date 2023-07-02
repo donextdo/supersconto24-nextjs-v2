@@ -1,11 +1,11 @@
+import React, { MouseEventHandler, useEffect, useState } from "react";
+/*import { useDispatch, useSelector } from "react-redux";
 import Image, { StaticImageData } from "next/image";
 import bn from "../assets/items/banana.jpg";
-import React, { MouseEventHandler, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { addItem, updateItemQuantity } from "../../features/cart/cartSlice";
 import { updateProductQuantity } from "../../features/product/productSlice";
 import { RootState } from "../../redux/store";
-import { Product } from "../../features/product/product";
+import { Product } from "../../features/product/product";*/
 
 interface Item {
     _id: string;
@@ -53,7 +53,9 @@ interface Props {
 }
 
 const AddToCartModal: React.FC<Props> = ({ item, handler, setChangecolor }) => {
-    // const [count, setCount] = useState(1);
+    return (<></>)
+
+    /*// const [count, setCount] = useState(1);
     const dispatch = useDispatch();
     const products = useSelector((state: RootState) => state.product.products) as Product[];
 
@@ -114,7 +116,7 @@ const AddToCartModal: React.FC<Props> = ({ item, handler, setChangecolor }) => {
 
     let discountprice;
     discountprice = item.unit_price * (item.discount/100)
-  let newprice=item.unit_price-discountprice
+    let newprice=item.unit_price-discountprice
 
     return (
 
@@ -127,11 +129,11 @@ const AddToCartModal: React.FC<Props> = ({ item, handler, setChangecolor }) => {
                 </div>
 
                 <section className="md:gap-4 md:flex">
-                    {/* 1st */}
+                    {/!* 1st *!/}
                     <div className="md:mt-2 h-[50vh]  md:w-4/6   md:ml-4 relative">
                         <Image src={item.product_image} fill style={{ objectFit: "contain" }} alt={item.product_name} />
                     </div>
-                    {/* 2nd */}
+                    {/!* 2nd *!/}
                     <div className="mx-5 md:mt-8 md:mx-10 md:w-1/2 md:col-2 md:span-2" >
                         <div>
                             <p className="text-2xl font-bold text-center md:text-left">{item.product_name}</p>
@@ -147,7 +149,7 @@ const AddToCartModal: React.FC<Props> = ({ item, handler, setChangecolor }) => {
                                     ${newprice.toFixed(2)}
                                 </span>
                             </div>
-                            {/* <div className="flex flex-raw ">
+                            {/!* <div className="flex flex-raw ">
                                 <div>
                                     <button
                                         className="px-3 text-lg text-white bg-black"
@@ -167,13 +169,13 @@ const AddToCartModal: React.FC<Props> = ({ item, handler, setChangecolor }) => {
                                         +
                                     </button>
                                 </div>
-                            </div> */}
+                            </div> *!/}
                         </div>
 
                         <div className="mt-5 text-lg ">${item.unit_price * prodcutone?.count || 0}</div>
 
                         <div className=" mt-10 mb-5 md:mt-10 md:mb-0">
-                            {/* { (item.count ==undefined || item.count<1) && (
+                            {/!* { (item.count ==undefined || item.count<1) && (
                             <button disabled={count === 0} className="disabled:opacity-50 bg-[#8DC14F]  px-2 py-[8px] rounded w-full" onClick={(e) => {
                                 const cartItems: [any] = JSON.parse(localStorage.getItem("cartItems")!) ?? []
                                 const product = cartItems.find(it => it._id === item._id)
@@ -192,7 +194,7 @@ const AddToCartModal: React.FC<Props> = ({ item, handler, setChangecolor }) => {
                             }}>
                                 Add to cart
                             </button>
-                            )} */}
+                            )} *!/}
                             {(prodcutone?.count == undefined || prodcutone?.count < 1) && (
                                 <button className="disabled:opacity-50 bg-[#8DC14F]  px-2 py-[8px] rounded w-full" onClick={(e) => {
                                     // const cartItems: [any] = JSON.parse(localStorage.getItem("cartItems")!) ?? []
@@ -254,7 +256,7 @@ const AddToCartModal: React.FC<Props> = ({ item, handler, setChangecolor }) => {
 
             </div>
         </div>
-    );
+    );*/
 };
 
 export default AddToCartModal;

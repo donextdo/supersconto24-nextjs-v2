@@ -1,17 +1,17 @@
 import React, { ReactElement, useEffect } from "react";
-import { FaStar, FaHeart } from "react-icons/fa";
+import { Product } from "@/app/[lang]/features/product/product";
+import { FC, useState } from "react";
+/*import { FaStar, FaHeart } from "react-icons/fa";
 import { SlSizeFullscreen } from "react-icons/sl";
 import { FiHeart } from "react-icons/fi";
-import { FC, useState } from "react";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
 import axios from "axios";
-import { Product } from "@/app/[lang]/features/product/product";
 import { addItem, calSubTotal, updateItemQuantity } from "@/app/[lang]/features/cart/cartSlice";
 import { updateProductQuantity } from "@/app/[lang]/features/product/productSlice";
 import { RootState } from "@/app/[lang]/redux/store";
-import baseUrl from "../../../../../utils/baseUrl";
+import baseUrl from "../../../../../utils/baseUrl";*/
 
 
 interface Props {
@@ -22,7 +22,8 @@ interface Props {
 
 
 const CaPopup: FC<Props> = ({ product }) => {
-  const [isDiscount, setIsdiscount] = useState(false);
+  return (<></>)
+  /*const [isDiscount, setIsdiscount] = useState(false);
   const [productPopup, setProductPopup] = useState(false);
   const [wishlist, setWishlist] = useState([]);
   const dispatch = useDispatch();
@@ -97,7 +98,7 @@ const CaPopup: FC<Props> = ({ product }) => {
   let newprice = product.unit_price - discountprice
 
   const handleWishlist = async (product: any) => {
-  
+
     const whishListObj = {
       "whishList": [{
         productId: product._id,
@@ -190,7 +191,7 @@ const CaPopup: FC<Props> = ({ product }) => {
         </div>
       </div>
 
-      {/* Main Imagee */}
+      {/!* Main Imagee *!/}
       <div className="h-[160px] w-auto hover:cursor-pointer m-4 ">
         <Link href={`/item-preview/${product._id}`}>
         <Image
@@ -208,7 +209,7 @@ const CaPopup: FC<Props> = ({ product }) => {
         </Link>
       </div>
 
-      {/* from product name to price */}
+      {/!* from product name to price *!/}
       <div className="mx-4 mb-1 max-h-[155.29px] max-w-[212.95] ">
         <div className="text-sm font-medium text-black hover:text-indigo-400  capitalize leading-tight hover:cursor-pointer line-clamp-2">
           <Link href={`/item-preview/${product._id}`}>
@@ -221,7 +222,7 @@ const CaPopup: FC<Props> = ({ product }) => {
           {product.quantity > 0 ? "In Stock" : "Out of Stock"}
         </div>
         <div className="text-xs pt-2 flex flex-row items-center my-1">
-          {/* {stars} */}
+          {/!* {stars} *!/}
           <p className="text-md text-yellow-400 flex">{yellowstars}</p>
           <p className="text-md text-gray-400 flex">{graystars}</p>
         </div>
@@ -237,7 +238,7 @@ const CaPopup: FC<Props> = ({ product }) => {
         </div>
       </div>
 
-      {/* add to cart and count */}
+      {/!* add to cart and count *!/}
       <div className="mx-4 border-black text-black py-2 px-4 mt-1 rounded-full md:invisible group-hover:visible md:group-hover:-translate-y-3 md:group-hover:ease-in transition duration-150">
         {(product.count == undefined || product.count < 1) && (
           <button
@@ -272,7 +273,7 @@ const CaPopup: FC<Props> = ({ product }) => {
         )}
       </div>
     </div>
-  );
+  );*/
 }
 
 export default CaPopup;

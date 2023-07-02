@@ -11,48 +11,12 @@ import CartPopupCard from "@/app/[lang]/features/cart/popup-cart/CartPopupCard";
 import {Product} from "../../product/product";
 import {useSearchParams} from "next/navigation";
 import useCurrency from "@/app/[lang]/components/Hooks/useCurrencyHook";
+import useCartItemsHook from "@/app/[lang]/components/Hooks/useCartItemsHook";
 
-const CartPopup = ({setCart}: any) => {
-    const [cartItems, setCartItems] = useState<Product[]>([]);
+const CartPopup = () => {
     const {getPrice} = useCurrency();
+    const {cartItems, cartAmount, removeProductFromCart} = useCartItemsHook()
 
-    useEffect(() => {
-        const cartItemsString = localStorage.getItem("cartItems");
-        const cartItemsArray = cartItemsString ? JSON.parse(cartItemsString) : [];
-        setCartItems(cartItemsArray);
-    }, []);
-
-    let totalAmount1 = useSelector((state: RootState) => state.cart.totalAmount);
-    const [cartObj, setCartObj] = useState<any>([]);
-
-    // console.log(cartItems)
-    const dispatch = useDispatch();
-
-    let totalSubtotal = 0;
-    // cartItems.forEach(price  =>{
-    //     totalSubtotal += price.subtotal
-    // }
-    // )
-    // console.log(totalSubtotal);
-
-    let totalAmount = 0;
-    let subtotal = 0;
-    for (let i = 0; i < cartItems.length; i++) {
-        let item = cartItems[i];
-        if (typeof item.discount === "undefined") {
-            subtotal = item.count * (item.unit_price - item.unit_price * (0 / 100));
-        } else {
-            subtotal =
-                item.count *
-                (item.unit_price - item.unit_price * (item.discount / 100));
-        }
-        totalAmount += subtotal;
-    }
-    useEffect(() => {
-        // console.log(totalAmount)
-        // totalAmount1 = totalAmount
-        dispatch(calSubTotal(12));
-    },[]);
 
     return (
         <>
@@ -64,7 +28,7 @@ const CartPopup = ({setCart}: any) => {
                                 getPrice={getPrice}
                                 item={item}
                                 key={index}
-                                setCartItems={setCartItems}
+                                handleRemove={() => {removeProductFromCart(item)}}
                             />
                         ))}
                     </div>
@@ -72,7 +36,7 @@ const CartPopup = ({setCart}: any) => {
                         <p className="text-[#c2c2d3] font-semibold text-[13px]">
                             Subtotal:
                         </p>
-                        <p className="text-lg text-[#ed174a]">{getPrice(totalAmount)}</p>
+                        <p className="text-lg text-[#ed174a]">{getPrice(cartAmount)}</p>
                     </div>
 
                     <Link href="/viewcart">

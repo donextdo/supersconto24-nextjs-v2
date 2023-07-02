@@ -1,13 +1,13 @@
 "use client"
-import {ChangeEvent, useCallback, useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {MdKeyboardArrowDown} from "react-icons/md";
 import {FiSearch} from "react-icons/fi";
 import {useRouter, useSearchParams} from "next/navigation";
+import {updateParamValue} from "../../../../../utils/baseUrl";
+import {BiCurrentLocation} from "react-icons/bi";
 import PlacesServiceStatus = google.maps.places.PlacesServiceStatus;
 import AutocompletePrediction = google.maps.places.AutocompletePrediction;
 import PlaceResult = google.maps.places.PlaceResult;
-import {updateParamValue} from "../../../../../utils/baseUrl";
-import { BiCurrentLocation } from "react-icons/bi";
 
 interface LocationType {
     dollar_min: any;
@@ -158,7 +158,7 @@ export const Location = () => {
     return (
         <div className=" z-40">
             <div
-                className="border border-gray-200 rounded-md relative mx-6 flex flex-row justify-start items-center h-[60px] w-[180px] py-6 px-4 shadow-sm cursor-pointer md:mx-3 "
+                className="border border-gray-200 rounded-md relative mx-6 flex flex-row justify-start items-center h-[60px] w-[180px] py-6 px-4 shadow-sm cursor-pointer md:ml-3 "
                 onClick={handleModal}
             >
                 <div className="flex-grow flex flex-col">

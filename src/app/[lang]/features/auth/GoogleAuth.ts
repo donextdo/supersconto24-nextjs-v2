@@ -15,7 +15,7 @@ function GoogleAuth() {
         new Promise((resolve, reject) => {
             id = setInterval(() => {
                 // console.log('a', authState)
-                if (google.accounts) {
+                if (window && window.google && google?.accounts) {
                     resolve(google)
                     clearInterval(id)
                 }

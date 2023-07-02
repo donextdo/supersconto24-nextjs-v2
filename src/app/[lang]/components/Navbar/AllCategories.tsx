@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { MdKeyboardArrowDown, MdOutlineStorage } from "react-icons/md";
+import { MdKeyboardArrowDown, MdMenu } from "react-icons/md";
 import baseUrl from "../../../../../utils/baseUrl";
 import axios from "axios";
-import { IoIosArrowForward } from "react-icons/io";
+import {IoIosArrowForward} from "react-icons/io";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 interface Category {
@@ -94,17 +94,17 @@ const AllCategories = () => {
   return (
     <div className="">
       <button
-        className="w-[214px] h-[50px] rounded-full bg-[#4BB62E] "
+        className="w-[214px] h-[50px] rounded-full border border-[#4BB62E] "
         onClick={toggleHome}
       >
         <div>
           <Link
             href="#"
-            className="font-ff-headings text-white justify-between px-3 py-4 text-[13px] font-semibold flex "
+            className="font-ff-headings text-[#898989] justify-between px-3 py-4 text-[13px] font-semibold flex "
           >
             {" "}
             <div>
-              <MdOutlineStorage className="mx-2 text-xl " />
+              <MdMenu className="mx-2 text-xl " />
             </div>
             ALL CATEGORIES
             <div>

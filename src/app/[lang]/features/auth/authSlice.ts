@@ -19,11 +19,18 @@ export type UserType = {
     role: 'CUSTOMER';
     status: 1;
 };
-export const socialAuth = createAsyncThunk('auth/check', async (payload: UserType) => {
-    const response = await makeRequest({url:`${baseUrl}/auth/social`, data:payload, method:"post"});
-    console.log(response)
-    return response
+
+export type AuthType = {
+    email: string;
+    password: string;
+};
+export const socialAuth = createAsyncThunk('auth/social', async (payload: UserType) => {
+    return await makeRequest({url: `${baseUrl}/auth/social`, data: payload, method: "post"})
 });
+export const generalAuth = createAsyncThunk('auth/general', async (payload: AuthType) => {
+    return await makeRequest({url: `${baseUrl}/users/login`, data: payload, method: "post"})
+});
+
 const initialState: AuthStateType = {
     loading: null,
     currentUser: null,
@@ -33,6 +40,11 @@ const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
+        setAuthUser: (state, action) => {
+            state.loading = false;
+            state.currentUser = action.payload;
+            state.error = null
+        },
         logOut: (state) => {
             state.loading = true;
             state.currentUser = null;
@@ -45,6 +57,7 @@ const authSlice = createSlice({
                 state.loading = true;
                 state.currentUser = null;
                 state.error = null
+
                 localStorage.removeItem("userData")
             })
             .addCase(socialAuth.fulfilled, (state, action) => {
@@ -52,16 +65,40 @@ const authSlice = createSlice({
                 state.loading = false;
                 state.currentUser = action.payload;
                 state.error = null;
+
                 localStorage.setItem("userData", btoa(JSON.stringify(action.payload)))
             })
             .addCase(socialAuth.rejected, (state, action) => {
                 state.loading = false;
                 state.currentUser = null;
                 state.error = action.error.message;
+
+                localStorage.removeItem("userData")
+            })
+            .addCase(generalAuth.pending, (state) => {
+                state.loading = true;
+                state.currentUser = null;
+                state.error = null
+
+                localStorage.removeItem("userData")
+            })
+            .addCase(generalAuth.fulfilled, (state, action) => {
+                console.log(action, state)
+                state.loading = false;
+                state.currentUser = action.payload;
+                state.error = null;
+
+                localStorage.setItem("userData", btoa(JSON.stringify(action.payload)))
+            })
+            .addCase(generalAuth.rejected, (state, action) => {
+                state.loading = false;
+                state.currentUser = null;
+                state.error = action.error.message;
+
                 localStorage.removeItem("userData")
             });
     },
 });
 
-export const {logOut} = authSlice.actions
+export const {logOut, setAuthUser} = authSlice.actions
 export default authSlice.reducer;

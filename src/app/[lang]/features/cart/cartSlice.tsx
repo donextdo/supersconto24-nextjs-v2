@@ -1,70 +1,106 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Product } from "../product/product";
-// import baseUrl from "../../../utils/baseUrl";
-import axios from "axios";
-// import { http } from "../../../utils/request";
+import {createSlice} from "@reduxjs/toolkit";
+import {Product} from "../product/product";
 
 interface CartState {
-  
-  totalCount: number;
-  totalAmount: number;
- 
-  error: string | null;
+    totalCount: number;
+    totalAmount: number;
+    cartItems: Product [];
+    error: string | null;
 }
 
 const initialState: CartState = {
-  
-  totalCount: 0,
-  totalAmount: 0,
-  
-  error: null,
+    totalCount: 0,
+    totalAmount: 0,
+    cartItems: [],
+    error: null,
 };
 
-
 export const cartSlice = createSlice({
-  name: "cart",
-  initialState,
-  reducers: {
-    
-    calSubTotal: (state, action) => {
-      // console.log('Order inserted:', action.payload);
-      state.totalAmount += action.payload 
-      
-    },
-    addProduct: (state, action) => {
-      
-      state.totalAmount += action.payload.price
-      state.totalCount += action.payload.count
+    name: "cart",
+    initialState,
+    reducers: {
+        calSubTotal: (state, action) => {
+            state.totalAmount += action.payload
+        },
 
-      
-    },
-    removeProduct: (state, action) => {
-      
-      state.totalAmount -= action.payload.price
-      state.totalCount -= action.payload.count
-      
-      
+        addProduct: (state, action) => {
+            const product = action.payload
+            state.totalCount += product.count
+
+            if (!product.discount) {
+                state.totalAmount += product.unit_price;
+            } else {
+                state.totalAmount += (product.unit_price - (product.unit_price * (product.discount / 100)));
+            }
+
+            let newCart
+            const existingProduct = state.cartItems.findIndex((item) => item._id === product._id)
+            if (existingProduct > -1) {
+                newCart = state.cartItems.map((item) => {
+                    if (item._id === product._id) {
+                        item.count += product.count
+                    }
+                    return item
+                })
+            } else {
+                newCart = [...state.cartItems, product]
+            }
+
+            state.cartItems = newCart
+            localStorage.setItem("cartItems", JSON.stringify(newCart))
+        },
+
+        removeProduct: (state, action) => {
+            const product = action.payload
+            state.totalCount -= product.count
+
+            if (!product.discount) {
+                state.totalAmount -= product.count * product.unit_price;
+            } else {
+                state.totalAmount -= product.count * (product.unit_price - (product.unit_price * (product.discount / 100)));
+            }
+
+            let newCart
+            const existingProduct = state.cartItems.findIndex((item) => item._id === product._id)
+            if (existingProduct > -1) {
+                newCart = state.cartItems.map((item) => {
+                    if (item._id === product._id) {
+                        item.count -= product.count
+                    }
+                    return item
+                }).filter((item) => item.count > 0)
+
+            } else {
+                newCart = [...state.cartItems, product]
+            }
+
+            state.cartItems = newCart
+            localStorage.setItem("cartItems", JSON.stringify(newCart))
+        },
+
+        resetProduct: (state, action) => {
+            state.totalAmount = 0
+            state.totalCount = 0
+            state.cartItems = []
+            localStorage.removeItem("cartItems")
+        },
+
+        setCart: (state, action) => {
+            state.totalAmount = action.payload.totalAmount
+            state.totalCount = action.payload.totalCount
+            state.cartItems = action.payload.cartItems
+        },
+
     },
 
-    resetProduct: (state, action) => {
-      
-      state.totalAmount = 0
-      state.totalCount = 0
-      
-      
-    },
-    
-  },
-  
 });
 
 export const {
-  
-  calSubTotal,
-  resetProduct,
-  removeProduct,
-  addProduct
-
+    calSubTotal,
+    addProduct,
+    removeProduct,
+    setCart,
+    resetProduct
 } = cartSlice.actions;
 
 export default cartSlice.reducer;
