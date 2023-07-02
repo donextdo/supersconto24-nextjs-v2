@@ -1,6 +1,6 @@
 "use client";
 
-import React, {FC, useEffect, useMemo, useRef, useState} from "react";
+import React, {FC, useEffect, useRef, useState} from "react";
 import Link from "next/link";
 import {useDispatch} from "react-redux";
 import {calSubTotal} from "../cartSlice";
@@ -16,6 +16,7 @@ import {BsPrinter} from "react-icons/bs";
 import html2pdf from "html2pdf.js";
 import useCartItemsHook from "@/app/[lang]/components/Hooks/useCartItemsHook";
 import {Product} from "@/app/[lang]/features/product/product";
+import useAuthCheckHook from "@/app/[lang]/components/Hooks/useAuthCheck";
 
 // import { PDFDocument, StandardFonts } from 'pdf-lib';
 // import fs from 'fs';
@@ -40,7 +41,6 @@ const Cart: FC<CartType> = () => {
     const [phone, setPhone] = useState("");
     const [email, setEmail] = useState("");
     const [cartObj, setCartObj] = useState<any>([]);
-    const [id, setId] = useState("")
     const [showInputs, setShowInputs] = useState(false);
     const [coupon, setCoupon] = useState("");
     const [total, setTotal] = useState(0);
@@ -59,23 +59,28 @@ const Cart: FC<CartType> = () => {
     });
     const componentRef = useRef<any>(null);
     const {getPrice} = useCurrency()
-    const {cartItems, cartCount, cartAmount, addProductToCart, removeProductFromCart} = useCartItemsHook()
+    const {cartItems, cartCount, cartAmount, addProductToCart, removeProductFromCart, fetchCart} = useCartItemsHook()
+    const {isLoggedIn, authUser, logOut} = useAuthCheckHook()
+
+    useEffect(() => {
+        fetchCart()
+    }, [])
 
 
     useEffect(() => {
-        console.log(cartItems);
-        setId(localStorage.getItem("id") ?? "");
-        getUserById();
-    }, []);
+        if (isLoggedIn && authUser)
+            getUserById(authUser._id);
+    }, [authUser, isLoggedIn]);
 
     useEffect(() => {
+        console.log(cartItems)
         if (cartItems.length > 0)
-            setCartObj(groupBy([...cartItems], (v) => v.shop_id.shop_name + " - " + v.shop_id.address.address));
+            setCartObj(groupBy([...cartItems], (v) => v.shop_id?.shop_name + " - " + v.shop_id?.address?.address));
         else
             setCartObj([])
     }, [cartItems])
 
-    async function getUserById() {
+    async function getUserById(id: string) {
         try {
             const res = await axios.get(`${baseUrl}/users/${id}`);
             console.log(res.data);

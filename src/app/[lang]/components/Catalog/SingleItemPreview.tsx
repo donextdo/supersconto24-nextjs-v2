@@ -15,6 +15,7 @@ interface Props {
     width: number,
     height: number
     handleSelection: (data: any) => void
+    cartItems:Product[]
 
 }
 
@@ -26,13 +27,13 @@ const SingleItemPreview: React.FC<Props> = ({
                                                 handleSelection,
                                                 width,
                                                 height,
+                                                cartItems
 
                                             }) => {
 
-    const {cartItems} = useCartItemsHook()
 
 
-    console.log({width, height, imageWidth, imageHeight, coordinates})
+    console.log({width, height, imageWidth, imageHeight,scaleX : width / imageWidth, scaleY : height / imageHeight, coordinates})
 
     return (
 

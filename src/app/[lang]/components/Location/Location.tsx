@@ -32,7 +32,7 @@ export const Location = () => {
         const lat = Number(searchParams.get("lat"))
         const long = Number(searchParams.get("long"))
         const delayDebounceFn = setInterval(() => {
-            if (!isNaN(lat) && !isNaN(long) && google) {
+            if (!isNaN(lat) && !isNaN(long) && window && window.google && google) {
                 getAddressFromCoordinates(lat, long);
                 clearInterval(delayDebounceFn)
             }

@@ -18,41 +18,7 @@ const UseCartItemsHook = () => {
 
         if (cart.length === 0) {
 
-            const localCart = localStorage.getItem("cartItems") ? JSON.parse(localStorage.getItem("cartItems")!) : []
-
-            if (localCart.length > 0) {
-
-                getCartItems(localCart).then((data) => {
-                    const fetchedCartItems = data.map((item: Product) => {
-                        const itemInCart: any = localCart.find((p: Product) => p._id === item._id);
-                        if (itemInCart) {
-                            return {...item, count: itemInCart.count || 0};
-                        }
-                        return item;
-                    });
-
-                    if (fetchedCartItems.length > 0) {
-                        const {cartAmountCalculated, cartCountCalculated} = calCartDetails(fetchedCartItems)
-                        dispatch(setCart({
-                            totalAmount: cartAmountCalculated,
-                            totalCount: cartCountCalculated,
-                            cartItems: fetchedCartItems
-                        }))
-                    } else {
-                        setCartItems([])
-                        setCartAmount(0)
-                        setCartCount(0)
-                    }
-
-                }).catch((error) => {
-                    console.error("error : ", error);
-                });
-
-            } else {
-                setCartItems([])
-                setCartAmount(0)
-                setCartCount(0)
-            }
+            fetchCart()
 
         } else {
             const cartItemsState = cartState.cartItems
@@ -94,9 +60,46 @@ const UseCartItemsHook = () => {
         dispatch(removeProduct(product))
     }
 
+    const fetchCart = () => {
+        const localCart = localStorage.getItem("cartItems") ? JSON.parse(localStorage.getItem("cartItems")!) : []
+
+        if (localCart.length > 0) {
+
+            getCartItems(localCart).then((data) => {
+                const fetchedCartItems = data.map((item: Product) => {
+                    const itemInCart: any = localCart.find((p: Product) => p._id === item._id);
+                    if (itemInCart) {
+                        return {...item, count: itemInCart.count || 0};
+                    }
+                    return item;
+                });
+
+                if (fetchedCartItems.length > 0) {
+                    const {cartAmountCalculated, cartCountCalculated} = calCartDetails(fetchedCartItems)
+                    dispatch(setCart({
+                        totalAmount: cartAmountCalculated,
+                        totalCount: cartCountCalculated,
+                        cartItems: fetchedCartItems
+                    }))
+                } else {
+                    setCartItems([])
+                    setCartAmount(0)
+                    setCartCount(0)
+                }
+
+            }).catch((error) => {
+                console.error("error : ", error);
+            });
+
+        } else {
+            setCartItems([])
+            setCartAmount(0)
+            setCartCount(0)
+        }
+    }
     console.log("render", {cartItems, cartCount, cartAmount, addProductToCart, removeProductFromCart})
 
-    return {cartItems, cartCount, cartAmount, addProductToCart, removeProductFromCart}
+    return {cartItems, cartCount, cartAmount, addProductToCart, removeProductFromCart, fetchCart}
 };
 
 export default UseCartItemsHook;

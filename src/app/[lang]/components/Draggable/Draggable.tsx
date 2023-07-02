@@ -2,16 +2,19 @@ import React, {useState, useRef, useEffect, useCallback} from 'react';
 import {log} from "util";
 import SingleItemPreview from '../Catalog/SingleItemPreview';
 import { NextArrowCircle, PrevArrowCircle } from '../CatalogOneItem/CatalogOneItem';
+import useCartItemsHook from "@/app/[lang]/components/Hooks/useCartItemsHook";
 
 function Draggable({pages, setShowModal, item}: any) {
     const [isDragging, setIsDragging] = useState(false);
     const [dragStartX, setDragStartX] = useState(0);
     const [scrollLeft, setScrollLeft] = useState(0);
+    const [isScrolling, setIsScrolling] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
     const [currentIndex, setCurrentIndex] = useState({index: 0, direction: true})
     const itemRefs = useRef<any>([])
     const observer = useRef<any>();
     const [windowInfo, setWindowInfo] = useState({width: 0, height: 0})
+    const {cartItems} = useCartItemsHook()
 
 
     useEffect(() => {
@@ -22,14 +25,16 @@ function Draggable({pages, setShowModal, item}: any) {
         observer.current = new IntersectionObserver(handleIntersect, {
             threshold: 1,
         });
+
         const items = itemRefs.current;
         items.forEach((item: any) => observer.current.observe(item));
+
         return () => {
             if (observer.current) {
                 observer.current.disconnect();
             }
         };
-    }, [pages, currentIndex, isDragging]);
+    }, [pages, currentIndex, isDragging, isScrolling]);
 
     useEffect(() => {
         if (pages.length > 0) {
@@ -60,10 +65,10 @@ function Draggable({pages, setShowModal, item}: any) {
     };
 
     const handleIntersect = (entries: any) => {
-        console.log(entries)
+        console.log(isDragging, entries)
         entries.forEach((entry: any) => {
-            if (entry.isIntersecting && entry.intersectionRatio === 1) {
-                if (isDragging) {
+            if (entry.intersectionRatio > 0.8) {
+                if (isDragging || isScrolling) {
                     console.log("intersecting", {
                         currentIndex,
                         length: pages.length
@@ -76,23 +81,6 @@ function Draggable({pages, setShowModal, item}: any) {
     }
 
     console.log({...currentIndex,pages});
-    useEffect(() => {
-        const handleScroll = (event: WheelEvent) => {
-            if (containerRef.current) {
-                containerRef.current.scrollLeft += event.deltaY;
-            }
-        };
-
-        if (containerRef.current) {
-            containerRef.current.addEventListener('wheel', handleScroll);
-        }
-
-        return () => {
-            if (containerRef.current) {
-                containerRef.current.removeEventListener('wheel', handleScroll);
-            }
-        };
-    }, []);
 
     return (
 
@@ -114,28 +102,43 @@ function Draggable({pages, setShowModal, item}: any) {
                 onMouseUp={handleMouseUp}
                 onMouseLeave={handleMouseUp}
                 onMouseUpCapture={handleMouseUp}
+
+                onWheel={(event: any) => {
+                    console.log("on Wheel")
+
+                    if (containerRef.current) {
+                        containerRef.current.scrollLeft += event.deltaY;
+                        setIsScrolling(true);
+
+                        setTimeout(() => {
+                            setIsScrolling(false);
+
+                        }, 500)
+                    }
+                }}
             >
 
                 <div className="counter">{currentIndex.index + 1}/{pages.length}</div>
                 {
                     pages.length > 0 && pages.map((item: any, index: number) => (
                         <div key={`page-slider-${index}`} ref={(el) => itemRefs.current[index] = el} data-index={index}>
-                            {item.items && item.items.length > 0 &&
+                            {item &&
                                 <SingleItemPreview
-                                    coordinates={item.items.map((it: any) => ({
+                                    cartItems={cartItems}
+                                    coordinates={item?.items.map((it: any) => ({
                                         ...it.coordinates,
                                         id: it._id,
                                         name: it.product_name
                                     })).flatMap((a: any) => a)}
                                     strokeImageUrl={item.page_image}
                                     height={(windowInfo.height - (16 * 7))}
-                                    width={item?.items[0]?.coordinates?.imageWidth * (windowInfo.height - (16 * 7)) / item?.items[0]?.coordinates?.imageHeight}
+                                    width={(item?.items[0]?.coordinates?.imageWidth ?? item?.dimensions.width) * (windowInfo.height - (16 * 7)) / (item?.items[0]?.coordinates?.imageHeight ?? item?.dimensions.height)}
                                     handleSelection={({itemId, itemName}) => {
-                                        const selectedProduct = item.items.find((it: { _id: string; }) => it._id === itemId)
+                                        const selectedProduct = item?.items.find((it: { _id: string; }) => it._id === itemId)
                                         setShowModal({show: true, item: selectedProduct._id})
                                     }}
-                                    imageHeight={item?.items[0]?.coordinates?.imageHeight}
-                                    imageWidth={item?.items[0]?.coordinates?.imageWidth}
+                                    imageHeight={item?.items[0]?.coordinates?.imageHeight ?? item?.dimensions.height}
+                                    imageWidth={item?.items[0]?.coordinates?.imageWidth ?? item?.dimensions.width}
 
                                 />
                             }
