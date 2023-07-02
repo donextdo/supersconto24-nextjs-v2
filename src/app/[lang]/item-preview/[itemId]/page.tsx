@@ -210,8 +210,16 @@ const ItemPages = ({params}: IProps) => {
 
 
     const {discountedPrice, newPrice} = useMemo(() => {
-        const discountedPrice = data.unit_price * (data.discount / 100);
-        const newPrice = data.unit_price - discountedPrice;
+        let discountedPrice = 0
+        let newPrice = 0
+
+        if (data.discount) {
+            discountedPrice = data.unit_price * (data.discount / 100);
+            newPrice = data.unit_price - discountedPrice;
+        } else {
+            newPrice = data.unit_price;
+        }
+
         return {discountedPrice, newPrice}
     }, [data])
 

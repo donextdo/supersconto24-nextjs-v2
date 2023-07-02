@@ -63,10 +63,18 @@ export const ProductCard: FC<Props> = ({ product }) => {
         });
     };
 
-    const { discountedPrice, newPrice } = useMemo(() => {
-        const discountedPrice = product.unit_price * (product.discount / 100);
-        const newPrice = product.unit_price - discountedPrice;
-        return { discountedPrice, newPrice }
+    const {discountedPrice, newPrice} = useMemo(() => {
+        let discountedPrice = 0
+        let newPrice = 0
+
+        if (product.discount) {
+            discountedPrice = product.unit_price * (product.discount / 100);
+            newPrice = product.unit_price - discountedPrice;
+        } else {
+            newPrice = product.unit_price;
+        }
+
+        return {discountedPrice, newPrice}
     }, [product])
 
     const { yellowStars, grayStars } = useMemo(() => {
