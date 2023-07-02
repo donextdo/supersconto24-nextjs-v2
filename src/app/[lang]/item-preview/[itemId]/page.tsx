@@ -1,34 +1,26 @@
 'use client'
-import { FaStar } from "react-icons/fa";
-import Image from "next/image";
-import { FC, ReactElement, useEffect, useState } from "react";
 import {
-    FaHeart,
     FaFacebookF,
-    FaTwitter,
-    FaWhatsapp,
-    FaPinterest,
     FaLinkedin,
+    FaPinterest,
     FaReddit,
     FaShippingFast,
+    FaStar,
+    FaTwitter,
+    FaWhatsapp
 } from "react-icons/fa";
-import { HiOutlineCurrencyDollar } from "react-icons/hi";
-import { GiMedicinePills } from "react-icons/gi";
-import { TbArrowsDownUp } from "react-icons/tb";
-import { BsCheckLg } from "react-icons/bs";
+import React, {ReactElement, useEffect, useMemo, useState} from "react";
+import {GiMedicinePills} from "react-icons/gi";
+import {BsCheckLg} from "react-icons/bs";
 import axios from "axios";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useDispatch, useSelector } from "react-redux";
-import { MdArrowBackIos, MdArrowForwardIos } from "react-icons/md";
-import { Product } from "../../features/product/product";
-import { RootState } from "../../redux/store";
+import {MainCategory, Product, SubCategory} from "../../features/product/product";
 import baseUrl from "../../../../../utils/baseUrl";
-import { updateProductQuantity } from "../../features/product/productSlice";
 import Description from "../../components/ViewItem/Details/Description";
 import Review from "../../components/ViewItem/Details/Review";
 import AdditionalInformation from "../../components/ViewItem/Details/AdditionalInformation";
-import { addItems } from "../../features/cart/cartSlice";
 import Swal from "sweetalert2";
+import useCartItemsHook from "@/app/[lang]/components/Hooks/useCartItemsHook";
+import useCurrency from "@/app/[lang]/components/Hooks/useCurrencyHook";
 
 // interface ItemData {
 //     description: string;
@@ -42,10 +34,9 @@ interface IProps {
         itemId: string;
     };
 }
-const ItemPages = ({ params }: IProps) => {
-    const itemId = params.itemId
-    console.log(params)
 
+const ItemPages = ({params}: IProps) => {
+    const itemId = params.itemId
     const [data, setData] = useState<Product>({
         _id: "",
         isRecommended: false,
@@ -54,6 +45,8 @@ const ItemPages = ({ params }: IProps) => {
         isFavourite: false,
         discount: 0,
         rating: 0,
+        product_category: "",
+        product_sub_category: "",
         front: "",
         back: "",
         side: "",
@@ -83,140 +76,63 @@ const ItemPages = ({ params }: IProps) => {
         unit_price: 0,
         product_image: ""
     });
-    const [myCategory, setMyCategory] = useState([]);
+    const [mainCategory, setMainCategory] = useState<MainCategory>({_id: "", name: ""})
+    const [subCategory, setSubCategory] = useState<SubCategory>({_id: "", mainCategoryId: "", name: ""})
     const [isColor, setIsColor] = useState(1);
-    const [mainImage, setMainImage] = useState(data?.front);
     const [tag, setTag] = useState([]);
     const [allreview, setAllreview] = useState<Array<Review>>([]);
-    const [hideBackImage, setHideBackImage] = useState(false);
-    const [hideFrontImage, setHideFrontImage] = useState(false);
-    const [hideSideImage, setHideSideImage] = useState(false);
     const [categoryName, setcategoryname] = useState();
-    let [newQuantity, setNewQuantity] = useState<number>(1)
     const [count, setCount] = useState(1);
-
-
-    let id: any;
-    if (typeof localStorage !== "undefined") {
-        id = localStorage.getItem("id");
-    }
-
-    const [isClicked, setIsClicked] = useState<string | null>("front");
     const [isModalOpen, setIsModalOpen] = useState(false);
-    let [imageArray1, setImageArray1] = useState<string[]>([]);
-    let [imageArray2, setImageArray2] = useState<string[]>([]);
+    const {cartItems, addProductToCart, removeProductFromCart} = useCartItemsHook()
+    const {getPrice} = useCurrency()
 
-
-    const [currentSlide, setCurrentSlide] = useState(0);
-
-
-
-
-    const router = useRouter();
-    const searchParams = useSearchParams();
-    // const itemId = searchParams.get('itemId')
-    // // const { itemId } = router.query;
-    // console.log(itemId)
-
-    const dispatch = useDispatch();
-    const products = useSelector(
-        (state: RootState) => state.product.products
-    ) as Product[];
 
     useEffect(() => {
-        const itemId = searchParams.get('itemId')
-        // const { itemId } = router.query;
-        console.log(itemId)
+        getCategory();
+        getSubCategory();
+        getReviews();
 
     }, []);
 
 
     useEffect(() => {
-        fetchData();
+        findSingleProduct();
     }, [itemId]);
 
-    async function fetchData() {
+    async function findSingleProduct() {
         try {
             const res = await axios.get(`${baseUrl}/catelog/item/find/${itemId}`);
-            console.log(res.data);
+            console.log(res)
             setData(res.data);
-            setTag(res.data.tags);
-            setImageArray2(res.data.imageArray)
-            if (res.data.back == "") {
-                setHideBackImage(true);
-            }
-            if (res.data.front == "") {
-                setHideFrontImage(true);
-            }
-            if (res.data.side == "") {
-                setHideSideImage(true);
-            }
+            setTag(res.data.tags)
+
         } catch (err) {
             console.log(err);
         }
     }
 
-    // slide image
-    useEffect(() => {
-        setImageArray1([data.back, data.front, data.side]);
-    }, [data.back, data.front, data.side]);
-
-    // useEffect(() => {
-    //     setImageArray2(data.imageArray)
-    // }, [data.imageArray]);
-
-
-    const combinedArray: any = [];
-    console.log(combinedArray[0])
-
-    const [selectedImage, setSelectedImage] = useState(combinedArray[0]);
-
-    console.log(selectedImage)
-
-
-    const nextSlide = () => {
-        setCurrentSlide((prevSlide) => (prevSlide + 1) % combinedArray.length);
-    };
-
-    const prevSlide = () => {
-        setCurrentSlide((prevSlide) => (prevSlide - 1 + combinedArray.length) % combinedArray.length);
-    };
-
-    const handleImageClick = (index: any) => {
-        setSelectedImage(combinedArray[index]);
-    };
-
-
-
-    let findcategory: any;
-    if (data && data.category && data.category.length > 0) {
-        findcategory = data.category[0];
-    } else {
-        findcategory = undefined;
-    }
-    console.log(findcategory);
-
-    useEffect(() => {
-        if (findcategory) {
-            fetchData2();
-        }
-    }, [findcategory]);
-
-    async function fetchData2() {
+    async function getCategory() {
         try {
-            const res = await axios.get(`${baseUrl}/categories/get/${findcategory}`);
-            console.log(res.data);
-            setMyCategory(res.data);
+            const res = await axios.get(`${baseUrl}/category/categories/${data.product_category}`);
+            console.log(res.data)
+            setMainCategory(res.data);
         } catch (err) {
             console.log(err);
         }
     }
 
-    // review part 
-    useEffect(() => {
-        fetchData3();
-    }, []);
-    async function fetchData3() {
+    async function getSubCategory() {
+        try {
+            const res = await axios.get(`${baseUrl}/category/subcategories/${data.product_sub_category}`);
+            console.log(res.data)
+            setSubCategory(res.data);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    async function getReviews() {
         try {
             const res = await axios.get(`${baseUrl}/reviews/getReview/${itemId}`);
             setAllreview(res.data);
@@ -245,45 +161,33 @@ const ItemPages = ({ params }: IProps) => {
 
     console.log(averageReviewCount);
 
-    let yellowstars = [];
-    let graystars = [];
+    const {yellowStars, grayStars} = useMemo(() => {
+        const yellowStars = []
+        const grayStars = []
+        for (let i = 1; i <= data.review; i++) {
+            yellowStars.push(<FaStar key={`yellow-star-${i}`}/>);
+        }
+        for (let i = 1; i <= 5 - data.review; i++) {
+            grayStars.push(<FaStar key={`gray-star-${i}`}/>);
+        }
+        return {yellowStars, grayStars}
 
-    for (let i = 1; i <= averageReviewCount; i++) {
-        yellowstars.push(<FaStar />);
-    }
-    for (let i = 1; i <= 5 - averageReviewCount; i++) {
-        graystars.push(<FaStar />);
-    }
+    }, [data])
 
-    const item: Product | undefined = products.find(
-        (item) => item._id === itemId
-    );
-
-    const handleIncrement = (data: Product) => {
-        setCount(count + 1);
+    const handleIncrement = (product: Product) => {
+        addProductToCart({...product, count: 1})
+        setCount(prevState => prevState + 1)
     };
 
-    const handleDecrement = (data: Product) => {
-        if (count > 0) {
-            setCount(count - 1);
-        }
+    const handleDecrement = (product: Product) => {
+        removeProductFromCart({...product, count: 1})
+        setCount(prevState => prevState - 1)
     };
 
 
-    const handleaddToCart = (data: any) => {
-        const cartItemsString = localStorage.getItem('cartItems');
-        const items = cartItemsString ? JSON.parse(cartItemsString) : [];
+    const handleAddToCart = (data: any) => {
+        addProductToCart({...data, count: 1})
 
-        const itemIndex = items.findIndex((item: any) => item._id === data._id);
-
-        if (itemIndex === -1) {
-            const newItem = { ...data, count: count };
-            items.push(newItem);
-            localStorage.setItem('cartItems', JSON.stringify(items));
-        } else {
-            items[itemIndex].count += count;
-            localStorage.setItem('cartItems', JSON.stringify(items));
-        }
         Swal.fire({
             title:
                 '<span style="font-size: 18px">Item has been added to your card</span>',
@@ -299,89 +203,17 @@ const ItemPages = ({ params }: IProps) => {
 
     };
 
-    const stars = Array.from({ length: 5 }, (_, i) => (
-        <span key={i}>
-            <FaStar
-                className={
-                    i < (data?.rating as number) ? "text-yellow-500" : "text-gray-400"
-                }
-            />
-        </span>
-    ));
 
     const handleChange = (id: any) => {
         setIsColor(id);
     };
 
 
-    const handleWishlist = async (data: any) => {
-
-        if (id) {
-            const whishListObj = {
-                whishList: [
-                    {
-                        productId: data._id,
-                        front: data.front,
-                        title: data.product_name,
-                        price: data.unit_price,
-                        date: new Date().toLocaleDateString("en-US", {
-                            month: "long",
-                            day: "numeric",
-                            year: "numeric",
-                        }),
-                        quantity: data.quantity,
-                    },
-                ],
-            };
-
-            try {
-
-                //authentication session handle
-                const token = localStorage.getItem("token"); // Retrieve the token from local storage or wherever it's stored
-                if (!token) {
-                    alert("Session expired")
-                    router.push("/account");
-                    return;
-                }
-
-                const config = {
-                    headers: {
-                        Authorization: token,
-                    },
-                };
-
-                const response = await axios.post(
-                    `${baseUrl}/users/wishList/${id}`,
-                    whishListObj,
-                    config,
-
-                );
-
-
-                console.log(response.data); // do something with the response data
-            } catch (error) {
-                console.log(error); // handle the error 
-
-                alert("Session expired")
-                router.push("/account");
-
-            }
-        } else {
-            router.push("/account");
-        }
-
-    }
-
-
-
-    // console.log(item)
-
-    const handleClick = (image: any) => {
-        setMainImage(image);
-    };
-    let discountprice;
-    discountprice = data.unit_price * (data.discount / 100);
-    let newprice = data.unit_price - discountprice;
+    const {discountedPrice, newPrice} = useMemo(() => {
+        const discountedPrice = data.unit_price * (data.discount / 100);
+        const newPrice = data.unit_price - discountedPrice;
+        return {discountedPrice, newPrice}
+    }, [data])
 
     const encodedUrl = encodeURIComponent(`${baseUrl}/item-preview/${itemId}`);
     const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
@@ -450,16 +282,11 @@ const ItemPages = ({ params }: IProps) => {
         setIsModalOpen(false);
     };
 
-    useEffect(() => {
-        let catName: any = localStorage.getItem("catName");
-        catName = catName?.replace(/"/g, "");
-        setcategoryname(catName);
-        console.log("catname: ", categoryName);
-    });
+
     const breadcrumbs = [
-        { title: "Home", url: "/" },
-        { title: `${categoryName}`, url: `/item-preview/${itemId}` },
-        { title: `${data.product_name}` },
+        {title: "Home", url: "/"},
+        {title: `${categoryName}`, url: `/item-preview/${itemId}`},
+        {title: `${data.product_name}`},
     ];
 
     const MAX_TITLE_LENGTH = 20; // Set your desired character limit
@@ -476,7 +303,8 @@ const ItemPages = ({ params }: IProps) => {
                     {/* working one */}
                     <div className=" bg-white drop-shadow rounded-md px-6 pt-10 mt-2 ">
                         <div className="w-full mb-[1.875rem]">
-                            <h1 className=" capitalize text-[1.5rem] font-semibold " onClick={() => setExpanded(!expanded)}>
+                            <h1 className=" capitalize text-[1.5rem] font-semibold "
+                                onClick={() => setExpanded(!expanded)}>
                                 {data.product_name.length > 20 ? titleToDisplay : data.product_name}
                             </h1>
                             <div className="flex flex-row bg-white text-[0.75rem] ">
@@ -485,15 +313,17 @@ const ItemPages = ({ params }: IProps) => {
 
                                 <div className="text-gray-400 mx-3">|</div>
                                 <span className="text-gray-400 ">
-                                    <div className="flex flex-row max-h-[18px] max-w-[130.49px] items-center justify-center">
+                                    <div
+                                        className="flex flex-row max-h-[18px] max-w-[130.49px] items-center justify-center">
                                         <p className="text-md text-yellow-400 flex">
-                                            {yellowstars}
+                                            {yellowStars}
                                         </p>
-                                        <p className="text-md text-gray-400 flex">{graystars}</p>
+                                        <p className="text-md text-gray-400 flex">{grayStars}</p>
                                     </div>
                                 </span>
                                 <span className="ml-1">
-                                    <div className="uppercase  text-gray-400 font-semibold ml-2 text-[11px] flex items-center justify-center">
+                                    <div
+                                        className="uppercase  text-gray-400 font-semibold ml-2 text-[11px] flex items-center justify-center">
                                         {allreview.length} REVIEW
                                     </div>
                                 </span>
@@ -507,25 +337,30 @@ const ItemPages = ({ params }: IProps) => {
                         <div className="grid grid-cols-1 lg:grid-cols-7 w-full min-h-[600px]">
                             <div className="col-span-3">
                                 <div className="relative  max-h-[579.2px] max-w-[466.66px] ">
-                                    <div className="absolute max-w-[88.41px] max-h-[49px] flex flex-col items-start gap-1 p-2">
+                                    <div
+                                        className="absolute max-w-[88.41px] max-h-[49px] flex flex-col items-start gap-1 p-2">
                                         {data?.discount && (
-                                            <div className=" font-semibold max-w-[45.39px] max-h-[24px] px-4 py-1 bg-sky-400 text-white rounded text-[10px] flex items-center justify-center">
+                                            <div
+                                                className=" font-semibold max-w-[45.39px] max-h-[24px] px-4 py-1 bg-sky-400 text-white rounded text-[10px] flex items-center justify-center">
                                                 {data.discount as unknown as ReactElement}%
 
                                             </div>
                                         )}
                                         {data?.isRecommended && (
-                                            <div className=" font-semibold px-2 py-1 bg-gray-500 text-white rounded text-[10px] flex items-center justify-center uppercase tracking-tighter">
+                                            <div
+                                                className=" font-semibold px-2 py-1 bg-gray-500 text-white rounded text-[10px] flex items-center justify-center uppercase tracking-tighter">
                                                 Recommended
                                             </div>
                                         )}
                                         {data?.speacialtag == "organic" && (
-                                            <div className=" font-semibold px-2 py-1 bg-emerald-100 text-green-600 rounded-full text-[10px] flex items-center justify-center uppercase tracking-tighter">
+                                            <div
+                                                className=" font-semibold px-2 py-1 bg-emerald-100 text-green-600 rounded-full text-[10px] flex items-center justify-center uppercase tracking-tighter">
                                                 {data.speacialtag}
                                             </div>
                                         )}
                                         {data?.speacialtag == "Recommended" && (
-                                            <div className=" font-semibold px-2 py-1 bg-gray-500 text-white rounded text-[10px] flex items-center justify-center uppercase tracking-tighter">
+                                            <div
+                                                className=" font-semibold px-2 py-1 bg-gray-500 text-white rounded text-[10px] flex items-center justify-center uppercase tracking-tighter">
                                                 {data.speacialtag}
                                             </div>
                                         )}
@@ -537,7 +372,7 @@ const ItemPages = ({ params }: IProps) => {
                                         <img
                                             width={390}
                                             height={436}
-                                            src={selectedImage || data.product_image}
+                                            src={data.product_image}
                                             alt="mainImage"
                                         />
                                     </div>
@@ -586,22 +421,31 @@ const ItemPages = ({ params }: IProps) => {
                             <div className="col-span-4 grid grid-cols-1 xl:grid-cols-2 gap-4 w-full ">
                                 <div className=" w-full">
                                     <div className=" flex flex-row">
-                                        <span className="text-gray-400 line-through mr-2 my-1 font-[1.125rem] flex items-center justify-center">
-                                            Rs {data?.unit_price.toFixed(2)}
-                                        </span>
+                                        {data.discount ? (
+                                            <span
+                                                className="text-gray-400 text-sm line-through mr-2 my-1 font-[1.125rem]">
+                                                {
+                                                    getPrice(data.unit_price) as unknown as ReactElement
+                                                }
+                                            </span>
+                                        ) : <span className="text-gray-400 text-sm  mr-2 my-1 font-[1.125rem]">
+                                            {getPrice(data.unit_price)}
+                                        </span>}
 
                                         {data.discount && (
                                             <span className="my-1 text-red-700 text-lg font-semibold">
-                                                ${newprice.toFixed(2)}
+                                                {getPrice(newPrice)}
                                             </span>
                                         )}
                                     </div>
                                     {data?.quantity > 0 ? (
-                                        <div className="font-medium py-2 px-2 mt-2 max-h-[26px] max-w-[68.35px] bg-emerald-100 text-green-600 rounded-full text-[.75rem] flex items-center justify-center uppercase tracking-tighter">
+                                        <div
+                                            className="font-medium py-2 px-2 mt-2 max-h-[26px] max-w-[68.35px] bg-emerald-100 text-green-600 rounded-full text-[.75rem] flex items-center justify-center uppercase tracking-tighter">
                                             In Stock
                                         </div>
                                     ) : (
-                                        <div className="font-medium py-2 px-2 mt-2 max-h-[26px] w-[100px] bg-red-100 text-red-600 rounded-full text-[.75rem] flex items-center justify-center uppercase tracking-tighter">
+                                        <div
+                                            className="font-medium py-2 px-2 mt-2 max-h-[26px] w-[100px] bg-red-100 text-red-600 rounded-full text-[.75rem] flex items-center justify-center uppercase tracking-tighter">
                                             Out of Stock
                                         </div>
                                     )}
@@ -612,7 +456,8 @@ const ItemPages = ({ params }: IProps) => {
                                     {/* <div className="fixed bottom-0 left-0 right-0 md:relative md:flex md:flex-row md:items-center md:justify-between md:max-w-[130px] md:mx-auto md:mt-10 md:mb-4 md:px-4">
                                     <div className="w-full flex items-center justify-between min-h-[44px] md:min-h-auto md:flex-1 md:grid md:grid-cols-3"> */}
                                     <div className="hidden lg:block">
-                                        <div className=" w-full lg:min-h-[44px] md:relative md:flex md:flex-row md:w-auto lg:max-w-[130px] md:min-h-[44px] md:max-w-[130px] mt-10 flex flex-row">
+                                        <div
+                                            className=" w-full lg:min-h-[44px] md:relative md:flex md:flex-row md:w-auto lg:max-w-[130px] md:min-h-[44px] md:max-w-[130px] mt-10 flex flex-row">
                                             <div className=" w-full flex grid-cols-3 min-h-[44px] min-w-[130px]">
                                                 <button
                                                     type="button"
@@ -641,7 +486,7 @@ const ItemPages = ({ params }: IProps) => {
                                             <button
                                                 type="button"
                                                 className=" bg-primary text-white min-h-[34px] min-w-[140px] rounded-full text-[13px]  ml-4"
-                                                onClick={() => handleaddToCart(data)}
+                                                onClick={() => handleAddToCart(data)}
                                             >
                                                 Add to cart
                                             </button>
@@ -672,7 +517,8 @@ const ItemPages = ({ params }: IProps) => {
                                         {data.type && (
                                             <div className="flex flex-row text-[.75rem] place-items-start mb-1">
                                                 <div className="mr-2">
-                                                    <BsCheckLg className="h-[15px] w-[15px] text-green-600 stroke-[1px]"></BsCheckLg>
+                                                    <BsCheckLg
+                                                        className="h-[15px] w-[15px] text-green-600 stroke-[1px]"></BsCheckLg>
                                                 </div>
                                                 <div className="">
                                                     Type: <span className="">{data.type}</span>
@@ -683,7 +529,8 @@ const ItemPages = ({ params }: IProps) => {
                                         {data.mfgDate && (
                                             <div className="flex flex-row text-[.75rem] place-items-start mb-1">
                                                 <div className="mr-2 ">
-                                                    <BsCheckLg className="h-[15px] w-[15px] text-green-600 stroke-[1px]"></BsCheckLg>
+                                                    <BsCheckLg
+                                                        className="h-[15px] w-[15px] text-green-600 stroke-[1px]"></BsCheckLg>
                                                 </div>
 
                                                 <div className="">
@@ -696,7 +543,8 @@ const ItemPages = ({ params }: IProps) => {
                                         {data.life && (
                                             <div className="flex flex-row text-[.75rem] place-items-start mb-1">
                                                 <div className="mr-2">
-                                                    <BsCheckLg className="h-[15px] w-[15px] text-green-600 stroke-[1px]"></BsCheckLg>
+                                                    <BsCheckLg
+                                                        className="h-[15px] w-[15px] text-green-600 stroke-[1px]"></BsCheckLg>
                                                 </div>
 
                                                 <div className="">
@@ -708,7 +556,7 @@ const ItemPages = ({ params }: IProps) => {
                                     </div>
                                     <hr className="max-w-[330px] mt-6"></hr>
                                     <div className="mt-6 max-h-[72.8px] max-w-[308.33px]">
-                                        {myCategory.length > 0 && (
+                                        {/*{myCategory.length > 0 && (
                                             <div className="flex flex-row">
                                                 <span className="text-gray-400 text-xs capitalize">
                                                     Category:
@@ -724,7 +572,7 @@ const ItemPages = ({ params }: IProps) => {
                                                     ))}
                                                 </span>
                                             </div>
-                                        )}
+                                        )}*/}
 
                                         {tag.length > 0 && (
                                             <div className="flex">
@@ -756,7 +604,8 @@ const ItemPages = ({ params }: IProps) => {
                                                     rel="noopener noreferrer"
                                                     onClick={facebookShareClick}
                                                 >
-                                                    <div className="h-[34px] w-[34px] rounded-full bg-blue-700 flex items-center justify-center">
+                                                    <div
+                                                        className="h-[34px] w-[34px] rounded-full bg-blue-700 flex items-center justify-center">
                                                         <FaFacebookF className="text-white"></FaFacebookF>
                                                     </div>
                                                 </a>
@@ -768,7 +617,8 @@ const ItemPages = ({ params }: IProps) => {
                                                     rel="noopener noreferrer"
                                                     onClick={twitterShareClick}
                                                 >
-                                                    <div className="h-[34px] w-[34px] rounded-full bg-cyan-500 flex items-center justify-center">
+                                                    <div
+                                                        className="h-[34px] w-[34px] rounded-full bg-cyan-500 flex items-center justify-center">
                                                         <FaTwitter className="text-white"></FaTwitter>
                                                     </div>
                                                 </a>
@@ -780,7 +630,8 @@ const ItemPages = ({ params }: IProps) => {
                                                     rel="noopener noreferrer"
                                                     onClick={pinterestShareClick}
                                                 >
-                                                    <div className="h-[34px] w-[34px] rounded-full bg-red-600 flex items-center justify-center">
+                                                    <div
+                                                        className="h-[34px] w-[34px] rounded-full bg-red-600 flex items-center justify-center">
                                                         <FaPinterest className="text-white"></FaPinterest>
                                                     </div>
                                                 </a>
@@ -792,7 +643,8 @@ const ItemPages = ({ params }: IProps) => {
                                                     rel="noopener noreferrer"
                                                     onClick={linkedinShareClick}
                                                 >
-                                                    <div className="h-[34px] w-[34px] rounded-full bg-cyan-700 flex items-center justify-center">
+                                                    <div
+                                                        className="h-[34px] w-[34px] rounded-full bg-cyan-700 flex items-center justify-center">
                                                         <FaLinkedin className="text-white"></FaLinkedin>
                                                     </div>
                                                 </a>
@@ -804,7 +656,8 @@ const ItemPages = ({ params }: IProps) => {
                                                     rel="noopener noreferrer"
                                                     onClick={redditShareClick}
                                                 >
-                                                    <div className="h-[34px] w-[34px] rounded-full bg-orange-600 flex items-center justify-center">
+                                                    <div
+                                                        className="h-[34px] w-[34px] rounded-full bg-orange-600 flex items-center justify-center">
                                                         <FaReddit className="text-white"></FaReddit>
                                                     </div>
                                                 </a>
@@ -816,7 +669,8 @@ const ItemPages = ({ params }: IProps) => {
                                                     rel="noopener noreferrer"
                                                     onClick={whatsappShareClick}
                                                 >
-                                                    <div className="h-[34px] w-[34px] rounded-full bg-green-500 flex items-center justify-center">
+                                                    <div
+                                                        className="h-[34px] w-[34px] rounded-full bg-green-500 flex items-center justify-center">
                                                         <FaWhatsapp className="text-white"></FaWhatsapp>
                                                     </div>
                                                 </a>
@@ -837,7 +691,8 @@ const ItemPages = ({ params }: IProps) => {
                                         </div>
                                         <div className="flex flex-row place-items-center ">
                                             <div className="mr-4">
-                                                <GiMedicinePills className="min-w-[30px] min-h-[20px]"></GiMedicinePills>
+                                                <GiMedicinePills
+                                                    className="min-w-[30px] min-h-[20px]"></GiMedicinePills>
                                             </div>
                                             <div className="text-xs">Guranteed 100% Organic from natural farmas</div>
                                         </div>
@@ -854,10 +709,11 @@ const ItemPages = ({ params }: IProps) => {
                     </div>
 
                     <div className="bg-white drop-shadow rounded-md mt-10 pb-5">
-                        <div className=" flex flex-col sm:flex-row gap-4 sm:gap-8  justify-start text-left text-gray-400 py-5 px-6">
+                        <div
+                            className=" flex flex-col sm:flex-row gap-4 sm:gap-8  justify-start text-left text-gray-400 py-5 px-6">
                             <button
                                 className={`   ${isColor === 1 ? "text-black" : "text-[#c2c2d3]"
-                                    }`}
+                                }`}
                                 onClick={() => handleChange(1)}
                             >
                                 DESCRIPTION
@@ -865,7 +721,7 @@ const ItemPages = ({ params }: IProps) => {
                             {data.additionalInformation?.length > 0 && (
                                 <button
                                     className={`  ${isColor === 2 ? "text-black" : "text-[#c2c2d3]"
-                                        }`}
+                                    }`}
                                     onClick={() => handleChange(2)}
                                 >
                                     ADDITIONAL INFORMATION
@@ -873,20 +729,20 @@ const ItemPages = ({ params }: IProps) => {
                             )}
                             <button
                                 className={`   ${isColor === 3 ? "text-black" : "text-[#c2c2d3]"
-                                    }`}
+                                }`}
                                 onClick={() => handleChange(3)}
                             >
                                 REVIEWS({approvedReviews.length})
                             </button>
                         </div>
-                        <hr />
+                        <hr/>
                         <div className="mt-4 px-6">
                             {isColor === 1 ? (
-                                <Description data={data} />
+                                <Description data={data}/>
                             ) : isColor === 2 ? (
-                                <AdditionalInformation data={data} />
+                                <AdditionalInformation data={data}/>
                             ) : (
-                                <Review itemId={itemId} />
+                                <Review itemId={itemId}/>
                             )}
                         </div>
                     </div>
@@ -912,7 +768,7 @@ const ItemPages = ({ params }: IProps) => {
                             </button>
 
                             <div className=" flex items-center justify-center w-full text-center ">
-                                {item?.count || 1}
+                                {data?.count || 1}
                             </div>
 
                             <button
@@ -927,14 +783,14 @@ const ItemPages = ({ params }: IProps) => {
                             <button
                                 type="button"
                                 className=" bg-blue-900 text-white px-6 md:px-12 py-3 rounded-full text-[13px]"
-                                onClick={() => handleaddToCart(data)}
+                                onClick={() => handleAddToCart(data)}
                             >
                                 Add to cart
                             </button>
                         </div>
                     </div>
                 </div>
-            </div >
+            </div>
 
             {/* Modal or Lightbox */}
             {
@@ -952,7 +808,7 @@ const ItemPages = ({ params }: IProps) => {
                             {/* Full screen image */}
                             <div className="flex items-center justify-center">
                                 <img
-                                    src={selectedImage}
+                                    src={data.product_image}
                                     alt="mainImage"
                                     width={700} // Adjust the width value as per your requirements
                                     height={700} // Adjust the height value as per your requirements

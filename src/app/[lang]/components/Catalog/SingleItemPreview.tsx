@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from "next/image";
 import marked from '../../../../../assets/right/marked.png'
 import {useDispatch, useSelector} from 'react-redux';
 import {Product} from '../../features/product/product';
 import {RootState} from '../../redux/store';
+import useCartItemsHook from "@/app/[lang]/components/Hooks/useCartItemsHook";
 
 
 interface Props {
@@ -14,7 +15,6 @@ interface Props {
     width: number,
     height: number
     handleSelection: (data: any) => void
-    changecolor: any
 
 }
 
@@ -26,13 +26,13 @@ const SingleItemPreview: React.FC<Props> = ({
                                                 handleSelection,
                                                 width,
                                                 height,
-                                                changecolor,
 
                                             }) => {
 
-    const products = useSelector((state: RootState) => state.cart.items) as Product[];
+    const {cartItems} = useCartItemsHook()
 
-    console.log({width, height, imageWidth, imageHeight, coordinates, products})
+
+    console.log({width, height, imageWidth, imageHeight, coordinates})
 
     return (
 
@@ -49,7 +49,7 @@ const SingleItemPreview: React.FC<Props> = ({
                 {coordinates.map((crop: any, index: number) => {
                     const scaleX = width / imageWidth;
                     const scaleY = height / imageHeight;
-                    const isAdded = products.some((p) => p._id === crop.id)
+                    const isAdded = cartItems.some((p) => p._id === crop.id)
                     return (
 
                         <div className="selection-div" key={`interactive-div-${index}`} style={{

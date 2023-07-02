@@ -129,6 +129,7 @@ const Orders = () => {
   const handleView = async (orderId: any) => {
     setHideOrder(false);
     try {
+      console.log("dddddd : ", orderId);
       const res = await axios.get(`${baseUrl}/neworder/${orderId}`);
       console.log(res.data);
       setOrder(res.data);
@@ -214,7 +215,7 @@ const Orders = () => {
             <div className="border border-gray-200 p-4 ">
               <p className="leading-loose">
                 <Link
-                  href="/shop"
+                  href="/"
                   className="bg-primary text-white p-2 rounded-md"
                 >
                   Browse Products

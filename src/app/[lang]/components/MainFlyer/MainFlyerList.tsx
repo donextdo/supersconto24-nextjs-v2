@@ -12,8 +12,8 @@ import flyer6 from '../../../../../assets/flyers/flyer_6.jpg'
 import flyer7 from '../../../../../assets/flyers/flyer_7.jpg'
 import MainFlyerCard from "./MainFlyerCard";
 import Link from "next/link";
-import { useDispatch, useSelector } from "react-redux";
-import { addFlyer } from "./FlyerSlice";
+import {useDispatch, useSelector} from "react-redux";
+import {addFlyer} from "./FlyerSlice";
 import {AppDispatch, RootState} from "../../redux/store";
 import {getExchangeRates} from "@/app/[lang]/features/site-data/siteDataSlice";
 
@@ -51,7 +51,6 @@ const MainFlyerList = (({dictionary, locale}: MainFlyerListType) => {
     }, [])
 
 
-
     useEffect(() => {
         console.log(pathname)
         if (coordinates) {
@@ -63,8 +62,8 @@ const MainFlyerList = (({dictionary, locale}: MainFlyerListType) => {
             // router.push(`${pathname}?${createQueryString("lat", query.lat)}&${createQueryString("long", query.long)}`, {shallow: false})
 
             const data = [
-                { key: 'lat', value: coordinates.latitude },
-                { key: 'long', value: coordinates.longitude },
+                {key: 'lat', value: coordinates.latitude},
+                {key: 'long', value: coordinates.longitude},
             ];
             router.push(updateParamValue(data), {shallow: false})
         }
@@ -101,7 +100,7 @@ const MainFlyerList = (({dictionary, locale}: MainFlyerListType) => {
     console.log("render", productList)
 
     const showMoreItem = () => {
-        setVisible((prevValue)=>prevValue + 8)
+        setVisible((prevValue) => prevValue + 8)
     }
 
     return (
@@ -110,16 +109,19 @@ const MainFlyerList = (({dictionary, locale}: MainFlyerListType) => {
 overflow-y-scroll overflow-x-hidden scrollbar-w-2 sm:grid-cols-4
 xxl:grid-cols-4 pt-4'>
 
-                {productList?.slice(0,visible).map((flyer: any, index: number) => (
-                <Link target="_blank" href={`/catalog-preview/${flyer._id}`} key={index}>
-                    <MainFlyerCard key={index} flyer={flyer}/>
-                    </Link>
+                {productList?.slice(0, visible).map((flyer: any, index: number) => (
+                    <a onClick={() => {
+                        window.location.href = `/catalog-preview/${flyer._id}?currency=${searchParams.get("currency")}`
+                    }} key={index}>
+                        <MainFlyerCard key={index} flyer={flyer}/>
+                    </a>
                 ))}
             </div>
 
             <button
-                className="w-full  bg-[#F5F5F5] py-2 px-6 text-base font-medium text-[#898989] rounded-md hover:bg-[#E7E7E7]" onClick={()=>{
-                    setVisible((prevValue)=>prevValue + 8)
+                className="w-full  bg-[#F5F5F5] py-2 px-6 text-base font-medium text-[#898989] rounded-md hover:bg-[#E7E7E7]"
+                onClick={() => {
+                    setVisible((prevValue) => prevValue + 8)
                 }}>
                 {dictionary.loadMore}
             </button>

@@ -1,12 +1,13 @@
 "use client"
-import {ChangeEvent, useCallback, useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {MdKeyboardArrowDown} from "react-icons/md";
 import {FiSearch} from "react-icons/fi";
 import {useRouter, useSearchParams} from "next/navigation";
+import {updateParamValue} from "../../../../../utils/baseUrl";
+import {BiCurrentLocation} from "react-icons/bi";
 import PlacesServiceStatus = google.maps.places.PlacesServiceStatus;
 import AutocompletePrediction = google.maps.places.AutocompletePrediction;
 import PlaceResult = google.maps.places.PlaceResult;
-import {updateParamValue} from "../../../../../utils/baseUrl";
 
 interface LocationType {
     dollar_min: any;
@@ -157,7 +158,7 @@ export const Location = () => {
     return (
         <div className=" z-40">
             <div
-                className="border border-gray-200 rounded-md relative mx-6 flex flex-row justify-start items-center h-[60px] w-[180px] py-6 px-4 shadow-sm cursor-pointer md:mx-3 "
+                className="border border-gray-200 rounded-md relative mx-6 flex flex-row justify-start items-center h-[60px] w-[180px] py-6 px-4 shadow-sm cursor-pointer md:ml-3 "
                 onClick={handleModal}
             >
                 <div className="flex-grow flex flex-col">
@@ -213,7 +214,7 @@ export const Location = () => {
                             <div>
                                 <div className="mt-3  sm:mt-5 ">
                                     <h3 className="text-lg leading-6 font-medium text-gray-900">
-                                        Choose your pickup location
+                                        Search your pickup location
                                     </h3>
                                     <h2 className="text-xs leading-6 text-gray-500">
                                         Enter your address and we will specify the offer for your
@@ -244,11 +245,11 @@ export const Location = () => {
                                     <div
                                         className="flex items-center justify-between px-2 py-4 bg-white text-gray-700 text-sm cursor-pointer"
                                         onClick={() => getMyLocation()}>
-                                        <div className="hover:text-[#233a95]">
-                                            Get Current Location
-                                        </div>
+                                        <button className="hover:text-black hover:opacity-80 flex items-center gap-1 rounded-full border border-gray-200 px-2 h-9 bg-[#4285f4] text-white">
+                                            Get Current Location <BiCurrentLocation className="text-lg text-black"/>
+                                        </button>
                                         <div
-                                            className="rounded-full text-gray-400 font-semibold w-20 px-2 text-xs h-8 border border-gray-200 flex justify-center items-center"
+                                            className="rounded-full text-gray-400 font-semibold w-20 px-3 text-xs h-8 border border-gray-200 flex justify-center items-center"
                                             onClick={() => {
                                                 setSearchTerm("")
                                                 setResult([])

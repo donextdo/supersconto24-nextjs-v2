@@ -69,7 +69,7 @@ input[type=range]::-webkit-slider-thumb {
 .draggable-container .counter {
   color: #f5f5f5;
   background-color: #333;
-  z-index: 1000;
+  z-index: 1;
   border-radius: 4px;
   opacity: 0.7;
   text-align: center;
@@ -162,4 +162,38 @@ input[type=range]::-webkit-slider-thumb {
 /* Customize the appearance of the scrollbar thumb */
 ::-webkit-scrollbar-thumb {
   background-color: #888; /* Example thumb color */
+}
+
+.footer-container {
+  background-color: #FCF7FC;
+  width: 100%;
+  margin: auto;
+}
+
+.links-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4rem 2rem;
+}
+
+.link-set {
+  width: 100%;
+}
+
+.link-set p {
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 1rem;
+}
+
+.link-set ul {
+  list-style: none;
+}
+
+.link-set ul li a {
+  text-decoration: none;
+  color: gray;
+  font-size: 14px;
+  margin-bottom: 0.5rem;
 }

@@ -12,9 +12,9 @@ function ContactUs() {
       <div className="mt-5 text-center">
         <p className="text-gray-900 text-[40px]">Get In Touch</p>
         <p className="justify-center px-5 mx-auto mt-3 text-gray-600 text-[14px]">
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Expedita
-          quaerat unde quam dolor culpa veritatis inventore, aut commodi eum
-          veniam vel.
+          Our Customer Care team will be pleased to help you from Monday to Friday
+          9.30 am - 1 pm / 2:30 pm - 6 pm
+          (GMT +1: Rome / Paris / Berlin time)
         </p>
       </div>
 
@@ -43,7 +43,7 @@ function ContactUs() {
               +02 1234 567 88
             </p>
             <p className="mt-3 text-gray-600 text-[13px] md:px-5">
-              Lorem ipsum dolar site amet discont
+            The cost of the call depends on your phone operator
             </p>
           </div>
         </div>
@@ -56,21 +56,23 @@ function ContactUs() {
               info@example.com
             </p>
             <p className="mt-3 text-gray-600 text-[13px] md:px-5">
-              Lorem ipsum dolar site amet discont
+            Typically replying within 48 hours
             </p>
           </div>
         </div>
       </div>
-      <ContactForm
-        onSubmit={function (values: {
-          name: string;
-          email: string;
-          subject: string;
-          message: string;
-        }): void {
-          throw new Error("Function not implemented.");
-        }}
-      />
+      <div className=" container mx-auto xl:px-40 px-5">
+        <ContactForm
+          onSubmit={function (values: {
+            name: string;
+            email: string;
+            subject: string;
+            message: string;
+          }): void {
+            throw new Error("Function not implemented.");
+          }}
+        />
+      </div>
     </>
   );
 }

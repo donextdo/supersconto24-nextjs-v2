@@ -1,12 +1,9 @@
-
 import MainFlyerList from '@/app/[lang]/components/MainFlyer/MainFlyerList'
-import NewProductList from '@/app/[lang]/components/NewProduct/NewProductList'
 import ProductList from '@/app/[lang]/features/product/ProductList'
-import Image from 'next/image'
-import { Locale } from "../../../i18n-config";
-import { getDictionary } from "../../../get-dictionary";
+import {Locale} from "../../../i18n-config";
+import {getDictionary} from "../../../get-dictionary";
 import ShopsList from './components/Shops/ShopsList';
-import { ImageFive, ImageFour, ImageOne, ImageThree, ImageTwo } from './components/ImageAds/ImageOne';
+import {ImageFive, ImageFour, ImageOne, ImageThree} from './components/ImageAds/ImageOne';
 import MoreCategoriesList from './components/MoreCategories/MoreCategoriesList';
 import NewsLettertwo from './components/NewsLetter2/NewsLettertwo';
 import LatestFlyers from './components/LatestFlyers/LatestFlyers';
@@ -112,6 +109,100 @@ export default async function page({ params: { lang } }: { params: { lang: Local
             <div className='mt-8'>
                 <NewsLettertwo />
             </div>
+
+
+
+            <div className="footer-container">
+                <div className="links-wrapper">
+                    <div className="link-set">
+                        <p>Customer Care</p>
+                        <ul>
+                            <li><a href="#">Shipping & Delivery</a></li>
+                            <li><a href="#">Return & Refund</a></li>
+                            <li><a href="#">Help Section</a></li>
+                            <li><a href="#">Support</a></li>
+                            <li><a href="#">Shipping & Delivery</a></li>
+                            <li><a href="#">Return & Refund</a></li>
+                            <li><a href="#">Help Section</a></li>
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">Careers</a></li>
+                            <li><a href="#">Size Guide</a></li>
+                            <li><a href="#">Product Care</a></li>
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">Careers</a></li>
+                        </ul>
+                    </div><div className="link-set">
+                        <p>Customer Care</p>
+                        <ul>
+                            <li><a href="#">Shipping & Delivery</a></li>
+                            <li><a href="#">Return & Refund</a></li>
+                            <li><a href="#">Help Section</a></li>
+                            <li><a href="#">Support</a></li>
+                            <li><a href="#">Shipping & Delivery</a></li>
+                            <li><a href="#">Return & Refund</a></li>
+                            <li><a href="#">Help Section</a></li>
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">Careers</a></li>
+                            <li><a href="#">Size Guide</a></li>
+                            <li><a href="#">Product Care</a></li>
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">Careers</a></li>
+                        </ul>
+                    </div><div className="link-set">
+                        <p>Customer Care</p>
+                        <ul>
+                            <li><a href="#">Shipping & Delivery</a></li>
+                            <li><a href="#">Return & Refund</a></li>
+                            <li><a href="#">Help Section</a></li>
+                            <li><a href="#">Support</a></li>
+                            <li><a href="#">Shipping & Delivery</a></li>
+                            <li><a href="#">Return & Refund</a></li>
+                            <li><a href="#">Help Section</a></li>
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">Careers</a></li>
+                            <li><a href="#">Size Guide</a></li>
+                            <li><a href="#">Product Care</a></li>
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">Careers</a></li>
+                        </ul>
+                    </div><div className="link-set">
+                        <p>Customer Care</p>
+                        <ul>
+                            <li><a href="#">Shipping & Delivery</a></li>
+                            <li><a href="#">Return & Refund</a></li>
+                            <li><a href="#">Help Section</a></li>
+                            <li><a href="#">Support</a></li>
+                            <li><a href="#">Shipping & Delivery</a></li>
+                            <li><a href="#">Return & Refund</a></li>
+                            <li><a href="#">Help Section</a></li>
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">Careers</a></li>
+                            <li><a href="#">Size Guide</a></li>
+                            <li><a href="#">Product Care</a></li>
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">Careers</a></li>
+                        </ul>
+                    </div><div className="link-set">
+                        <p>Customer Care</p>
+                        <ul>
+                            <li><a href="#">Shipping & Delivery</a></li>
+                            <li><a href="#">Return & Refund</a></li>
+                            <li><a href="#">Help Section</a></li>
+                            <li><a href="#">Support</a></li>
+                            <li><a href="#">Shipping & Delivery</a></li>
+                            <li><a href="#">Return & Refund</a></li>
+                            <li><a href="#">Help Section</a></li>
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">Careers</a></li>
+                            <li><a href="#">Size Guide</a></li>
+                            <li><a href="#">Product Care</a></li>
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">Careers</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
         </div>
     )
 }

@@ -3,7 +3,7 @@ import {log} from "util";
 import SingleItemPreview from '../Catalog/SingleItemPreview';
 import { NextArrowCircle, PrevArrowCircle } from '../CatalogOneItem/CatalogOneItem';
 
-function Draggable({pages, setShowModal, changecolor, item}: any) {
+function Draggable({pages, setShowModal, item}: any) {
     const [isDragging, setIsDragging] = useState(false);
     const [dragStartX, setDragStartX] = useState(0);
     const [scrollLeft, setScrollLeft] = useState(0);
@@ -16,7 +16,6 @@ function Draggable({pages, setShowModal, changecolor, item}: any) {
 
     useEffect(() => {
         setWindowInfo({width: window.innerWidth, height: window.innerHeight})
-
     }, [])
 
     useEffect(() => {
@@ -77,7 +76,23 @@ function Draggable({pages, setShowModal, changecolor, item}: any) {
     }
 
     console.log({...currentIndex,pages});
+    useEffect(() => {
+        const handleScroll = (event: WheelEvent) => {
+            if (containerRef.current) {
+                containerRef.current.scrollLeft += event.deltaY;
+            }
+        };
 
+        if (containerRef.current) {
+            containerRef.current.addEventListener('wheel', handleScroll);
+        }
+
+        return () => {
+            if (containerRef.current) {
+                containerRef.current.removeEventListener('wheel', handleScroll);
+            }
+        };
+    }, []);
 
     return (
 
@@ -121,8 +136,7 @@ function Draggable({pages, setShowModal, changecolor, item}: any) {
                                     }}
                                     imageHeight={item?.items[0]?.coordinates?.imageHeight}
                                     imageWidth={item?.items[0]?.coordinates?.imageWidth}
-                                    changecolor={changecolor}
-                                    
+
                                 />
                             }
                         </div>
