@@ -13,7 +13,7 @@ interface Props {
 }
 
 const CatalogPreview: React.FC<Props> = async ({  params }) => {
-   const catalog = await fetch(`${baseUrl}/catelog/book/find/${params.catalogId}`).then((res) => res.json())
+   const catalog = await fetch(`${baseUrl}/catelog/book/find/${params.catalogId}`,{ cache: 'no-store' }).then((res) => res.json())
     return (
         <div>
             <CatalogCarousel catalog={catalog} />

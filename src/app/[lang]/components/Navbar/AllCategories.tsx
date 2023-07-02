@@ -91,6 +91,8 @@ const AllCategories = () => {
     }
   }, [pathname]);
 
+  
+
   return (
     <div className="">
       <button
@@ -120,7 +122,6 @@ const AllCategories = () => {
               return (
                 <li key={index} className="list-item w-full flex-row pt-3">
                   <a
-                    href="#"
                     className={`block px-2 py-2  hover:text-[#4BB62E] group "
                     ${
                       activeCategory === category._id && isHover
@@ -147,7 +148,6 @@ const AllCategories = () => {
                         {viewSubCategoryList.map((subcategory, subIndex) => (
                           <li key={subIndex}>
                             <a
-                              href="#"
                               className="block px-2 py-2 pt-5 text-gray-500 hover:text-[#4BB62E]"
                               onClick={() =>
                                 getProductByCategory(subcategory._id)

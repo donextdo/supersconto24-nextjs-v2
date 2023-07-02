@@ -6,7 +6,7 @@ import {FaMinus, FaPlus} from "react-icons/fa";
 import {IoCloseSharp} from "react-icons/io5";
 import useCartItemsHook from "@/app/[lang]/components/Hooks/useCartItemsHook";
 
-const CartCard = ({item, index,  handleDecrement, handleIncrement, handleDelete,discountedPrice,newPrice,subTotal, count}: any) => {
+const CartCard = ({item, index,  handleDecrement, handleIncrement, handleDelete,price,newPrice,subTotal, count}: any) => {
 
     return (
         <div
@@ -30,7 +30,7 @@ const CartCard = ({item, index,  handleDecrement, handleIncrement, handleDelete,
             <div className="sm:col-span-3 col-span-1 text-sm  ">
                 {item.product_name}
             </div>
-            <div className="hidden sm:block text-gray-400 text-sm line-through mr-2 my-1 font-[1.125rem]">{discountedPrice}</div>
+            <div className="hidden sm:block text-gray-400 text-sm line-through mr-2 my-1 font-[1.125rem]">{price}</div>
             <div className="col-span-1">{newPrice}</div>
             <div className="flex sm:col-span-2">
                 <button

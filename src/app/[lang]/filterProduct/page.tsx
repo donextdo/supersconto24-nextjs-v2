@@ -6,7 +6,7 @@ export const metadata: Metadata = {
 const FilterProduct = () => {
 
   return (
-    <div className="  hidden md:hidden xl:block container mx-auto xl:px-40 px-5">
+    <div className="   xl:block container mx-auto xl:px-40 px-5">
       <FilterSideBar/>
     </div>
   );

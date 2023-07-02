@@ -99,8 +99,8 @@ const CaPopup: FC<Props> = ({ product }) => {
 
   const handleWishlist = async (product: any) => {
 
-    const whishListObj = {
-      "whishList": [{
+    const wishListObj = {
+      "wishList": [{
         productId: product._id,
         front: product.front,
         title: product.title,
@@ -115,7 +115,7 @@ const CaPopup: FC<Props> = ({ product }) => {
     };
 
     try {
-      const response = await axios.post(`${baseUrl}/users/wishList/${id}`, whishListObj);
+      const response = await axios.post(`${baseUrl}/users/wishList/${id}`, wishListObj);
       console.log(response.data); // do something with the response data
     } catch (error) {
       console.log(error); // handle the error

@@ -1,27 +1,31 @@
-import React, {FC, ReactElement, useEffect, useMemo, useState} from "react";
-import {FaHeart, FaStar} from "react-icons/fa";
-import {SlSizeFullscreen} from "react-icons/sl";
-import {FiHeart} from "react-icons/fi";
+import React, { FC, ReactElement, useEffect, useMemo, useState } from "react";
+import { FaHeart, FaStar } from "react-icons/fa";
+import { SlSizeFullscreen } from "react-icons/sl";
+import { FiHeart } from "react-icons/fi";
 import Image from "next/image";
-import {Product} from "./product";
+import { Product } from "./product";
 import Link from "next/link";
 import ProductPopup from "./ProductPopup";
 import Swal from "sweetalert2";
 import useCurrency from "@/app/[lang]/components/Hooks/useCurrencyHook";
 import useCartItemsHook from "@/app/[lang]/components/Hooks/useCartItemsHook";
+import axios from "axios";
+import baseUrl from "../../../../../utils/baseUrl";
+import useAuthCheckHook from "@/app/[lang]/components/Hooks/useAuthCheck";
 
 interface Props {
     product: Product;
 }
 
-export const ProductCard: FC<Props> = ({product}) => {
+export const ProductCard: FC<Props> = ({ product }) => {
     const [productPopup, setProductPopup] = useState(false);
     const [proId, setProId] = useState("");
     const [count, setCount] = useState(0);
 
-    const {getPrice} = useCurrency();
-    const {cartItems, addProductToCart, removeProductFromCart} = useCartItemsHook()
-    
+    const { getPrice } = useCurrency();
+    const { cartItems, addProductToCart, removeProductFromCart } = useCartItemsHook()
+    const {isLoggedIn, authUser, logOut} = useAuthCheckHook()
+
     useEffect(() => {
         const currentProduct = cartItems.find((item) => item._id === product._id)
         if (currentProduct) {
@@ -30,20 +34,20 @@ export const ProductCard: FC<Props> = ({product}) => {
             setCount(0)
         }
     }, [cartItems, product])
-    
+
 
     const handleIncrement = (product: Product) => {
-        addProductToCart({...product, count: 1})
+        addProductToCart({ ...product, count: 1 })
         setCount(prevState => prevState + 1)
     };
 
     const handleDecrement = (product: Product) => {
-        removeProductFromCart({...product, count: 1})
+        removeProductFromCart({ ...product, count: 1 })
         setCount(prevState => prevState - 1)
     };
 
     const handleAddToCart = (product: Product) => {
-        addProductToCart({...product, count: 1})
+        addProductToCart({ ...product, count: 1 })
         setCount(prevState => prevState + 1)
 
         Swal.fire({
@@ -59,52 +63,48 @@ export const ProductCard: FC<Props> = ({product}) => {
         });
     };
 
-    const {discountedPrice, newPrice} = useMemo(() => {
+    const { discountedPrice, newPrice } = useMemo(() => {
         const discountedPrice = product.unit_price * (product.discount / 100);
         const newPrice = product.unit_price - discountedPrice;
-        return {discountedPrice, newPrice}
+        return { discountedPrice, newPrice }
     }, [product])
 
-    const {yellowStars, grayStars} = useMemo(() => {
+    const { yellowStars, grayStars } = useMemo(() => {
         const yellowStars = []
         const grayStars = []
         for (let i = 1; i <= product.review; i++) {
-            yellowStars.push(<FaStar key={`yellow-star-${i}`}/>);
+            yellowStars.push(<FaStar key={`yellow-star-${i}`} />);
         }
         for (let i = 1; i <= 5 - product.review; i++) {
-            grayStars.push(<FaStar key={`gray-star-${i}`}/>);
+            grayStars.push(<FaStar key={`gray-star-${i}`} />);
         }
-        return {yellowStars, grayStars}
+        return { yellowStars, grayStars }
 
     }, [product])
 
 
     const handleWishlist = async (product: any) => {
-        // const wishlist = JSON.parse(localStorage.getItem('wishlist'));
-
-        // const wishlistString = localStorage.getItem('wishlist');
-        // const wishlist = wishlistString ? JSON.parse(wishlistString) : [];
-
-        const whishListObj = {
-            whishList: [
-                {
-                    productId: product._id,
-                    front: product.front,
-                    title: product.title,
-                    price: product.unit_price,
-                    date: new Date().toLocaleDateString("en-US", {
-                        month: "long",
-                        day: "numeric",
-                        year: "numeric",
-                    }),
-                    quantity: product.quantity,
-                },
+        
+        const wishListObj = {
+            wishList: [
+              {
+                productId: product._id,
+                front: product.product_image,
+                title: product.product_name,
+                price: product.unit_price,
+                date: new Date().toLocaleDateString("en-US", {
+                  month: "long",
+                  day: "numeric",
+                  year: "numeric",
+                }),
+                quantity: product.quantity,
+              },
             ],
-        };
+          };
 
         try {
-            // const response = await http.post(`/users/wishList/${id}`, whishListObj);
-            // console.log(response.data); // do something with the response data
+            const response = await axios.post(`${baseUrl}/users/wishList/${authUser._id}`, wishListObj);
+            console.log(response.data); // do something with the response data
         } catch (error) {
             console.log(error); // handle the error
         }
@@ -115,7 +115,7 @@ export const ProductCard: FC<Props> = ({product}) => {
         setProId(product);
     };
 
-    console.log({count})
+    console.log({ count })
     return (
         <>
             <div
@@ -147,7 +147,7 @@ export const ProductCard: FC<Props> = ({product}) => {
                         className="absolute max-w-[24px] max-h-[24px] top-2 right-2 bg-white flex items-center justify-center rounded-full h-8 w-8 hover:cursor-pointer drop-shadow-lg md:invisible group-hover:visible md:group-hover:-translate-x-3 md:group-hover:ease-in transition duration-150 hover:bg-blue-900 group/icon2"
                         onClick={() => handlePopup(product._id)}
                     >
-                        <SlSizeFullscreen className="h-[10px] w-[10px] fill-blue-900 group-hover/icon2:fill-white"/>
+                        <SlSizeFullscreen className="h-[10px] w-[10px] fill-blue-900 group-hover/icon2:fill-white" />
                     </button>
 
                     <div
@@ -155,9 +155,9 @@ export const ProductCard: FC<Props> = ({product}) => {
                         onClick={() => handleWishlist(product)}
                     >
                         {product.isFavourite ? (
-                            <FaHeart className="h-3 w-3 fill-blue-900 group-hover/icon1:fill-white"/>
+                            <FaHeart className="h-3 w-3 fill-blue-900 group-hover/icon1:fill-white" />
                         ) : (
-                            <FiHeart className="h-3 w-3 text-blue-900 group-hover/icon1:text-white"/>
+                            <FiHeart className="h-3 w-3 text-blue-900 group-hover/icon1:text-white" />
                         )}
                     </div>
                 </div>
@@ -253,7 +253,7 @@ export const ProductCard: FC<Props> = ({product}) => {
                 </div>
             </div>
             {productPopup && (
-                <ProductPopup setProductPopup={setProductPopup} proId={proId}/>
+                <ProductPopup setProductPopup={setProductPopup} proId={proId} />
             )}
         </>
     );
