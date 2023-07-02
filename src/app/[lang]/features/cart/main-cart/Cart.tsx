@@ -286,8 +286,14 @@ const Cart: FC<CartType> = () => {
                                         )
                                         .map((item: any, index: number) => {
 
-                                            const discountedPrice = item.unit_price * (item.discount / 100);
-                                            const newPrice = item.unit_price - discountedPrice;
+                                            let discountedPrice = 0
+                                            let newPrice = 0
+                                            if (item.discount) {
+                                                discountedPrice = item.unit_price * (item.discount / 100);
+                                                newPrice = item.unit_price - discountedPrice;
+                                            } else {
+                                                newPrice = item.unit_price;
+                                            }
                                             const subTotal = newPrice * item.count;
 
                                             return (

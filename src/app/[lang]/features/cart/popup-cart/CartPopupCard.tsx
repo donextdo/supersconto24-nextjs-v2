@@ -5,8 +5,16 @@ import {useMemo} from "react";
 const CartPopupCard = ({item, handleRemove, getPrice}: any) => {
 
     const {discountedPrice, newPrice} = useMemo(() => {
-        const discountedPrice = item.unit_price * (item.discount / 100);
-        const newPrice = item.unit_price - discountedPrice;
+        let discountedPrice = 0
+        let newPrice = 0
+
+        if (item.discount) {
+            discountedPrice = item.unit_price * (item.discount / 100);
+            newPrice = item.unit_price - discountedPrice;
+        } else {
+            newPrice = item.unit_price;
+        }
+
         return {discountedPrice, newPrice}
     }, [item])
 
