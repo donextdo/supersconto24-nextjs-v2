@@ -1,28 +1,37 @@
-import MainFlyerList from '@/app/[lang]/components/MainFlyer/MainFlyerList'
-import ProductList from '@/app/[lang]/features/product/ProductList'
-import {Locale} from "../../../i18n-config";
-import {getDictionary} from "../../../get-dictionary";
-import ShopsList from './components/Shops/ShopsList';
-import {ImageFive, ImageFour, ImageOne, ImageThree} from './components/ImageAds/ImageOne';
-import MoreCategoriesList from './components/MoreCategories/MoreCategoriesList';
-import NewsLettertwo from './components/NewsLetter2/NewsLettertwo';
-import LatestFlyers from './components/LatestFlyers/LatestFlyers';
-import FeaturedFlyer from './components/FeaturedFlyer/FeaturedFlyer';
-import ContactAds from './components/ImageAds/ContactAds';
-import FirstPurchaceAds from './components/ImageAds/FirstPurchaceAds';
-import {Metadata} from "next";
+import MainFlyerList from "@/app/[lang]/components/MainFlyer/MainFlyerList";
+import ProductList from "@/app/[lang]/features/product/ProductList";
+import { Locale } from "../../../i18n-config";
+import { getDictionary } from "../../../get-dictionary";
+import ShopsList from "./components/Shops/ShopsList";
+import {
+    ImageFive,
+    ImageFour,
+    ImageOne,
+    ImageThree,
+} from "./components/ImageAds/ImageOne";
+import MoreCategoriesList from "./components/MoreCategories/MoreCategoriesList";
+import NewsLettertwo from "./components/NewsLetter2/NewsLettertwo";
+import LatestFlyers from "./components/LatestFlyers/LatestFlyers";
+import FeaturedFlyer from "./components/FeaturedFlyer/FeaturedFlyer";
+import ContactAds from "./components/ImageAds/ContactAds";
+import FirstPurchaceAds from "./components/ImageAds/FirstPurchaceAds";
+import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Supersconto | Home"
-}
-export default async function page({ params: { lang } }: { params: { lang: Locale } }) {
-    const dictionary = await getDictionary(lang)
-    console.log("render page", dictionary)
+    title: "Supersconto | Home",
+};
+export default async function page({
+    params: { lang },
+}: {
+    params: { lang: Locale };
+}) {
+    const dictionary = await getDictionary(lang);
+    console.log("render page", dictionary);
 
     return (
-        <div className='container mx-auto xl:px-40 px-5'>
+        <div className="container mx-auto xl:px-40 px-5">
             {/* <NewProductList /> */}
-            <div className='grid grid-cols-4 gap-1'>
+            <div className="grid grid-cols-4 gap-1">
                 {/* left side */}
                 {/* <div className='col-span-1'>
                     {dictionary['server-component'].welcome}
@@ -37,172 +46,216 @@ export default async function page({ params: { lang } }: { params: { lang: Local
                     </div>
 
                 </div> */}
-
             </div>
 
-            <div className='w-full flex flex-row gap-4'>
-                <div className='w-96  hidden xl:block'>
-
-                </div>
-                <div className='w-full '>
+            <div className="w-full flex flex-row gap-4">
+                <div className="w-96  hidden xl:block"></div>
+                <div className="w-full ">
                     <MainFlyerList locale={lang} dictionary={dictionary.mainFlyer} />
-
                 </div>
-
             </div>
 
-
-            <div className='w-full flex flex-row gap-4'>
-                <div className='w-96 hidden xl:block'>
+            <div className="w-full flex flex-row gap-4">
+                <div className="w-96 hidden xl:block">
                     <ContactAds />
                 </div>
-                <div className='w-full'>
-                    <div className='mt-8'>
+                <div className="w-full">
+                    <div className="mt-8">
                         <ProductList />
                     </div>
-
                 </div>
-
             </div>
 
-            <div className='w-full flex flex-row gap-4'>
-                <div className='w-96 hidden xl:block'>
+            <div className="w-full flex flex-row gap-4">
+                <div className="w-96 hidden xl:block">
                     <ImageOne />
                 </div>
-                <div className='w-full'>
-                    <div className='mt-8'>
+                <div className="w-full">
+                    <div className="mt-8">
                         <FeaturedFlyer />
                     </div>
-
                 </div>
-
             </div>
 
-            <div className='mt-8'>
+            <div className="mt-8">
                 <LatestFlyers />
             </div>
 
-            <div className='mt-8'>
+            <div className="mt-8">
                 <ShopsList />
             </div>
 
-            <div className='mt-8'>
+            <div className="mt-8">
                 <FirstPurchaceAds />
             </div>
 
-            <div className='mt-8 w-full flex flex-row gap-4'>
-                <div className='w-96  hidden lg:block'>
+            <div className="mt-8 w-full flex flex-row gap-4">
+                <div className="w-96  hidden lg:block">
                     <ImageFive />
                 </div>
-                <div className='grid grid-cols-1 lg:grid-cols-2 gap-4 w-full '>
-
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full ">
                     <ImageThree />
                     <ImageFour />
                 </div>
-
             </div>
 
-            <div className='mt-8'>
+            <div className="mt-8">
                 <MoreCategoriesList />
             </div>
 
-            <div className='mt-8'>
+            <div className="mt-8">
                 <NewsLettertwo />
             </div>
 
-
-
             <div className="footer-container">
-                <div className="links-wrapper">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 py-16 px-8">
                     <div className="link-set">
                         <p>Customer Care</p>
                         <ul>
-                            <li><a href="#">Shipping & Delivery</a></li>
-                            <li><a href="#">Return & Refund</a></li>
-                            <li><a href="#">Help Section</a></li>
-                            <li><a href="#">Support</a></li>
-                            <li><a href="#">Shipping & Delivery</a></li>
-                            <li><a href="#">Return & Refund</a></li>
-                            <li><a href="#">Help Section</a></li>
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">Careers</a></li>
-                            <li><a href="#">Size Guide</a></li>
-                            <li><a href="#">Product Care</a></li>
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">Careers</a></li>
+                            <li>
+                                <a href="#">Shipping & Delivery</a>
+                            </li>
+                            <li>
+                                <a href="#">Return & Refund</a>
+                            </li>
+                            <li>
+                                <a href="#">Help Section</a>
+                            </li>
+                            <li>
+                                <a href="#">Support</a>
+                            </li>
+                            <li>
+                                <a href="#">Shipping & Delivery</a>
+                            </li>
+                            <li>
+                                <a href="#">Return & Refund</a>
+                            </li>
+                            <li>
+                                <a href="#">Help Section</a>
+                            </li>
+                            <li>
+                                <a href="#">About Us</a>
+                            </li>
                         </ul>
-                    </div><div className="link-set">
+                    </div>
+                    <div className="link-set">
                         <p>Customer Care</p>
                         <ul>
-                            <li><a href="#">Shipping & Delivery</a></li>
-                            <li><a href="#">Return & Refund</a></li>
-                            <li><a href="#">Help Section</a></li>
-                            <li><a href="#">Support</a></li>
-                            <li><a href="#">Shipping & Delivery</a></li>
-                            <li><a href="#">Return & Refund</a></li>
-                            <li><a href="#">Help Section</a></li>
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">Careers</a></li>
-                            <li><a href="#">Size Guide</a></li>
-                            <li><a href="#">Product Care</a></li>
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">Careers</a></li>
+                            <li>
+                                <a href="#">Shipping & Delivery</a>
+                            </li>
+                            <li>
+                                <a href="#">Return & Refund</a>
+                            </li>
+                            <li>
+                                <a href="#">Help Section</a>
+                            </li>
+                            <li>
+                                <a href="#">Support</a>
+                            </li>
+                            <li>
+                                <a href="#">Shipping & Delivery</a>
+                            </li>
+                            <li>
+                                <a href="#">Return & Refund</a>
+                            </li>
+                            <li>
+                                <a href="#">Help Section</a>
+                            </li>
+                            <li>
+                                <a href="#">About Us</a>
+                            </li>
                         </ul>
-                    </div><div className="link-set">
+                    </div>
+                    <div className="link-set">
                         <p>Customer Care</p>
                         <ul>
-                            <li><a href="#">Shipping & Delivery</a></li>
-                            <li><a href="#">Return & Refund</a></li>
-                            <li><a href="#">Help Section</a></li>
-                            <li><a href="#">Support</a></li>
-                            <li><a href="#">Shipping & Delivery</a></li>
-                            <li><a href="#">Return & Refund</a></li>
-                            <li><a href="#">Help Section</a></li>
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">Careers</a></li>
-                            <li><a href="#">Size Guide</a></li>
-                            <li><a href="#">Product Care</a></li>
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">Careers</a></li>
+                            <li>
+                                <a href="#">Shipping & Delivery</a>
+                            </li>
+                            <li>
+                                <a href="#">Return & Refund</a>
+                            </li>
+                            <li>
+                                <a href="#">Help Section</a>
+                            </li>
+                            <li>
+                                <a href="#">Support</a>
+                            </li>
+                            <li>
+                                <a href="#">Shipping & Delivery</a>
+                            </li>
+                            <li>
+                                <a href="#">Return & Refund</a>
+                            </li>
+                            <li>
+                                <a href="#">Help Section</a>
+                            </li>
+                            <li>
+                                <a href="#">About Us</a>
+                            </li>
                         </ul>
-                    </div><div className="link-set">
+                    </div>
+                    <div className="link-set">
                         <p>Customer Care</p>
                         <ul>
-                            <li><a href="#">Shipping & Delivery</a></li>
-                            <li><a href="#">Return & Refund</a></li>
-                            <li><a href="#">Help Section</a></li>
-                            <li><a href="#">Support</a></li>
-                            <li><a href="#">Shipping & Delivery</a></li>
-                            <li><a href="#">Return & Refund</a></li>
-                            <li><a href="#">Help Section</a></li>
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">Careers</a></li>
-                            <li><a href="#">Size Guide</a></li>
-                            <li><a href="#">Product Care</a></li>
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">Careers</a></li>
+                            <li>
+                                <a href="#">Shipping & Delivery</a>
+                            </li>
+                            <li>
+                                <a href="#">Return & Refund</a>
+                            </li>
+                            <li>
+                                <a href="#">Help Section</a>
+                            </li>
+                            <li>
+                                <a href="#">Support</a>
+                            </li>
+                            <li>
+                                <a href="#">Shipping & Delivery</a>
+                            </li>
+                            <li>
+                                <a href="#">Return & Refund</a>
+                            </li>
+                            <li>
+                                <a href="#">Help Section</a>
+                            </li>
+                            <li>
+                                <a href="#">About Us</a>
+                            </li>
                         </ul>
-                    </div><div className="link-set">
+                    </div>
+                    <div className="link-set">
                         <p>Customer Care</p>
                         <ul>
-                            <li><a href="#">Shipping & Delivery</a></li>
-                            <li><a href="#">Return & Refund</a></li>
-                            <li><a href="#">Help Section</a></li>
-                            <li><a href="#">Support</a></li>
-                            <li><a href="#">Shipping & Delivery</a></li>
-                            <li><a href="#">Return & Refund</a></li>
-                            <li><a href="#">Help Section</a></li>
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">Careers</a></li>
-                            <li><a href="#">Size Guide</a></li>
-                            <li><a href="#">Product Care</a></li>
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">Careers</a></li>
+                            <li>
+                                <a href="#">Shipping & Delivery</a>
+                            </li>
+                            <li>
+                                <a href="#">Return & Refund</a>
+                            </li>
+                            <li>
+                                <a href="#">Help Section</a>
+                            </li>
+                            <li>
+                                <a href="#">Support</a>
+                            </li>
+                            <li>
+                                <a href="#">Shipping & Delivery</a>
+                            </li>
+                            <li>
+                                <a href="#">Return & Refund</a>
+                            </li>
+                            <li>
+                                <a href="#">Help Section</a>
+                            </li>
+                            <li>
+                                <a href="#">About Us</a>
+                            </li>
                         </ul>
                     </div>
                 </div>
             </div>
-
         </div>
-    )
+    );
 }

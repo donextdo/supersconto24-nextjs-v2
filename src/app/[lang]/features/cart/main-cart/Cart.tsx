@@ -293,7 +293,7 @@ const Cart: FC<CartType> = () => {
                                                     handleIncrement={handleIncrement}
                                                     item={item}
                                                     key={index}
-                                                    discountedPrice={getPrice(discountedPrice)}
+                                                    Price={getPrice(item.unit_price)}
                                                     newPrice={getPrice(newPrice)}
                                                     subTotal={getPrice(subTotal)}
                                                     count={item.count}

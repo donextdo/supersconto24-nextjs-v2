@@ -22,22 +22,22 @@ export default function BottomFooter() {
   return (
     <>
       <div className="my-10 ">
-        <div className="flex justify-between px-2">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center sm:justify-between px-2 items-center">
           <div className="flex">
             <div>
-              <button className="p-3 border rounded-full md:ml-40 lg:ml-0">
+              <button className="p-3 border rounded-full mr-2">
                 <FiPhoneCall />
               </button>
             </div>
 
-            <div className="px-2 xl:px-5 lg:mr-0 xl:mr-32 2xl:mr-40">
+            <div className="">
 
               <h2 className="font-semibold text-[20px] flex">{contactNumber}</h2>
               <p className="text-gray-400 text-[11px]">Working 8:00 - 22:00</p>
             </div>
           </div>
 
-          <div className="flex flex-row gap-2">
+          <div className="flex flex-col md:flex-row gap-2 items-center justify-end">
             {/* <div className="ml-7 xl:ml-40 2xl:ml-96  sm:mx-10 xl:mx-0 lg:ml-16 md:ml-40">
 
               <p className="font-semibold text-[14px] xl:ml-7 md:ml-7 ">
@@ -48,12 +48,12 @@ export default function BottomFooter() {
               </p>
             </div> */}
 
-            <div className="mt-3 lg:mt-0 xl:mt-0 md:mx-32 lg:mx-0 ">
+            <div className="mt-3 flex flex-col sm:flex-row gap-2 ">
               <button>
                 <Image
                   src={googleplay}
                   alt="GooglePlay - Image"
-                  className="ml-5 lg:ml-0 xl:ml-5"
+                  className=""
                   width={116}
                   height={38}
                 />
@@ -62,14 +62,14 @@ export default function BottomFooter() {
                 <Image
                   src={applestore}
                   alt="AppStore - Image"
-                  className="ml-2 xl:ml-2"
+                  className=""
                   width={116}
                   height={38}
                 />
               </button>
             </div>
 
-            <div className="sm:mx-[25%]  lg:mx-0 xl:mx-0 my-0">
+            <div className="">
               <Link href="https://www.facebook.com"><button className="border rounded-full p-2  mt-3 lg:mt-0 text-[#233a95]">
                 <GrFacebookOption />
               </button></Link>
@@ -86,22 +86,23 @@ export default function BottomFooter() {
             </div>
           </div>
         </div>
+
         <hr className="my-5 " />
 
-        <div className="xl:flex justify-between">
-          <div className="lg:flex lg:mb-5 xl:mb-0">
+        <div className="flex flex-col sm:flex-row justify-between">
+          <div className="flex flex-row gap-4">
             <div>
 
-              <p className="text-gray-400 text-[12px] pl-5 xl:mr-7">
+              <p className="text-gray-400 text-[12px]">
 
                 Copyright © 2023 SUPERSCONTO24. All Rights Reserved.
               </p>
             </div>
 
 
-            <div className="flex mt-5 lg:mt-0 lg:pl-32 xl:pl-5 2xl:ml-60">
+            <div className="flex flex-row gap-2">
 
-              <p className="text-gray-400 text-[12px]  pl-5 lg:pl-2">
+              <p className="text-gray-400 text-[12px]  ">
                 <Link
                   href="/privacy-policy"
                   className="hover:underline hover:underline-offset-1"
@@ -109,7 +110,7 @@ export default function BottomFooter() {
                   Privacy Policy
                 </Link>
               </p>
-              <p className="text-gray-400 text-[12px]  pl-4 lg:pl-2">
+              <p className="text-gray-400 text-[12px]">
                 <Link
                   href="/terms"
                   className="hover:underline hover:underline-offset-1"
@@ -117,7 +118,7 @@ export default function BottomFooter() {
                   Terms and Conditions
                 </Link>
               </p>
-              <p className="text-gray-400 text-[12px]  pl-4 lg:pl-2">
+              <p className="text-gray-400 text-[12px]">
                 <Link
                   href="/#"
                   className="hover:underline hover:underline-offset-1"
@@ -127,27 +128,27 @@ export default function BottomFooter() {
               </p>
             </div>
           </div>
-          <div className="hidden lg:block  ">
-            <div></div>
-            <button className="ml-5 xl:ml-7">
-              <SiAmericanexpress className="text-2xl text-gray-600" />
+          <div className="flex flex-row gap-2 ">
+            
+            <button className="border py-0.5 px-2">
+              <SiAmericanexpress className="text-xl text-gray-600" />
             </button>
-            {/* <button className="ml-5 xl:ml-7">
+            <button className="border py-0.5 px-2">
               <FaCcStripe className="text-2xl text-gray-600" />
             </button>
-            <button className="ml-5 xl:ml-7">
+            <button className="border py-0.5 px-2">
               <FaGooglePay className="text-2xl text-gray-600" />
             </button>
-            <button className="ml-5 xl:ml-7">
+            <button className="border py-0.5 px-2">
               <SiApplepay className="text-2xl text-gray-600" />
             </button>
-            <button className="ml-5 xl:ml-7">
+            <button className="border py-0.5 px-2">
               <FaCcPaypal className="text-2xl text-gray-600" />
-            </button> */}
-            <button className="ml-5 xl:ml-7">
+            </button>
+            <button className="border py-0.5 px-2">
               <RiMastercardFill className="text-2xl text-gray-600" />
             </button>
-            <button className="ml-5 xl:ml-7">
+            <button className="border py-0.5 px-2">
               <SiVisa className="text-2xl text-gray-600" />
             </button>
 
