@@ -38,8 +38,8 @@ const Wishlist = () => {
     async function fetchData() {
         try {
             const res = await axios.get(`${baseUrl}/users/${id}`);
-            console.log(res.data.whishList)
-            setData(res.data.whishList)
+            console.log(res.data.wishList)
+            setData(res.data.wishList)
         } catch (err) {
             console.log(err);
         }
