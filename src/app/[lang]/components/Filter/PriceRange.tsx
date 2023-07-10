@@ -13,45 +13,32 @@ const PriceRange = ({ categoryId }: any) => {
   const pathname = usePathname();
   const searchParams = useSearchParams()!;
 
+  const catId = searchParams.get("categoryId");
+  const subCatId = searchParams.get("subCategories");
+  const brand = searchParams.get("brands");
+
   // useEffect(() => {
-  //   if (categoryId) {
-  //     const fetchData = async () => {
-  //       const response = await axios(
-  //         `${baseUrl}/productDetails?categoryId=${categoryId}`
-  //       );
-  //       const products = response.data.products;
+  //   console.log("maxPrice : ", { maxValue }, { minValue });
+  //   const min_price = searchParams.get("min_price");
+  //   const max_price = searchParams.get("max_price");
 
-  //       // Extracting all the product prices
-  //       const prices = products.map((product: any) => product.price);
+  //   const minPrice = Number(min_price);
+  //   const maxPrice = Number(max_price);
 
-  //       // Finding the maximum price
-  //       const maxPrice = Math.max(...prices);
-
-  //       // Rounding the maximum price
-  //       let roundedPrice;
-
-  //       roundedPrice = Math.ceil(maxPrice / 10) * 10;
-  //       // setMaxPriceValue(roundedPrice);
-  //       // setMaxValue(maxPriceValue);
-  //       console.log("Rounded maximum price: ", roundedPrice);
-  //     };
-
-  //     fetchData();
+  //   if (minPrice != null && maxPrice != null) {
+  //     setMinValue(minPrice);
+  //     setMaxValue(maxPrice);
   //   }
-  // }, []);
+  // }, [router]);
 
-  useEffect(() => {
-    const min_price = searchParams.get("min_price");
-    const max_price = searchParams.get("max_price");
-    const minPrice = Number(min_price);
-    const maxPrice = Number(max_price);
-
-    if (!isNaN(minPrice) && !isNaN(maxPrice)) {
-      setMinValue(minPrice);
-      setMaxValue(maxPrice);
-    }
-  }, [router]);
-
+  const createQueryString = useCallback(
+    (name: string, value: string | number) => {
+      const params = new URLSearchParams();
+      params.set(name, String(value));
+      return params.toString();
+    },
+    [searchParams]
+  );
   const handleMin = (e: ChangeEvent<HTMLInputElement>) => {
     e.persist();
     e.preventDefault();
@@ -98,65 +85,56 @@ const PriceRange = ({ categoryId }: any) => {
   }, [minValue, maxValue]);
 
   const updatePriceQuery = (min: number, max: number) => {
-    const url = searchParams.get("categoryId");
-
     const query = {
-      min_price: minValue,
-      max_price: maxValue,
+      min_price: min,
+      max_price: max,
     };
-    router.push(
-      `/filterProduct?categoryId=${url}&${createQueryString(
-        "min_price",
-        query.min_price
-      )}&${createQueryString("max_price", query.max_price)}`
-    );
-    // router.push(
-    //   {
-    //     pathname: router.pathname,
-    //     query: {
-    //       ...router.query,
-    //       min_price: min,
-    //       max_price: max,
-    //     },
-    //   },
-    //   undefined,
-    //   { scroll: false }
-    // );
-  };
+    const queryString =
+      createQueryString("min_price", query.min_price) +
+      "&" +
+      createQueryString("max_price", query.max_price);
 
-  const createQueryString = useCallback(
-    (name: string, value: string | number) => {
-      const params = new URLSearchParams();
-      params.set(name, String(value));
-      return params.toString();
-    },
-    [searchParams]
-  );
+    let url = "/filterProduct";
+    if (catId) {
+      url += `?categoryId=${catId}`;
+    }
+    if (subCatId) {
+      url += `&subCategories=${subCatId}`;
+    }
+    if (brand) {
+      url += `&brands=${brand}`;
+    }
+    url += `&${queryString}`;
+
+    router.push(url);
+  };
 
   const setPriceQuery = () => {
     console.log("pathname : ", pathname);
 
-    const url = searchParams.get("categoryId");
-
     const query = {
       min_price: minValue,
       max_price: maxValue,
     };
-    router.push(
-      `/filterProduct?categoryId=${url}&${createQueryString(
-        "min_price",
-        query.min_price
-      )}&${createQueryString("max_price", query.max_price)}`
-    );
 
-    // router.push({
-    //   pathname: router.pathname,
-    //   query: {
-    //     ...router.query,
-    //     min_price: minValue,
-    //     max_price: maxValue,
-    //   },
-    // });
+    const queryString =
+      createQueryString("min_price", query.min_price) +
+      "&" +
+      createQueryString("max_price", query.max_price);
+
+    let url = "/filterProduct";
+    if (catId) {
+      url += `?categoryId=${catId}`;
+    }
+    if (subCatId) {
+      url += `&subCategories=${subCatId}`;
+    }
+    if (brand) {
+      url += `&brands=${brand}`;
+    }
+    url += `&${queryString}`;
+
+    router.push(url);
   };
 
   return (

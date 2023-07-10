@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { MdKeyboardArrowDown, MdMenu } from "react-icons/md";
 import baseUrl from "../../../../../utils/baseUrl";
 import axios from "axios";
-import {IoIosArrowForward} from "react-icons/io";
+import { IoIosArrowForward } from "react-icons/io";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 interface Category {
@@ -91,8 +91,6 @@ const AllCategories = () => {
     }
   }, [pathname]);
 
-  
-
   return (
     <div className="">
       <button
@@ -131,7 +129,7 @@ const AllCategories = () => {
                     onMouseEnter={() => handleCategoryHover(category?._id)}
                     onClick={() => getProductByCategory(category?._id)}
                   >
-                    <div className=" flex flex-row items-center justify-between">
+                    <div className=" flex flex-row items-center justify-between hover:cursor-pointer">
                       <div>{category?.name} </div>
                       {hasSubcategories(category?._id) && (
                         <IoIosArrowForward className="text-gray-500" />
@@ -148,13 +146,14 @@ const AllCategories = () => {
                         {viewSubCategoryList.map((subcategory, subIndex) => (
                           <li key={subIndex}>
                             <a
-                              className="block px-2 py-2 pt-5 text-gray-500 hover:text-[#4BB62E]"
+                              className="block px-2 py-2 pt-5 text-gray-500 hover:text-[#4BB62E] hover:cursor-pointer"
                               onClick={() =>
                                 getProductByCategory(subcategory._id)
                               }
                               onMouseEnter={() =>
                                 handleSubCategoryHover(subcategory?._id)
                               }
+                              onMouseLeave={handleCategoryLeave}
                             >
                               {subcategory.name}
                             </a>

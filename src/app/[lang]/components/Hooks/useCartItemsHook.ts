@@ -97,7 +97,7 @@ const UseCartItemsHook = () => {
             setCartCount(0)
         }
     }
-    console.log("render", {cartItems, cartCount, cartAmount, addProductToCart, removeProductFromCart})
+    // console.log("render", {cartItems, cartCount, cartAmount, addProductToCart, removeProductFromCart})
 
     return {cartItems, cartCount, cartAmount, addProductToCart, removeProductFromCart, fetchCart}
 };
