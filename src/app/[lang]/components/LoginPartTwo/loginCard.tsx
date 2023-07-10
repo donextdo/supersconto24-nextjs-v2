@@ -11,7 +11,6 @@ import axios from "axios";
 import baseUrl from "../../../../../utils/baseUrl";
 import Swal from "sweetalert2";
 import {IoClose} from "react-icons/io5";
-import {FaFacebook} from "react-icons/fa";
 
 const LoginCard = () => {
     const [email, setEmail] = useState("");

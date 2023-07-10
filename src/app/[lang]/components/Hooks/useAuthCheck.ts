@@ -1,8 +1,7 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "@/app/[lang]/redux/store";
-import {Product} from "@/app/[lang]/features/product/product";
-import {addProduct, removeProduct, setCart} from "@/app/[lang]/features/cart/cartSlice";
+import {logOut as signOut} from "@/app/[lang]/features/auth/authSlice";
 
 const useAuthCheckHook = () => {
 
@@ -38,9 +37,9 @@ const useAuthCheckHook = () => {
         }
     }, [authState.currentUser])
 
-    const logOut = useCallback(() => {
-        dispatch(logOut)
-    }, [])
+    const logOut = () => {
+        dispatch(signOut)
+    }
 
     return {isLoggedIn, authUser, logOut}
 };
