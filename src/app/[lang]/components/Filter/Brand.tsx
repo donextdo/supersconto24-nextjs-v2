@@ -1,9 +1,10 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
 import baseUrl from "../../../../../utils/baseUrl";
 import axios from "axios";
+import { uniqBy } from "lodash";
 
 const Brand = ({ categoryId }: any) => {
   const [brand, setBrand] = useState([]);
@@ -11,6 +12,13 @@ const Brand = ({ categoryId }: any) => {
   const [checkedBrands, setCheckedBrands] = useState<any>({});
   const [brandPage, setBrandPage] = useState<string[]>([]);
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams()!;
+
+  const [showAllBrands, setShowAllBrands] = useState(false);
+  const displayedBrands = showAllBrands ? brand : brand.slice(0, 10);
+  const uniqueBrands = uniqBy(displayedBrands, "brand");
+  const shouldShowSeeLess = showAllBrands && brand.length > 10;
 
   useEffect(() => {
     setCheckedBrands([]);
@@ -27,16 +35,27 @@ const Brand = ({ categoryId }: any) => {
       }
     };
     fetchData();
-    // const queryBrands = router.query.brands;
-    // if (typeof queryBrands === "string") {
-    //   const selectedBrands = queryBrands.split(",");
-    //   const newCheckedBrands: { [key: string]: boolean } = {};
-    //   selectedBrands.forEach((brandId: any) => {
-    //     newCheckedBrands[brandId] = true;
-    //   });
-    //   setCheckedBrands(newCheckedBrands);
-    // }
+    const brands = searchParams.get("brands");
+    const queryBrands = brands;
+    if (typeof queryBrands === "string") {
+      const selectedBrands = queryBrands.split(",");
+      const newCheckedBrands: { [key: string]: boolean } = {};
+      selectedBrands.forEach((brandId: any) => {
+        newCheckedBrands[brandId] = true;
+      });
+      setCheckedBrands(newCheckedBrands);
+    }
   }, [categoryId]);
+
+  const createQueryString = useCallback(
+    (name: string, value: string | number) => {
+      const params = new URLSearchParams();
+      params.set(name, String(value));
+      return params.toString();
+    },
+    [searchParams]
+  );
+
   const handleBrandClick = (brandId: any) => {
     const newCheckedBrands = { ...checkedBrands };
     newCheckedBrands[brandId] = !checkedBrands[brandId];
@@ -44,11 +63,28 @@ const Brand = ({ categoryId }: any) => {
     const selectedBrands = Object.keys(newCheckedBrands).filter(
       (key) => newCheckedBrands[key]
     );
+    const catId = searchParams.get("categoryId");
+    const subCategories = searchParams.get("subCategories");
+    const minP: number | null = Number(searchParams.get("min_price"));
+    const maxP: number | null = Number(searchParams.get("max_price"));
+    const queryString = createQueryString("brands", selectedBrands.join(","));
 
-    // router.push({
-    //   pathname: router.pathname,
-    //   query: { ...router.query, brands: selectedBrands.join(",") },
-    // });
+    let url = "/filterProduct";
+    if (catId) {
+      url += `?categoryId=${catId}`;
+    }
+    if (subCategories) {
+      url += `&subCategories=${subCategories}`;
+    }
+    if (minP !== null && maxP !== null) {
+      url += `&${createQueryString("min_price", minP)}&${createQueryString(
+        "max_price",
+        maxP
+      )}`;
+    }
+    url += `&${queryString}`;
+
+    router.push(url);
   };
 
   return (
@@ -59,7 +95,7 @@ const Brand = ({ categoryId }: any) => {
               <h4 className="max-h-[18px] max-w-[270px] uppercase tracking-[0] font-[600] text-[.9375rem] mb-[1.25rem] font-ff-headings">
                 brands
               </h4>
-              {brand.map((category: any, index) => {
+              {uniqueBrands.map((category: any) => {
                 const isChecked = checkedBrands[category._id];
                 return (
                   <div
@@ -86,6 +122,25 @@ const Brand = ({ categoryId }: any) => {
                   </div>
                 );
               })}
+              {brand.length > 10 && (
+                <div>
+                  {shouldShowSeeLess ? (
+                    <div
+                      className="text-[.8125rem] font-medium text-blue-900 hover:underline hover:cursor-pointer"
+                      onClick={() => setShowAllBrands(false)}
+                    >
+                      See Less
+                    </div>
+                  ) : (
+                    <div
+                      className="text-[.8125rem] font-medium text-blue-900 hover:underline hover:cursor-pointer"
+                      onClick={() => setShowAllBrands(true)}
+                    >
+                      See All
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           )
         : !isEmpty && (
@@ -93,7 +148,7 @@ const Brand = ({ categoryId }: any) => {
               <h4 className="max-h-[18px] max-w-[270px] uppercase tracking-[0] font-[600] text-[.9375rem] mb-[1.25rem] font-ff-headings">
                 brands
               </h4>
-              {brandPage.map((brand: any, index: any) => {
+              {/* {brandPage.map((brand: any, index: any) => {
                 const isChecked = checkedBrands[brand.id];
                 return (
                   <div
@@ -128,7 +183,7 @@ const Brand = ({ categoryId }: any) => {
                     </div>
                   </div>
                 );
-              })}
+              })} */}
             </div>
           )}
     </div>

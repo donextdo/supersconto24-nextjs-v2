@@ -5,7 +5,7 @@ import Brand from "./Brand";
 import Category from "./Category";
 import PriceRange from "./PriceRange";
 import FilteredProduct from "./FilteredProduct";
-import {usePathname, useRouter, useSearchParams} from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 const FilterSideBar = () => {
   const router = useRouter();
@@ -16,9 +16,7 @@ const FilterSideBar = () => {
   const minValue = searchParams.get("min_price");
   const maxValue = searchParams.get("max_price");
   const subcategory = searchParams.get("subCategories");
-  console.log("page categoryId : ", categoryId);
-  console.log("page minValue : ", minValue);
-  console.log("page maxValue : ", maxValue);
+  const brand = searchParams.get("brands");
 
   return (
     <div className="flex flex-row mb-9">
@@ -33,16 +31,10 @@ const FilterSideBar = () => {
         <div className="lg:mt-12 md:mt-12 mt-12 cursor-pointer">
           <FilteredProduct
             categoryId={categoryId}
-            // brand={brand}
+            brand={brand}
             subcategory={subcategory}
             minValue={minValue}
             maxValue={maxValue}
-            // inStock={inStock}
-            // onSale={onSale}
-            // perpage={perpage}
-            // page={page}
-            // orderby={orderby}
-            // passgrid={passgrid}
           />
         </div>
       </div>

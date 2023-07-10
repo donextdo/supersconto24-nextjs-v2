@@ -112,6 +112,7 @@ const LoginCard = () => {
                     heightAuto: true,
                     position: "bottom",
                 });
+                 localStorage.setItem("id", response.data._id);
                 
                 dispatch(generalAuth(details))
 

@@ -15,6 +15,7 @@ const FilteredProduct = ({
   minValue,
   maxValue,
   subcategory,
+  brand,
 }: any) => {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
@@ -48,7 +49,9 @@ const FilteredProduct = ({
         if (subcategory) {
           url += `&subCategories=${subcategory}`;
         }
-
+        if (brand) {
+          url += `&brands=${brand}`;
+        }
         if (minValue && maxValue) {
           url += `&min_price=${minValue}&max_price=${maxValue}`;
         }
@@ -62,35 +65,21 @@ const FilteredProduct = ({
       }
     };
     fetchData();
-  }, [categoryId, subcategory, minValue, maxValue]);
+  }, [categoryId, subcategory, minValue, maxValue, brand]);
 
   return (
     <>
       <div>
-        <div className="flex flex-row items-center justify-between mb-9 ">
-          {/* <div className="flex flex-col">
-            <div className="uppercase font-semibold text-lg font-ff-headings lg:text-xl">
-              Best Seller
-            </div>
-            <div className="text-xs text-gray-400">
-              Do not miss the current offers until the end of March.
-            </div>
-          </div> */}
-          {/* <div
-            className=" p-2 h-9 flex flex-row rounded-full border border-gray-300 text-sm w-32 text-gray-500 px-4 justify-between cursor-pointer"
-            onClick={goToProduct}
-          >
-            View All
-            <span>
-              <BsArrowRight className="text-lg"></BsArrowRight>
-            </span>
-          </div> */}
-        </div>
+        <div className="flex flex-row items-center justify-between mb-9 "></div>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4">
-        {products?.length > 0 ? products.map((product) => (
-          <ProductCard key={product._id} product={product} />
-        )): <>No products found</>}
+        {products?.length > 0 ? (
+          products.map((product) => (
+            <ProductCard key={product._id} product={product} />
+          ))
+        ) : (
+          <>No products found</>
+        )}
       </div>
     </>
   );
