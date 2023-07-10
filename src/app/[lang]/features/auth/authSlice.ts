@@ -89,8 +89,6 @@ const authSlice = createSlice({
                 state.error = null;
 
                 localStorage.setItem("userData", btoa(JSON.stringify(action.payload)))
-                localStorage.setItem("id", action.payload._id);
-
             })
             .addCase(generalAuth.rejected, (state, action) => {
                 state.loading = false;
