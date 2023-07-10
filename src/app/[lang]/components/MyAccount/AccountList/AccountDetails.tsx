@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import baseUrl from "../../../../../../utils/baseUrl";
 import Swal from "sweetalert2";
+import useAuthCheckHook from "../../Hooks/useAuthCheck";
 
 const AccountDetails = () => {
     const [modal, setModal] = useState(false)
@@ -12,7 +13,8 @@ const AccountDetails = () => {
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    let id = localStorage.getItem("id");
+    const {isLoggedIn, authUser, logOut} = useAuthCheckHook()
+
     
     useEffect(() => {
         
@@ -23,7 +25,7 @@ const AccountDetails = () => {
 
       async function fetchData() {
         try {
-            const res = await axios.get(`${baseUrl}/users/${id}`); 
+            const res = await axios.get(`${baseUrl}/users/${authUser._id}`); 
            console.log(res.data)
            const data = res.data;
            setFirstName(data.firstName);
@@ -47,7 +49,7 @@ const AccountDetails = () => {
            
           }
           try {
-            const response = await axios.patch(`${baseUrl}/users/${id}`, data);
+            const response = await axios.patch(`${baseUrl}/users/${authUser._id}`, data);
             console.log(response.data); // do something with the response data
             if (response.status==200){
                 Swal.fire({

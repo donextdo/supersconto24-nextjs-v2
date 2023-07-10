@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import baseUrl from "../../../../../utils/baseUrl";
 import axios from "axios";
 import Swal from "sweetalert2";
+import useAuthCheckHook from "../Hooks/useAuthCheck";
 
 
 const Bill = ({setModal, setModal1}:any) => {
@@ -17,8 +18,7 @@ const Bill = ({setModal, setModal1}:any) => {
     const [zipCode, setZipCode] = useState('');
     const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('');
-    let id = localStorage.getItem("id");
-
+   
     const [emailError, setEmailError] = useState('');
     const [firstNameError, setFirstNameError] = useState('');
     const [lastNameError, setLastNameError] = useState('');
@@ -32,6 +32,7 @@ const Bill = ({setModal, setModal1}:any) => {
     const [phoneError, setPhoneError] = useState('');
     const [formError, setFormError] = useState('');
 
+    const {isLoggedIn, authUser, logOut} = useAuthCheckHook()
 
 
     useEffect(() => {
@@ -40,7 +41,7 @@ const Bill = ({setModal, setModal1}:any) => {
 
     async function fetchData() {
         try {
-            const res = await axios.get(`${baseUrl}/users/${id}`);
+            const res = await axios.get(`${baseUrl}/users/${authUser._id}`);
             console.log(res.data)
             const data = res.data;
             setFirstName(data.billingAddress.billingFirstName);
@@ -217,7 +218,7 @@ const Bill = ({setModal, setModal1}:any) => {
                 }
               };
             try {
-                const response = await axios.patch(`${baseUrl}/users/${id}`, data);
+                const response = await axios.patch(`${baseUrl}/users/${authUser._id}`, data);
                 console.log(response.data); // do something with the response data
                 if (response.status==200){
                     Swal.fire({

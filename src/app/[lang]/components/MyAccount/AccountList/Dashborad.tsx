@@ -1,5 +1,5 @@
 import {RootState} from "@/app/[lang]/redux/store";
-import {JSXElementConstructor, ReactElement, ReactFragment} from "react";
+import {JSXElementConstructor, ReactElement, ReactFragment, useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import useAuthCheckHook from "@/app/[lang]/components/Hooks/useAuthCheck";
 
@@ -10,18 +10,15 @@ const Dashboard = ({
 }: any) => {
   const orderList = useSelector((state: RootState) => state.order.orders);
   console.log("orderList : ", orderList);
-  let dispatch = useDispatch();
   const {isLoggedIn, authUser, logOut} = useAuthCheckHook()
 
   console.log(authUser);
 
   const handleClick = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("id");
     logOut()
     location.reload();
   };
-  const handleorder = () => {};
+  
 
   let email: string | null;
   let username;
@@ -35,7 +32,9 @@ const Dashboard = ({
     | undefined;
 
   // review name
+  // useEffect(()=>)
   if (authUser) {
+    console.log(authUser)
     if (authUser?.email !== null) {
       username = authUser?.email.split("@")[0]; // Extract the username from the email
       extractedUsername = username.replace(/"/g, "");
@@ -46,6 +45,7 @@ const Dashboard = ({
     // Handle the case when the value is null
     // For example, you could set a default value
   }
+
   return (
     <div>
       <p className="text-sm">

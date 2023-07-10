@@ -27,13 +27,14 @@ export type AuthType = {
 };
 export const socialAuth = createAsyncThunk('auth/social', async (payload: UserType) => {
     // return await makeRequest({url: `${baseUrl}/auth/social`, data: payload, method: "post"})
-    return await axios.post(`${baseUrl}/auth/social`,payload)
+    const res = await axios.post(`${baseUrl}/auth/social`,payload)
+    return res.data
 });
 
 export const generalAuth = createAsyncThunk('auth/general', async (payload: AuthType) => {
     // return await makeRequest({url: `${baseUrl}/users/login`, data: payload, method: "post"})
-    return await axios.post(`${baseUrl}/users/login`,payload)
-
+    const res = await axios.post(`${baseUrl}/users/login`,payload)
+    return res.data
 });
 
 const initialState: AuthStateType = {
