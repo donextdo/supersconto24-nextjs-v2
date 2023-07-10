@@ -136,6 +136,7 @@ export const Location = () => {
 
                 // Use the formatted address as needed
                 setSelectedLocation(formattedAddress);
+                setSearchTerm(formattedAddress)
             }
         });
     }
