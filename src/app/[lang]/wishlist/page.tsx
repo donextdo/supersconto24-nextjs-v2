@@ -30,20 +30,21 @@ const Wishlist = () => {
     const dispatch = useDispatch()
     const router = useRouter ()
 
-    let id: any;
-    if (typeof localStorage !== 'undefined') {
-        id = localStorage.getItem("id");
-    }
+   
 
     const { cartItems, addProductToCart, removeProductFromCart } = useCartItemsHook()
     const {isLoggedIn, authUser, logOut} = useAuthCheckHook()
 
     
     useEffect(() => {
-        fetchData()
-    }, []);
+       
+        if(authUser?._id){
+            fetchData()
+        }
+    }, [authUser?._id]);
 
     async function fetchData() {
+        
         try {
             const res = await axios.get(`${baseUrl}/users/${authUser._id}`);
             console.log(res.data.wishList)
@@ -80,7 +81,7 @@ const Wishlist = () => {
         const items = cartItemsString ? JSON.parse(cartItemsString) : [];
 
         try {
-            const res = await axios.delete(`${baseUrl}/users/${id}/wishList/${_id}`);
+            const res = await axios.delete(`${baseUrl}/users/${authUser._id}/wishList/${_id}`);
             console.log(res.data)
             const newItems = data.filter((item) => item.productId !== _id);
             setData(newItems)

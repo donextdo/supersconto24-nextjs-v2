@@ -1,5 +1,6 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import baseUrl, {axiosRequest} from "../../../../../utils/baseUrl";
+import axios from 'axios';
 
 const makeRequest = axiosRequest();
 
@@ -25,10 +26,14 @@ export type AuthType = {
     password: string;
 };
 export const socialAuth = createAsyncThunk('auth/social', async (payload: UserType) => {
-    return await makeRequest({url: `${baseUrl}/auth/social`, data: payload, method: "post"})
+    // return await makeRequest({url: `${baseUrl}/auth/social`, data: payload, method: "post"})
+    return await axios.post(`${baseUrl}/auth/social`,payload)
 });
+
 export const generalAuth = createAsyncThunk('auth/general', async (payload: AuthType) => {
-    return await makeRequest({url: `${baseUrl}/users/login`, data: payload, method: "post"})
+    // return await makeRequest({url: `${baseUrl}/users/login`, data: payload, method: "post"})
+    return await axios.post(`${baseUrl}/users/login`,payload)
+
 });
 
 const initialState: AuthStateType = {
@@ -91,6 +96,7 @@ const authSlice = createSlice({
                 localStorage.setItem("userData", btoa(JSON.stringify(action.payload)))
             })
             .addCase(generalAuth.rejected, (state, action) => {
+                console.log("generalAuth.rejected")
                 state.loading = false;
                 state.currentUser = null;
                 state.error = action.error.message;
