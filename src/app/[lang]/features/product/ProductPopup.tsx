@@ -211,7 +211,7 @@ const ProductPopup = ({ setProductPopup, proId }: any) => {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-2 w-full min-h-[420px]">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 w-full ">
                         <div>
                             <div className="relative  max-h-[579.2px] max-w-[466.66px] ">
                                 <div

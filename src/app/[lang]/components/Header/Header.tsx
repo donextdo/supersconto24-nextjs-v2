@@ -56,8 +56,8 @@ const Header = () => {
     return (
         <>
             <div className="hidden md:block container mx-auto xl:px-40 px-5">
-                <div className=" flex items-center flex-row py-2">
-                    <div className="basis-1/4 text-4xl font-bold text-[#223994]">
+                <div className=" flex items-center flex-row  py-2">
+                    <div className="basis-1/4 text-4xl font-bold text-[#223994] flex justify-start">
                         <Link href="/">
                             <div className="h-[50px] w-auto ">
                                 <Image

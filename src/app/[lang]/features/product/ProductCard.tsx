@@ -12,6 +12,7 @@ import useCartItemsHook from "@/app/[lang]/components/Hooks/useCartItemsHook";
 import axios from "axios";
 import baseUrl from "../../../../../utils/baseUrl";
 import useAuthCheckHook from "@/app/[lang]/components/Hooks/useAuthCheck";
+import { useRouter } from "next/navigation";
 
 interface Props {
     product: Product;
@@ -21,6 +22,7 @@ export const ProductCard: FC<Props> = ({ product }) => {
     const [productPopup, setProductPopup] = useState(false);
     const [proId, setProId] = useState("");
     const [count, setCount] = useState(0);
+    const router = useRouter()
 
     const { getPrice } = useCurrency();
     const { cartItems, addProductToCart, removeProductFromCart } = useCartItemsHook()
@@ -92,30 +94,35 @@ export const ProductCard: FC<Props> = ({ product }) => {
 
 
     const handleWishlist = async (product: any) => {
-        
-        const wishListObj = {
-            wishList: [
-              {
-                productId: product._id,
-                front: product.product_image,
-                title: product.product_name,
-                price: product.unit_price,
-                date: new Date().toLocaleDateString("en-US", {
-                  month: "long",
-                  day: "numeric",
-                  year: "numeric",
-                }),
-                quantity: product.quantity,
-              },
-            ],
-          };
-
-        try {
-            const response = await axios.post(`${baseUrl}/users/wishList/${authUser._id}`, wishListObj);
-            console.log(response.data); // do something with the response data
-        } catch (error) {
-            console.log(error); // handle the error
+        console.log(authUser._id)
+        if(authUser._id){
+            const wishListObj = {
+                wishList: [
+                  {
+                    productId: product._id,
+                    front: product.product_image,
+                    title: product.product_name,
+                    price: product.unit_price,
+                    date: new Date().toLocaleDateString("en-US", {
+                      month: "long",
+                      day: "numeric",
+                      year: "numeric",
+                    }),
+                    quantity: product.quantity,
+                  },
+                ],
+              };
+    
+            try {
+                const response = await axios.post(`${baseUrl}/users/wishList/${authUser._id}`, wishListObj);
+                console.log(response.data); // do something with the response data
+            } catch (error) {
+                console.log(error); // handle the error
+            }
+        }else{
+            router.push("/account")
         }
+        
     };
 
     const handlePopup = (product: any) => {

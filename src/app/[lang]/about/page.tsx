@@ -69,7 +69,7 @@ function About() {
         </div>
 
         <div className="xl:grid-flow-col xl:grid xl:grid-col-2">
-          <div className="relative ">
+          {/* <div className="relative ">
             <Image
               src={pic2}
               alt="Bacola-Ceo"
@@ -77,7 +77,7 @@ function About() {
               width={1200}
               height={800}
             />
-          </div>
+          </div> */}
 
           <div className="xl:ml-16 xl:mt-24 xl:mb-40">
             <p className=" text-gray-900 text-[16px]  text-left ">

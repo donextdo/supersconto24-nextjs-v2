@@ -305,11 +305,11 @@ const ItemPages = ({params}: IProps) => {
         <>
             <div className="bg-[#f7f8fd] ">
                 <div className="container mx-auto xl:px-40 px-5 m-8 py-6 ">
-                    <div className=" pb-3">
+                    <div className=" ">
                         {/* <Breadcrumbs crumbs={breadcrumbs}></Breadcrumbs> */}
                     </div>
                     {/* working one */}
-                    <div className=" bg-white drop-shadow rounded-md px-6 pt-10 mt-2 ">
+                    <div className=" bg-white drop-shadow rounded-md px-6 pb-10 pt-5">
                         <div className="w-full mb-[1.875rem]">
                             <h1 className=" capitalize text-[1.5rem] font-semibold "
                                 onClick={() => setExpanded(!expanded)}>
@@ -342,7 +342,7 @@ const ItemPages = ({params}: IProps) => {
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-1 lg:grid-cols-7 w-full min-h-[600px]">
+                        <div className="grid grid-cols-1 lg:grid-cols-7 w-full ">
                             <div className="col-span-3">
                                 <div className="relative  max-h-[579.2px] max-w-[466.66px] ">
                                     <div

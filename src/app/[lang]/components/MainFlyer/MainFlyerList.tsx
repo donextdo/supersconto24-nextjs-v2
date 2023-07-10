@@ -110,11 +110,12 @@ overflow-y-scroll overflow-x-hidden scrollbar-w-2 sm:grid-cols-4
 xxl:grid-cols-4 pt-4'>
 
                 {productList?.slice(0, visible).map((flyer: any, index: number) => (
-                    <a onClick={() => {
+                   <button> <a onClick={() => {
                         window.location.href = `/catalog-preview/${flyer._id}?currency=${searchParams.get("currency")}`
                     }} key={index}>
                         <MainFlyerCard key={index} flyer={flyer}/>
                     </a>
+                    </button>
                 ))}
             </div>
 
