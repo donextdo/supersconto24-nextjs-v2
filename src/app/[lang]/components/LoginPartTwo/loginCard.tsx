@@ -26,29 +26,6 @@ const LoginCard = () => {
     useEffect(() => {
         (window as any).handleCredentialResponse = handleCredentialResponse;
 
-        window.fbAsyncInit = function () {
-            FB.init({
-                appId: '812498850234407',
-                cookie: true,
-                xfbml: true,
-                version: 'v14.0'
-            });
-
-            FB.AppEvents.logPageView();
-
-        };
-
-        (function (d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) {
-                return;
-            }
-            js = d.createElement(s);
-            js.id = id;
-            js.src = "https://connect.facebook.net/en_US/sdk.js";
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
-
     }, []);
 
     function handleCredentialResponse(response: any) {
@@ -202,6 +179,7 @@ const LoginCard = () => {
                                 className="flex items-center w-[302px] border border-gray-300 text-black h-[45px] pl-[10px] rounded-md"
                                 onClick={() => {
                                     /* global FB*/
+                                    let FB = (window as any).FB;
                                     FB.getLoginStatus((res:any) => {
                                         if (res.status === "connected")
                                             FB.logout()

@@ -179,6 +179,44 @@ const Cart: FC<CartType> = () => {
         }
     };
 
+    const handleEmail = async () => {
+        if (componentRef.current) {
+            const opt = {
+                margin: 0.5,
+                filename: 'shopping-list.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+            };
+
+            const clone = componentRef.current.cloneNode(true) as HTMLDivElement;
+
+            const buttons = clone.querySelectorAll('button');
+            buttons.forEach((button) => button.remove());
+
+            const pdfBlob = await html2pdf().from(clone).set(opt).output('blob');
+
+            // Send the PDF blob to the backend
+            const formData = new FormData();
+            formData.append('pdf', pdfBlob, 'shopping-list.pdf');
+            formData.append('email', authUser.email);
+
+            // Replace 'http://backend-api-url' with your actual backend API URL
+            fetch(`${baseUrl}/order/send-email`, {
+                method: 'POST',
+                body: formData,
+            })
+                .then((response) => {
+                    // Handle the response from the backend, e.g., show success message
+                    console.log('Email sent successfully');
+                })
+                .catch((error) => {
+                    // Handle errors, e.g., show error message
+                    console.error('Error sending email:', error);
+                });
+        }
+    };
+
     async function getCartItems() {
         if (cartItems.length > 0) {
             fetch(`${baseUrl}/catelog/item/find-list`, {
@@ -344,7 +382,7 @@ const Cart: FC<CartType> = () => {
                                         onClick={handleDownload}><HiOutlineDocumentDownload className=" h-4 w-4"/>
                                 </button>
                                 <button className="bg-[#233a95] text-white py-2.5 px-4 rounded-md text-xs h-11"
-                                        onClick={handleDownload}><TfiEmail className=" h-4 w-4"/></button>
+                                        onClick={handleEmail}><TfiEmail className=" h-4 w-4"/></button>
 
                                 <button
                                     className="bg-[#233a95] text-white py-2.5 px-4 rounded-md text-xs h-11"
