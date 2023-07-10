@@ -114,14 +114,14 @@ const MainFlyerList = ({ dictionary, locale }: MainFlyerListType) => {
         xxl:grid-cols-4 pt-4"
             >
                 {productList?.slice(0, visible).map((flyer: any, index: number) => (
-                    <button>
+                    <button key={index}>
                         {" "}
                         <a
                             onClick={() => {
                                 window.location.href = `/catalog-preview/${flyer._id
                                     }?currency=${searchParams.get("currency")}`;
                             }}
-                            key={index}
+                            
                         >
                             <MainFlyerCard key={index} flyer={flyer} />
                         </a>

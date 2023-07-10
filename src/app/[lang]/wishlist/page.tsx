@@ -7,6 +7,8 @@ import { useDispatch } from "react-redux";
 import baseUrl from "../../../../utils/baseUrl";
 import { calSubTotal } from "../features/cart/cartSlice";
 import useCartItemsHook from "../components/Hooks/useCartItemsHook";
+import { useRouter } from "next/navigation";
+import useAuthCheckHook from "../components/Hooks/useAuthCheck";
 
 
 interface WIshlist {
@@ -26,6 +28,7 @@ interface WIshlist {
 const Wishlist = () => {
     const [data, setData] = useState<Array<WIshlist>>([]);
     const dispatch = useDispatch()
+    const router = useRouter ()
 
     let id: any;
     if (typeof localStorage !== 'undefined') {
@@ -33,6 +36,8 @@ const Wishlist = () => {
     }
 
     const { cartItems, addProductToCart, removeProductFromCart } = useCartItemsHook()
+    const {isLoggedIn, authUser, logOut} = useAuthCheckHook()
+
     
     useEffect(() => {
         fetchData()
@@ -40,7 +45,7 @@ const Wishlist = () => {
 
     async function fetchData() {
         try {
-            const res = await axios.get(`${baseUrl}/users/${id}`);
+            const res = await axios.get(`${baseUrl}/users/${authUser._id}`);
             console.log(res.data.wishList)
             setData(res.data.wishList)
         } catch (err) {
@@ -188,6 +193,11 @@ const Wishlist = () => {
         });
     }
 
+
+    const handleHome = () =>{
+        router.push('/')
+    }
+
     return (
         <div className="container mx-auto xl:px-40 px-5 mb-40">
             <h1 className="text-[32px] mt-14 mb-6">Default wishlist</h1>
@@ -269,7 +279,7 @@ const Wishlist = () => {
             ) : (
                 <div className="space-y-4">
                     <div>Your Wishlist is currently empty.</div>
-                    <button className="bg-primary text-white py-2.5 px-4 rounded-md text-sm h-11 w-40">Return to Home</button>
+                    <button className="bg-primary text-white py-2.5 px-4 rounded-md text-sm h-11 w-40" onClick={handleHome}>Return to Home</button>
                 </div>
             )}
 
