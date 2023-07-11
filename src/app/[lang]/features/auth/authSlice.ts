@@ -1,6 +1,7 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import baseUrl, {axiosRequest} from "../../../../../utils/baseUrl";
 import axios from 'axios';
+import Swal from "sweetalert2";
 
 const makeRequest = axiosRequest();
 
@@ -103,6 +104,14 @@ const authSlice = createSlice({
                 state.error = action.error.message;
 
                 localStorage.removeItem("userData")
+                Swal.fire({
+                    title: 'Login Failed',
+                    text: 'Your email or password is incorrect',
+                    icon: 'error',
+                    confirmButtonText: 'Ok',
+                    confirmButtonColor: '#2563eb',
+                    
+                  })
             });
     },
 });
