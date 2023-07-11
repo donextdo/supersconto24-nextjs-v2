@@ -9,6 +9,7 @@ import { getOrdersByUserIdAsync } from "@/app/[lang]/components/Checkout/orderSl
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import baseUrl from "../../../../../../utils/baseUrl";
+import useAuthCheckHook from "../../Hooks/useAuthCheck";
 
 interface Order {
   orderId: string;
@@ -116,15 +117,14 @@ const Orders = () => {
   const orderList = useSelector((state: RootState) => state.order.orders);
   console.log(orderList);
 
-  let id: string | null;
-  if (localStorage.getItem("id") !== null) {
-    id = localStorage.getItem("id");
-  } else {
-  }
+  const { isLoggedIn, authUser, logOut } = useAuthCheckHook()
+
 
   useEffect(() => {
-    dispatch(getOrdersByUserIdAsync(id!));
-  }, [dispatch, id!]);
+    if (authUser?._id) {
+      dispatch(getOrdersByUserIdAsync(authUser?._id!));
+    }
+  }, [dispatch, authUser?._id!]);
 
   const handleView = async (orderId: any) => {
     setHideOrder(false);
@@ -173,7 +173,7 @@ const Orders = () => {
                     <div className="text-right">
                       <button
                         className="bg-[#233a95] text-white p-2 rounded-md w-[74px]"
-                        onClick={() => handleView(order.orderId)}
+                        onClick={() => handleView(order.orderNumber)}
                       >
                         view
                       </button>
