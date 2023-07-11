@@ -109,8 +109,10 @@ const Address = () => {
     })
 
     useEffect(() => {
-        fetchData()
-    }, []);
+        if (authUser?._id) {
+            fetchData()
+        }
+    }, [authUser?._id]);
 
     async function fetchData() {
         try {

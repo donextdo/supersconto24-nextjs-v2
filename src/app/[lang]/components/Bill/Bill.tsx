@@ -36,8 +36,10 @@ const Bill = ({setModal, setModal1}:any) => {
 
 
     useEffect(() => {
-        fetchData()
-    }, []);
+        if (authUser?._id) {
+            fetchData()
+        }
+    }, [authUser?._id]);
 
     async function fetchData() {
         try {
