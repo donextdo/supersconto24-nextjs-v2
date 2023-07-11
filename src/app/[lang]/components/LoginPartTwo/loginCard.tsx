@@ -263,7 +263,7 @@ const LoginCard = () => {
                             <div className="flex items-center justify-between">
                                 <div>
                                     <a
-                                        href="#"
+                                        href="/lost-password"
                                         className="text-gray-500 hover:text-gray-700 text-[13px]"
                                     >
                                         Forgot password?
