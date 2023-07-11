@@ -91,6 +91,10 @@ const AllCategories = () => {
     }
   }, [pathname]);
 
+  const redirectFilter = () => {
+    router.push(`/filterProduct`);
+  };
+
   return (
     <div className="">
       <button
@@ -169,13 +173,28 @@ const AllCategories = () => {
           <hr className="my-2" />
 
           <div className="py-2 px-2">
-            <p className="hover:text-[#4BB62E] ">Value Of the Day</p>
+            <p
+              className="hover:text-[#4BB62E] hover:cursor-pointer"
+              onClick={redirectFilter}
+            >
+              Value Of the Day
+            </p>
           </div>
           <div className="py-2 px-2">
-            <p className="hover:text-[#4BB62E]">Top 100 Offers</p>
+            <p
+              className="hover:text-[#4BB62E] hover:cursor-pointer"
+              onClick={redirectFilter}
+            >
+              Top 100 Offers
+            </p>
           </div>
           <div className="py-2 px-2">
-            <p className="hover:text-[#4BB62E]">New Arrivals</p>
+            <p
+              className="hover:text-[#4BB62E] hover:cursor-pointer"
+              onClick={redirectFilter}
+            >
+              New Arrivals
+            </p>
           </div>
         </div>
       )}

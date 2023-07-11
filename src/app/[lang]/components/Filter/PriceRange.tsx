@@ -17,20 +17,6 @@ const PriceRange = ({ categoryId }: any) => {
   const subCatId = searchParams.get("subCategories");
   const brand = searchParams.get("brands");
 
-  // useEffect(() => {
-  //   console.log("maxPrice : ", { maxValue }, { minValue });
-  //   const min_price = searchParams.get("min_price");
-  //   const max_price = searchParams.get("max_price");
-
-  //   const minPrice = Number(min_price);
-  //   const maxPrice = Number(max_price);
-
-  //   if (minPrice != null && maxPrice != null) {
-  //     setMinValue(minPrice);
-  //     setMaxValue(maxPrice);
-  //   }
-  // }, [router]);
-
   const createQueryString = useCallback(
     (name: string, value: string | number) => {
       const params = new URLSearchParams();
