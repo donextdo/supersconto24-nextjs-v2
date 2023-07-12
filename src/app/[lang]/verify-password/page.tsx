@@ -3,6 +3,8 @@ import axios from "axios";
 import {useRouter, useSearchParams} from "next/navigation";
 import { useEffect, useState } from "react";
 import baseUrl from "../../../../utils/baseUrl";
+import Swal from "sweetalert2";
+
 
 const VerifyPassword = () => {
     const [password, setPassword] = useState('');
@@ -27,10 +29,17 @@ const VerifyPassword = () => {
             const res = await axios.post(`${baseUrl}/auth/verify-password`, data);
             if (res.data.isVerify) {
                 setIsVerify(true);
-                // validate
+                
             } else {
                 setIsVerify(false);
-                // validate
+                Swal.fire({
+                    title: 'Verification Failed',
+                    text: 'Invalid reset link',
+                    icon: 'error',
+                    confirmButtonText: 'Ok',
+                    confirmButtonColor: '#2563eb',
+                    
+                  })
             }
         } catch (err) {
             console.log(err);
@@ -46,11 +55,30 @@ const VerifyPassword = () => {
             try {
                 const res = await axios.post(`${baseUrl}/auth/update-password`, {token: t, userId: u, newPassword: password});
                 if (res.data.isUpdated) {
-                    router.push("/account")
-                // validate
+                    
+                    Swal.fire({
+                        title: 'Success',
+                        text: 'password changed successfully. please login',
+                        icon: 'success',
+                        confirmButtonText: 'Done',
+                        confirmButtonColor: '#8DC14F',   
+                      }).then((result) => {
+                        /* Read more about isConfirmed, isDenied below */
+                        if (result.isConfirmed) {
+                            router.push("/account")
+                        } else if (result.isDenied) {
+                            router.push("/account")
+                        }
+                      })
                 } else {
                     setIsVerify(false);
-                // validate
+                    Swal.fire({
+                        title: 'Update Failed',
+                        text: 'Password update failed',
+                        icon: 'error',
+                        confirmButtonText: 'Ok',
+                        confirmButtonColor: '#2563eb',   
+                      })
                 }
             }catch (e) {
                 console.log(e)

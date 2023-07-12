@@ -2,6 +2,8 @@
 import { useState } from "react";
 import axios from "axios";
 import baseUrl from "../../../../utils/baseUrl";
+import Swal from "sweetalert2";
+
 
 const LostPasswordPage = () => {
   const [email, setEmail] = useState('');
@@ -14,10 +16,23 @@ const LostPasswordPage = () => {
               const res = await axios.post(`${baseUrl}/auth/forget-password`, {email});
               console.log(res.data)
               if (res.data.message) {
-
-                  // validate
+                Swal.fire({
+                  title: 'Success',
+                  text: 'Password reset email has been sent.',
+                  icon: 'success',
+                  confirmButtonText: 'Done',
+                  confirmButtonColor: '#8DC14F',
+                  
+                })
               } else {
-                  // validate
+                Swal.fire({
+                  title: 'Failed',
+                  text: 'Unable to send reset link. check email',
+                  icon: 'error',
+                  confirmButtonText: 'Ok',
+                  confirmButtonColor: '#2563eb',
+                  
+                })
               }
           }catch (e) {
               console.log(e)
