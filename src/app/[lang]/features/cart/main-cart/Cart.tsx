@@ -202,7 +202,7 @@ const Cart: FC<CartType> = () => {
             formData.append('email', authUser.email);
 
             // Replace 'http://backend-api-url' with your actual backend API URL
-            fetch(`${baseUrl}/order/send-email`, {
+            fetch(`${baseUrl}/neworder/send-email`, {
                 method: 'POST',
                 body: formData,
             })

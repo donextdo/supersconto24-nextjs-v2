@@ -1,15 +1,14 @@
-'use client'
-import React, {ReactElement, useEffect, useMemo, useState} from "react";
-import {MainCategory, Product, SubCategory} from "./product";
+"use client";
+import React, { ReactElement, useEffect, useMemo, useState } from "react";
+import { MainCategory, Product, SubCategory } from "./product";
 import axios from "axios";
 import baseUrl from "../../../../../utils/baseUrl";
-import {FaStar} from "react-icons/fa";
-import {BsCheckLg} from "react-icons/bs";
-import {IoClose} from "react-icons/io5";
+import { FaStar } from "react-icons/fa";
+import { BsCheckLg } from "react-icons/bs";
+import { IoClose } from "react-icons/io5";
 import Swal from "sweetalert2";
 import useCurrency from "@/app/[lang]/components/Hooks/useCurrencyHook";
 import useCartItemsHook from "@/app/[lang]/components/Hooks/useCartItemsHook";
-
 
 interface Review {
     rating: number;
@@ -17,7 +16,7 @@ interface Review {
     body: string;
     submittedDate: string;
     _id: string;
-    reviewStatus: string
+    reviewStatus: string;
     // other properties
 }
 
@@ -59,15 +58,23 @@ const ProductPopup = ({ setProductPopup, proId }: any) => {
         tags: "",
         title: "",
         type: "",
-        unit_price: 0
-    })
-    const [allreview, setAllreview] = useState<Array<Review>>([])
+        unit_price: 0,
+    });
+    const [allreview, setAllreview] = useState<Array<Review>>([]);
     const [tag, setTag] = useState([]);
-    const [subCategory, setSubCategory] = useState<SubCategory>({_id: "", mainCategoryId: "", name: ""})
-    const [mainCategory, setMainCategory] = useState<MainCategory>({_id: "", name: ""})
+    const [subCategory, setSubCategory] = useState<SubCategory>({
+        _id: "",
+        mainCategoryId: "",
+        name: "",
+    });
+    const [mainCategory, setMainCategory] = useState<MainCategory>({
+        _id: "",
+        name: "",
+    });
     const [count, setCount] = useState(1);
-    const { getPrice } = useCurrency()
-    const {cartItems, addProductToCart, removeProductFromCart} = useCartItemsHook()
+    const { getPrice } = useCurrency();
+    const { cartItems, addProductToCart, removeProductFromCart } =
+        useCartItemsHook();
 
     useEffect(() => {
         getCategory();
@@ -79,18 +86,19 @@ const ProductPopup = ({ setProductPopup, proId }: any) => {
     async function findSingleProduct() {
         try {
             const res = await axios.get(`${baseUrl}/catelog/item/find/${proId}`);
-            console.log(res)
+            console.log(res);
             setData(res.data);
-            setTag(res.data.tags)
-
+            setTag(res.data.tags);
         } catch (err) {
             console.log(err);
         }
     }
     async function getCategory() {
         try {
-            const res = await axios.get(`${baseUrl}/category/categories/${data.product_category}`);
-            console.log(res.data)
+            const res = await axios.get(
+                `${baseUrl}/category/categories/${data.product_category}`
+            );
+            console.log(res.data);
             setMainCategory(res.data);
         } catch (err) {
             console.log(err);
@@ -98,8 +106,10 @@ const ProductPopup = ({ setProductPopup, proId }: any) => {
     }
     async function getSubCategory() {
         try {
-            const res = await axios.get(`${baseUrl}/category/subcategories/${data.product_sub_category}`);
-            console.log(res.data)
+            const res = await axios.get(
+                `${baseUrl}/category/subcategories/${data.product_sub_category}`
+            );
+            console.log(res.data);
             setSubCategory(res.data);
         } catch (err) {
             console.log(err);
@@ -116,18 +126,17 @@ const ProductPopup = ({ setProductPopup, proId }: any) => {
     }
 
     const handleIncrement = (product: Product) => {
-        addProductToCart({...product, count: 1})
-        setCount(prevState => prevState + 1)
+        addProductToCart({ ...product, count: 1 });
+        setCount((prevState) => prevState + 1);
     };
 
     const handleDecrement = (product: Product) => {
-        removeProductFromCart({...product, count: 1})
-        setCount(prevState => prevState - 1)
+        removeProductFromCart({ ...product, count: 1 });
+        setCount((prevState) => prevState - 1);
     };
 
-
     const handleAddToCart = (data: any) => {
-        addProductToCart({...data, count: 1})
+        addProductToCart({ ...data, count: 1 });
 
         Swal.fire({
             title:
@@ -143,9 +152,9 @@ const ProductPopup = ({ setProductPopup, proId }: any) => {
         });
     };
 
-    const {discountedPrice, newPrice} = useMemo(() => {
-        let discountedPrice = 0
-        let newPrice = 0
+    const { discountedPrice, newPrice } = useMemo(() => {
+        let discountedPrice = 0;
+        let newPrice = 0;
 
         if (data.discount) {
             discountedPrice = data.unit_price * (data.discount / 100);
@@ -154,216 +163,200 @@ const ProductPopup = ({ setProductPopup, proId }: any) => {
             newPrice = data.unit_price;
         }
 
-        return {discountedPrice, newPrice}
-    }, [data])
+        return { discountedPrice, newPrice };
+    }, [data]);
 
-    const {yellowStars, grayStars} = useMemo(() => {
-        const yellowStars = []
-        const grayStars = []
+    const { yellowStars, grayStars } = useMemo(() => {
+        const yellowStars = [];
+        const grayStars = [];
         for (let i = 1; i <= data.review; i++) {
-            yellowStars.push(<FaStar key={`yellow-star-${i}`}/>);
+            yellowStars.push(<FaStar key={`yellow-star-${i}`} />);
         }
         for (let i = 1; i <= 5 - data.review; i++) {
-            grayStars.push(<FaStar key={`gray-star-${i}`}/>);
+            grayStars.push(<FaStar key={`gray-star-${i}`} />);
         }
-        return {yellowStars, grayStars}
-
-    }, [data])
+        return { yellowStars, grayStars };
+    }, [data]);
 
     const handleClose = () => {
-        setProductPopup(false)
-    }
+        setProductPopup(false);
+    };
 
-    console.log({mainCategory, subCategory})
+    console.log({ mainCategory, subCategory });
     return (
         <div className="fixed inset-0 z-50 grid place-items-center bg-slate-900 bg-opacity-80">
             <div className="py-4 px-4 mx-2 flex flex-col relative bg-white shadow-md rounded-md w-full lg:w-[880px]">
-                <div className="absolute top-4 right-4"><button onClick={handleClose} className="bg-[#c2c2d3] rounded-full w-8 h-8 flex justify-center items-center"><IoClose className="text-white" /></button></div>
-                {data.product_name ? <div className=" bg-white  rounded-md px-6 mt-4 ">
-                    <div className="w-full mb-[1.875rem]">
-                        <h1 className=" capitalize text-[1.5rem] font-semibold">
-                            {data.product_name}
-                        </h1>
-                        <div className="flex flex-row bg-white text-[0.75rem] ">
-                            <span className="text-gray-400 ">Brands: </span>
-                            <span className="ml-1"> {data.brand}</span>
+                <div className="absolute top-4 right-10">
+                    <button
+                        onClick={handleClose}
+                        className="bg-[#c2c2d3] rounded-full w-8 h-8 flex justify-center items-center"
+                    >
+                        <IoClose className="text-white" />
+                    </button>
+                </div>
+                {data.product_name ? (
+                    <div className=" bg-white  rounded-md px-6  ">
+                        <div className="w-full mb-[1.875rem]">
+                            <h1 className=" capitalize text-[1.5rem] font-semibold">
+                                {data.product_name}
+                            </h1>
+                            <div className="flex flex-row bg-white text-[0.75rem] ">
+                                <span className="text-gray-400 ">Brands: </span>
+                                <span className="ml-1"> {data.brand}</span>
 
-                            <div className="text-gray-400 mx-3">|</div>
-                            <span className="text-gray-400 ">
-                                <div
-                                    className="flex flex-row max-h-[18px] max-w-[130.49px] items-center justify-center">
-                                    <p className="text-md text-yellow-400 flex">
-                                        {yellowStars}
-                                    </p>
-                                    <p className="text-md text-gray-400 flex">{grayStars}</p>
-                                </div>
-                            </span>
-                            <span className="ml-1">
-                                <div
-                                    className="uppercase  text-gray-400 font-semibold ml-2 text-[11px] flex items-center justify-center">
-                                    {allreview.length} REVIEW
-                                </div>
-                            </span>
+                                <div className="text-gray-400 mx-3">|</div>
+                                <span className="text-gray-400 ">
+                                    <div className="flex flex-row max-h-[18px] max-w-[130.49px] items-center justify-center">
+                                        <p className="text-md text-yellow-400 flex">
+                                            {yellowStars}
+                                        </p>
+                                        <p className="text-md text-gray-400 flex">{grayStars}</p>
+                                    </div>
+                                </span>
+                                <span className="ml-1">
+                                    <div className="uppercase  text-gray-400 font-semibold ml-2 text-[11px] flex items-center justify-center">
+                                        {allreview.length} REVIEW
+                                    </div>
+                                </span>
 
-                            <div className="text-gray-400 mx-3">|</div>
-                            <span className="text-gray-400 ">SKU: </span>
-                            <span className="ml-1">{data.skuNumber}</span>
-                        </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 lg:grid-cols-2 w-full ">
-                        <div>
-                            <div className="relative  max-h-[579.2px] max-w-[466.66px] ">
-                                <div
-                                    className="absolute max-w-[88.41px] max-h-[49px] flex flex-col items-start gap-1 p-2">
-                                    {data?.discount && (
-                                        <div
-                                            className=" font-semibold max-w-[45.39px] max-h-[24px] px-4 py-1 bg-sky-400 text-white rounded text-[10px] flex items-center justify-center">
-                                            {data.discount}%
-                                        </div>
-                                    )}
-
-                                    {data?.speacialtag == "organic" && (
-                                        <div
-                                            className=" font-semibold px-2 py-1 bg-emerald-100 text-green-600 rounded-full text-[10px] flex items-center justify-center uppercase tracking-tighter">
-                                            {data.speacialtag}
-                                        </div>
-                                    )}
-                                    {data?.speacialtag == "Recommended" && (
-                                        <div
-                                            className=" font-semibold px-2 py-1 bg-gray-500 text-white rounded text-[10px] flex items-center justify-center uppercase tracking-tighter">
-                                            {data.speacialtag}
-                                        </div>
-                                    )}
-                                </div>
-                                <div className="hover:cursor-pointer flex items-center justify-center px-12 ">
-                                    <img
-                                        width={390}
-                                        height={436}
-                                        src={data?.product_image}
-                                        alt="mainImage"
-                                    />
-                                </div>
-
+                                <div className="text-gray-400 mx-3">|</div>
+                                <span className="text-gray-400 ">SKU: </span>
+                                <span className="ml-1">{data.skuNumber}</span>
                             </div>
                         </div>
-                        <div className=" w-full ">
-                            <div className=" w-full">
-                                <div className=" flex flex-row">
-                                    {data.discount ? (
-                                        <span className="text-gray-400 text-sm line-through mr-2 my-1 font-[1.125rem]">
-                                            {
-                                                getPrice(data.unit_price) as unknown as ReactElement
-                                            }
-                                        </span>
-                                    ) : <span className="text-gray-400 text-sm  mr-2 my-1 font-[1.125rem]">
-                                        {
-                                            getPrice(data.unit_price) as unknown as ReactElement
-                                        }
-                                    </span>}
 
-                                    {data.discount && (
-                                        <span className="my-1 text-red-700 text-lg font-semibold">
-                                            {getPrice(newPrice)}
-                                        </span>
+                        <div className="grid grid-cols-1 lg:grid-cols-5 w-full">
+                            <div className="col-span-3">
+                                <div className="relative  max-h-[579.2px] max-w-[466.66px] ">
+                                    <div className="absolute max-w-[88.41px] max-h-[49px] flex flex-col items-start gap-1 p-2">
+                                        {data?.discount && (
+                                            <div className=" font-semibold max-w-[45.39px] max-h-[24px] px-4 py-1 bg-sky-400 text-white rounded text-[10px] flex items-center justify-center">
+                                                {data.discount}%
+                                            </div>
+                                        )}
+
+                                        {data?.speacialtag == "organic" && (
+                                            <div className=" font-semibold px-2 py-1 bg-emerald-100 text-green-600 rounded-full text-[10px] flex items-center justify-center uppercase tracking-tighter">
+                                                {data.speacialtag}
+                                            </div>
+                                        )}
+                                        {data?.speacialtag == "Recommended" && (
+                                            <div className=" font-semibold px-2 py-1 bg-gray-500 text-white rounded text-[10px] flex items-center justify-center uppercase tracking-tighter">
+                                                {data.speacialtag}
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="hover:cursor-pointer flex items-center justify-center px-12 ">
+                                        <img
+                                            width={390}
+                                            height={436}
+                                            src={data?.product_image}
+                                            alt="mainImage"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="w-full col-span-2">
+                                <div className=" w-full">
+                                    <div className=" flex flex-row">
+                                        {data.discount ? (
+                                            <span className="text-gray-400 text-sm line-through mr-2 my-1 font-[1.125rem]">
+                                                {getPrice(data.unit_price) as unknown as ReactElement}
+                                            </span>
+                                        ) : (
+                                            <span className="text-gray-400 text-sm  mr-2 my-1 font-[1.125rem]">
+                                                {getPrice(data.unit_price) as unknown as ReactElement}
+                                            </span>
+                                        )}
+
+                                        {data.discount && (
+                                            <span className="my-1 text-red-700 text-lg font-semibold">
+                                                {getPrice(newPrice)}
+                                            </span>
+                                        )}
+                                    </div>
+                                    {data?.quantity > 0 ? (
+                                        <div className="font-medium py-2 px-2 mt-2 max-h-[26px] max-w-[68.35px] bg-emerald-100 text-green-600 rounded-full text-[.75rem] flex items-center justify-center uppercase tracking-tighter">
+                                            In Stock
+                                        </div>
+                                    ) : (
+                                        <div className="font-medium py-2 px-2 mt-2 max-h-[26px] w-[100px] bg-red-100 text-red-600 rounded-full text-[.75rem] flex items-center justify-center uppercase tracking-tighter">
+                                            Out of Stock
+                                        </div>
                                     )}
-                                </div>
-                                {data?.quantity > 0 ? (
-                                    <div
-                                        className="font-medium py-2 px-2 mt-2 max-h-[26px] max-w-[68.35px] bg-emerald-100 text-green-600 rounded-full text-[.75rem] flex items-center justify-center uppercase tracking-tighter">
-                                        In Stock
-                                    </div>
-                                ) : (
-                                    <div
-                                        className="font-medium py-2 px-2 mt-2 max-h-[26px] w-[100px] bg-red-100 text-red-600 rounded-full text-[.75rem] flex items-center justify-center uppercase tracking-tighter">
-                                        Out of Stock
-                                    </div>
-                                )}
 
-                                <div className="mt-6 text-[.8125rem]">
-                                    <p className=" ">
-                                        {data.product_description}
-                                    </p>
-                                </div>
-                                <div className="hidden lg:block">
-                                    <div
-                                        className=" w-full lg:min-h-[44px] md:relative md:flex md:flex-row md:w-auto lg:max-w-[130px] md:min-h-[44px] md:max-w-[130px] mt-10 flex flex-row">
+                                    <div className="mt-6 text-[.8125rem]">
+                                        <p className=" ">{data.product_description}</p>
+                                    </div>
+                                    <div className="">
+                                        <div className=" max-w-[130px] lg:min-h-[44px] md:relative md:flex md:flex-row  lg:max-w-[130px] md:min-h-[44px] md:max-w-[130px] mt-10 flex flex-row">
+                                            <div className=" w-full flex grid-cols-3 min-h-[44px] min-w-[130px]">
+                                                <button
+                                                    type="button"
+                                                    className="hover:bg-yellow-400 px-4 border-gray-500 bg-gray-300 text-[25px]  rounded-full font-medium"
+                                                    onClick={() => handleDecrement(data)}
+                                                >
+                                                    -
+                                                </button>
 
-                                        <div className=" w-full flex grid-cols-3 min-h-[44px] min-w-[130px]">
+                                                <div className=" flex items-center justify-center w-full text-center ">
+                                                    {count}
+                                                </div>
+
+                                                <button
+                                                    type="button"
+                                                    className="px-4 hover:bg-yellow-400 border-gray-500 bg-gray-300  text-[20px]   rounded-full  font-medium"
+                                                    onClick={() => handleIncrement(data)}
+                                                >
+                                                    +
+                                                </button>
+                                            </div>
                                             <button
                                                 type="button"
-                                                className="hover:bg-yellow-400 px-4 border-gray-500 bg-gray-300 text-[25px]  rounded-full font-medium"
-                                                onClick={() => handleDecrement(data)}
+                                                className=" bg-blue-900 text-white min-h-[34px] min-w-[140px] rounded-full  ml-4"
+                                                onClick={() => handleAddToCart(data)}
                                             >
-                                                -
-                                            </button>
-
-                                            <div className=" flex items-center justify-center w-full text-center ">
-
-                                                {count}
-                                            </div>
-
-                                            <button
-                                                type="button"
-                                                className="px-4 hover:bg-yellow-400 border-gray-500 bg-gray-300  text-[20px]   rounded-full  font-medium"
-                                                onClick={() => handleIncrement(data)}
-                                            >
-                                                +
+                                                Add to cart
                                             </button>
                                         </div>
-                                        <button
-                                            type="button"
-                                            className=" bg-blue-900 text-white min-h-[34px] min-w-[140px] rounded-full  ml-4"
-                                            onClick={() => handleAddToCart(data)}
-                                        >
-                                            Add to cart
-                                        </button>
                                     </div>
-                                </div>
-                                <div className="max-h-[66px]  mt-6">
-                                    {data.type && (
-
-                                        <div className="flex flex-row text-[.75rem] place-items-start mb-1">
-                                            <div className="mr-2">
-                                                <BsCheckLg
-                                                    className="h-[15px] w-[15px] text-green-600 stroke-[1px]"></BsCheckLg>
+                                    <div className="max-h-[66px]  mt-6">
+                                        {data.type && (
+                                            <div className="flex flex-row text-[.75rem] place-items-start mb-1">
+                                                <div className="mr-2">
+                                                    <BsCheckLg className="h-[15px] w-[15px] text-green-600 stroke-[1px]"></BsCheckLg>
+                                                </div>
+                                                <div className="">
+                                                    Type: <span className="">{data.type}</span>
+                                                </div>
                                             </div>
-                                            <div className="">
-                                                Type: <span className="">{data.type}</span>
-                                            </div>
+                                        )}
+                                        {data.mfgDate && (
+                                            <div className="flex flex-row text-[.75rem] place-items-start mb-1">
+                                                <div className="mr-2 ">
+                                                    <BsCheckLg className="h-[15px] w-[15px] text-green-600 stroke-[1px]"></BsCheckLg>
+                                                </div>
 
-                                        </div>
-                                    )}
-                                    {data.mfgDate && (
-                                        <div className="flex flex-row text-[.75rem] place-items-start mb-1">
-                                            <div className="mr-2 ">
-                                                <BsCheckLg
-                                                    className="h-[15px] w-[15px] text-green-600 stroke-[1px]"></BsCheckLg>
+                                                <div className="">
+                                                    MFG: <span>{data.mfgDate}</span>
+                                                </div>
                                             </div>
+                                        )}
+                                        {data.life && (
+                                            <div className="flex flex-row text-[.75rem] place-items-start mb-1">
+                                                <div className="mr-2">
+                                                    <BsCheckLg className="h-[15px] w-[15px] text-green-600 stroke-[1px]"></BsCheckLg>
+                                                </div>
 
-                                            <div className="">
-                                                MFG: <span>{data.mfgDate}</span>
+                                                <div className="">
+                                                    LIFE: <span className="">{data.life}</span>
+                                                </div>
                                             </div>
-
-                                        </div>
-                                    )}
-                                    {data.life && (
-                                        <div className="flex flex-row text-[.75rem] place-items-start mb-1">
-                                            <div className="mr-2">
-                                                <BsCheckLg
-                                                    className="h-[15px] w-[15px] text-green-600 stroke-[1px]"></BsCheckLg>
-                                            </div>
-
-                                            <div className="">
-                                                LIFE: <span className="">{data.life}</span>
-                                            </div>
-
-                                        </div>
-                                    )}
-                                </div>
-                                {/*<hr className="max-w-[330px] mt-6"></hr>*/}
-                                <div className="mt-6 max-h-[72.8px] max-w-[308.33px]">
-                                    {/*<div className="flex items-center justify-between max-h-[72.8px] mt-6">
+                                        )}
+                                    </div>
+                                    {/*<hr className="max-w-[330px] mt-6"></hr>*/}
+                                    <div className="mt-6 max-h-[72.8px] max-w-[308.33px]">
+                                        {/*<div className="flex items-center justify-between max-h-[72.8px] mt-6">
                                             <span className="text-gray-400 text-xs capitalize">
                                                 Category: <a
                                                 href=""
@@ -384,41 +377,40 @@ const ProductPopup = ({ setProductPopup, proId }: any) => {
                                             </span>
                                     </div>*/}
 
-                                    {tag.length > 0 && (
-                                        <div className="flex">
-                                            <span className="text-gray-400 text-xs capitalize">
-                                                Tags:
-                                            </span>
+                                        {tag.length > 0 && (
                                             <div className="flex">
-                                                {tag.map((tag: any, index: number) => (
-                                                    <div key={index} className="flex">
-                                                        <div className="text-xs">{index > 0 && ","}</div>
-                                                        <a
-                                                            href=""
-                                                            rel="tag"
-                                                            className="ml-2 text-gray-600 text-xs capitalize flex"
-                                                        >
-                                                            {tag.name}
-                                                        </a>
-                                                    </div>
-                                                ))}
+                                                <span className="text-gray-400 text-xs capitalize">
+                                                    Tags:
+                                                </span>
+                                                <div className="flex">
+                                                    {tag.map((tag: any, index: number) => (
+                                                        <div key={index} className="flex">
+                                                            <div className="text-xs">{index > 0 && ","}</div>
+                                                            <a
+                                                                href=""
+                                                                rel="tag"
+                                                                className="ml-2 text-gray-600 text-xs capitalize flex"
+                                                            >
+                                                                {tag.name}
+                                                            </a>
+                                                        </div>
+                                                    ))}
+                                                </div>
                                             </div>
-                                        </div>
-                                    )}
-
+                                        )}
+                                    </div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
-
-                </div> : <div className="h-[50vh] flex justify-center items-center">
-                    <h3>Loading...</h3>
-                </div>}
+                ) : (
+                    <div className="h-[50vh] flex justify-center items-center">
+                        <h3>Loading...</h3>
+                    </div>
+                )}
             </div>
         </div>
     );
-}
+};
 
 export default ProductPopup;
-

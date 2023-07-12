@@ -2,18 +2,18 @@
 import { useState } from "react";
 
 const LostPasswordPage = () => {
-    const [email, setEmail] = useState('');
+  const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
 
-  const handleUser = async (e:any) => {
+  const handleUser = async (e: any) => {
     e.preventDefault();
 
-    
+
 
   };
-    return ( 
-        <div className=" mt-10 container mx-auto xl:px-40 px-5">
-     
+  return (
+    <div className=" mt-10 container mx-auto xl:px-40 px-5">
+
       <div className=" mt-10 ">
         <p className="text-black text-sm font-normal">
           Lost your password? Please enter your email address. You
@@ -48,7 +48,7 @@ const LostPasswordPage = () => {
       </div>
       <p>{message}</p>
     </div>
-     );
+  );
 }
- 
+
 export default LostPasswordPage;

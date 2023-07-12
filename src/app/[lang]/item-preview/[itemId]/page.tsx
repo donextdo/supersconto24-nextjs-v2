@@ -304,12 +304,12 @@ const ItemPages = ({params}: IProps) => {
     return (
         <>
             <div className="bg-[#f7f8fd] ">
-                <div className="container mx-auto xl:px-40 px-5 m-8 py-6 ">
+                <div className="container mx-auto xl:px-40 px-5 py-6 ">
                     <div className=" ">
                         {/* <Breadcrumbs crumbs={breadcrumbs}></Breadcrumbs> */}
                     </div>
                     {/* working one */}
-                    <div className=" bg-white drop-shadow rounded-md px-6 pb-10 pt-5">
+                    <div className=" bg-white drop-shadow rounded-md px-6 pb-5 pt-5">
                         <div className="w-full mb-[1.875rem]">
                             <h1 className=" capitalize text-[1.5rem] font-semibold "
                                 onClick={() => setExpanded(!expanded)}>
