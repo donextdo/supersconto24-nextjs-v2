@@ -34,7 +34,9 @@ const VerifyPassword = () => {
 
     const handlePassword = async (e: any) => {
         e.preventDefault();
-    
+        if(password == confirmPassword){
+            
+        }
       };
 
     return (
