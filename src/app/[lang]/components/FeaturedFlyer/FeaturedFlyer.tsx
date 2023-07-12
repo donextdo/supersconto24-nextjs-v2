@@ -13,6 +13,8 @@ const FeaturedFlyer = () => {
         return shuffled.slice(0, count); // Return the first 'count' items
     };
 
+    const featuredProducts = productList.filter(product => product.flyer === true);
+
     return (
         <>
             <div>
@@ -29,7 +31,7 @@ const FeaturedFlyer = () => {
                 </div>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-4">
-                {getRandomItems(productList, 4).map((flyer: any, index: number) => (
+                {getRandomItems(featuredProducts, 4).map((flyer: any, index: number) => (
                     <a onClick={() => {
                         window.location.href = `/catalog-preview/${flyer._id}?currency=${searchParams.get("currency")}`
                     }} key={index}>
