@@ -8,6 +8,7 @@ import StartRating from "./ReviewDetails/StartRating";
 import DateFormatChange from "./ReviewDetails/DateFormatChange";
 import { useRouter } from "next/navigation";
 import baseUrl from "../../../../../../utils/baseUrl";
+import useAuthCheckHook from "../../Hooks/useAuthCheck";
 
 interface Review {
     rating: number;
@@ -24,7 +25,7 @@ const Review = ({ itemId }: any) => {
     const [text, setText] = useState("");
     const [savedText, setSavedText] = useState("");
     const [data, setData] = useState<Array<Review>>([])
-    let id = localStorage.getItem("id");
+    const { isLoggedIn, authUser, logOut } = useAuthCheckHook()
     const router = useRouter();
 
 
@@ -34,17 +35,16 @@ const Review = ({ itemId }: any) => {
     let extractedUsername: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | ReactFragment | null | undefined;
 
     // review name
-    if (localStorage.getItem('email') !== null) {
-        email = localStorage.getItem('email');
-        if (email !== null) {
-            username = email.split('@')[0]; // Extract the username from the email
-            extractedUsername = username.replace(/"/g, '');
+    if (authUser) {
+        if (authUser?.email !== null) {
+            username = authUser?.email.split("@")[0]; // Extract the username from the email
+            extractedUsername = username.replace(/"/g, "");
         } else {
             // Handle the case when the email value is null
         }
     } else {
         // Handle the case when the value is null
-        // For example, you could set a default value      
+        // For example, you could set a default value
     }
 
     useEffect(() => {
@@ -65,30 +65,34 @@ const Review = ({ itemId }: any) => {
 
     // submit savetext
     const handleSubmit = async () => {
-        if (id) {
+        console.log({authUser})
+        console.log("hi")
+        if (authUser?._id) {
             const review = text
 
             const data = {
                 body: review,
                 name: extractedUsername,
                 rating: rating,
-                userId: id,
+                userId: authUser._id,
                 productId: itemId
             }
+
             console.log(data)
+
             if (rating > 0 && review) {
                 try {
                     //authentication session handle
-                const token = localStorage.getItem("token"); // Retrieve the token from local storage or wherever it's stored
+                const token = authUser?.token // Retrieve the token from local storage or wherever it's stored
                 if (!token) {
                 alert("Session expired")
-                  router.push("/account");
+                //   router.push("/account");
                   return;
                 }
 
                 const config = {
                   headers: {
-                    Authorization: token,
+                    Authorization: `Bearer ${token}`,
                   },
                 };
 
@@ -98,37 +102,16 @@ const Review = ({ itemId }: any) => {
 
                 } catch (error) {
                     console.log(error); // handle the error
-                    alert("Session expired")
-                    router.push("/account");
+                    // alert("Session expired")
+                    // router.push("/account");
                 }
             } else {
                 alert("please add a rating and review")
             }
         } else {
-            router.push('/account');
+            // router.push('/account');
         }
-        //    const review=text
-
-        //     const data = {
-        //         body: review,
-        //         name: extractedUsername,
-        //         rating: rating,
-        //         userId: id,
-        //         productId:itemId
-        //     }
-        //     console.log(data)
-        //     if(rating>0 && review){
-        //     try {
-        //         const response = await axios.post(`${baseUrl}/reviews/insert`, data);
-        //         console.log(response.data); // do something with the response data
-        //     setText("");
-
-        //     } catch (error) {
-        //         console.log(error); // handle the error
-        //     }
-        // }else{
-        //     alert("please add a rating and review")
-        // }
+        
     };
 
 
@@ -146,6 +129,7 @@ const Review = ({ itemId }: any) => {
         setRating(rating);
     };
 
+   
     return (
         <div>
             <h1> REVIEW FOR ALL NATURAL ITALIAN-STYLE CHICKEN MEATBALLS</h1>
@@ -165,7 +149,7 @@ const Review = ({ itemId }: any) => {
                         width={450}
                         height={400}
                     /> */}
-                        <UserProfile email={email} />
+                        <UserProfile email={review.name} />
                     </div>
                     <div className="ml-[15px] space-y-1.5">
                         <div>
@@ -194,7 +178,10 @@ const Review = ({ itemId }: any) => {
             <h4 className="mt-3 mb-2 text-[13px]">Your review *</h4>
             <textarea className="w-full h-60 bg-gray-100 rounded-sm px-4" value={text}
                 onChange={handleTextChange}></textarea>
-            <button onClick={handleSubmit} className="px-4 py-2 bg-[#233a95] text-white text-sm mt-4 rounded-md cursor-pointer w-[90px]">
+            <button onClick={()=>{
+                console.log("review submit")
+                handleSubmit()
+            }} className="px-4 py-2 bg-[#233a95] text-white text-sm mt-4 rounded-md cursor-pointer w-[90px]">
                 Submit
             </button>
 
