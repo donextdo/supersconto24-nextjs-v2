@@ -1,5 +1,7 @@
 'use client'
 import { useState } from "react";
+import axios from "axios";
+import baseUrl from "../../../../utils/baseUrl";
 
 const LostPasswordPage = () => {
   const [email, setEmail] = useState('');
@@ -7,8 +9,20 @@ const LostPasswordPage = () => {
 
   const handleUser = async (e: any) => {
     e.preventDefault();
+      if (email) {
+          try {
+              const res = await axios.post(`${baseUrl}/auth/forget-password`, {email});
+              console.log(res.data)
+              if (res.data.message) {
 
-
+                  // validate
+              } else {
+                  // validate
+              }
+          }catch (e) {
+              console.log(e)
+          }
+      }
 
   };
   return (
