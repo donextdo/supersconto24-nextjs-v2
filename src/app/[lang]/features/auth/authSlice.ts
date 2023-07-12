@@ -34,7 +34,7 @@ export const socialAuth = createAsyncThunk('auth/social', async (payload: UserTy
 
 export const generalAuth = createAsyncThunk('auth/general', async (payload: AuthType) => {
     // return await makeRequest({url: `${baseUrl}/users/login`, data: payload, method: "post"})
-    const res = await axios.post(`${baseUrl}/users/login`,payload)
+    const res = await axios.post(`${baseUrl}/auth/signin`,payload)
     return res.data
 });
 

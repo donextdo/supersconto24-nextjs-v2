@@ -50,6 +50,7 @@ const LoginCard = () => {
         const details = {
             email: email,
             password: password,
+            role: 2
         };
         dispatch(generalAuth(details))
     };
@@ -70,10 +71,11 @@ const LoginCard = () => {
         const details = {
             email: userNameOrEmail,
             password: regPassword,
+            role: 2
         };
         console.log("response.data : ", details);
         try {
-            const response = await axios.post(`${baseUrl}/users/register`, details);
+            const response = await axios.post(`${baseUrl}/auth/signup`, details);
 
             if (response.status == 201 || response.status == 200) {
                 Swal.fire({

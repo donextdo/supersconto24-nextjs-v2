@@ -91,9 +91,12 @@ const Review = ({ itemId }: any) => {
                 }
 
                 const config = {
-                  headers: {
-                    Authorization: `Bearer ${token}`,
-                  },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*',
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': "application/json"
+                      }
                 };
 
                     const response = await axios.post(`${baseUrl}/reviews/insert`, data, config);
