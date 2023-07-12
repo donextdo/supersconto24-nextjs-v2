@@ -1,47 +1,66 @@
 'use client'
 import axios from "axios";
-import { useSearchParams } from "next/navigation";
+import {useRouter, useSearchParams} from "next/navigation";
 import { useEffect, useState } from "react";
 import baseUrl from "../../../../utils/baseUrl";
 
 const VerifyPassword = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [isverify, setIsverify] = useState(false);
+    const [isVerify, setIsVerify] = useState(false);
     const searchParams = useSearchParams();
+    const router = useRouter()
 
 
     useEffect(() => {
-        
+
         const t = searchParams.get("t");
         const u = searchParams.get("u");
         if (t && u) {
-            fetchData();
+            verifyUser({token: t, userId: u});
         }
-       
+
       }, [searchParams]);
 
-      const fetchData = async () => {  
+    const verifyUser = async (data: any) => {
         try {
-          const res = await axios.get(`${baseUrl}/auth/verify-password`);
-          console.log(res.data);
-          // setIsverify(res.data);
+            const res = await axios.post(`${baseUrl}/auth/verify-password`, data);
+            if (res.data.isVerify) {
+                setIsVerify(true);
+                // validate
+            } else {
+                setIsVerify(false);
+                // validate
+            }
         } catch (err) {
-          console.log(err);
+            console.log(err);
         }
-      
+
     };
 
     const handlePassword = async (e: any) => {
         e.preventDefault();
-        if(password == confirmPassword){
-            
+        const t = searchParams.get("t");
+        const u = searchParams.get("u");
+        if (password === confirmPassword && t && u) {
+            try {
+                const res = await axios.post(`${baseUrl}/auth/update-password`, {token: t, userId: u, newPassword: password});
+                if (res.data.isUpdated) {
+                    router.push("/account")
+                // validate
+                } else {
+                    setIsVerify(false);
+                // validate
+                }
+            }catch (e) {
+                console.log(e)
+            }
         }
-      };
+    };
 
     return (
         <div>
-             {isverify && (
+             {isVerify && (
                 <div className=" mt-10 container mx-auto xl:px-40 px-5">
 
                 <div className=" mt-10 ">
@@ -90,12 +109,12 @@ const VerifyPassword = () => {
                         Reset password
                     </button>
                 </div>
-    
+
             </div>
              )}
         </div>
-       
-        
+
+
     );
 }
 
