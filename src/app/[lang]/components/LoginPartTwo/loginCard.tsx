@@ -71,6 +71,7 @@ const LoginCard = () => {
         const details = {
             email: userNameOrEmail,
             password: regPassword,
+            userType: 2,
             role: 2
         };
         console.log("response.data : ", details);
