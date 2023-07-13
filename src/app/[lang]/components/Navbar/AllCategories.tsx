@@ -118,7 +118,10 @@ const AllCategories = () => {
         </div>
       </button>
       {homeOpen && (
-        <div className="text-[13px] w-64 py-2 min-w-[17rem]   bg-white mt-2.5 border border-gray m-auto absolute p-3 z-30">
+        <div
+          className="text-[13px] w-64 py-2 min-w-[17rem]   bg-white mt-2.5 border border-gray m-auto absolute p-3 z-30"
+          onMouseLeave={handleCategoryLeave}
+        >
           <ul className="relative">
             {viewCategory.map((category, index) => {
               return (
@@ -157,7 +160,6 @@ const AllCategories = () => {
                               onMouseEnter={() =>
                                 handleSubCategoryHover(subcategory?._id)
                               }
-                              onMouseLeave={handleCategoryLeave}
                             >
                               {subcategory.name}
                             </a>
