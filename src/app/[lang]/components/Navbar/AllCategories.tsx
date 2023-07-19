@@ -20,16 +20,30 @@ const AllCategories = () => {
   const [viewSubCategoryLevelTwo, setviewSubCategoryLevelTwo] = useState<
     Array<Category>
   >([]);
+  const [viewSubCategoryLevelThree, setviewSubCategoryLevelThree] = useState<
+    Array<Category>
+  >([]);
+  const [viewSubCategoryLevelFour, setviewSubCategoryLevelFour] = useState<
+    Array<Category>
+  >([]);
 
   const [viewSubCategoryList, setviewSubCategoryList] = useState<
     Array<Category>
   >([]);
   const [viewSubCategoryLevelTwoList, setviewSubCategoryLevelTwoList] =
     useState<Array<Category>>([]);
+  const [viewSubCategoryLevelThreeList, setviewSubCategoryLevelThreeList] =
+    useState<Array<Category>>([]);
+  const [viewSubCategoryLevelFourList, setviewSubCategoryLevelFourList] =
+    useState<Array<Category>>([]);
 
   const [activeCategory, setActiveCategory] = useState(null);
   const [activeSubcategories, setActiveSubcategories] = useState(null);
   const [activeSubcategoriesLevelTwo, setActiveSubcategoriesLevelTwo] =
+    useState(null);
+  const [activeSubcategoriesLevelThree, setActiveSubcategoriesLevelThree] =
+    useState(null);
+  const [activeSubcategoriesLevelFour, setActiveSubcategoriesLevelFour] =
     useState(null);
 
   const [isHover, setIsHover] = useState(false);
@@ -46,6 +60,8 @@ const AllCategories = () => {
       setviewCategory(response.data.mainCategories);
       setviewSubCategory(response.data.subCategories);
       setviewSubCategoryLevelTwo(response.data.subCategoriesLevelTwo);
+      setviewSubCategoryLevelThree(response.data.subCategoriesLevelThree);
+      setviewSubCategoryLevelFour(response.data.subCategoriesLevelFour);
     };
     fetchData();
   }, []);
@@ -84,6 +100,40 @@ const AllCategories = () => {
     }
   };
 
+  const handleCategoryLevelThreeHover = (_id: any) => {
+    const selectedCategoryLevelThree = viewSubCategoryLevelThree.filter(
+      (category) => category.mainCategoryId === _id
+    );
+
+    if (selectedCategoryLevelThree.length > 0) {
+      setActiveSubcategoriesLevelTwo(_id);
+      setviewSubCategoryLevelThreeList(selectedCategoryLevelThree);
+      setActiveArrow(true);
+      console.log("sub level two: ", selectedCategoryLevelThree);
+    } else {
+      setActiveSubcategoriesLevelTwo(null);
+      setviewSubCategoryLevelThreeList([]);
+      setActiveArrow(false);
+    }
+  };
+
+  const handleCategoryLevelFourHover = (_id: any) => {
+    const selectedCategoryLevelFour = viewSubCategoryLevelFour.filter(
+      (category) => category.mainCategoryId === _id
+    );
+
+    if (selectedCategoryLevelFour.length > 0) {
+      setActiveSubcategoriesLevelThree(_id);
+      setviewSubCategoryLevelFourList(selectedCategoryLevelFour);
+      setActiveArrow(true);
+      console.log("sub level two: ", selectedCategoryLevelFour);
+    } else {
+      setActiveSubcategoriesLevelThree(null);
+      setviewSubCategoryLevelFourList([]);
+      setActiveArrow(false);
+    }
+  };
+
   const hasSubcategories = (categoryId: string) => {
     const selectedCategory = viewSubCategory.find(
       (category) => category.mainCategoryId === categoryId
@@ -99,18 +149,36 @@ const AllCategories = () => {
     return selectedCategoryLevelTwo !== undefined;
   };
 
+  const hasSubcategoriesLevelThree = (categoryId: string) => {
+    const selectedCategoryLevelThree = viewSubCategoryLevelThree.find(
+      (category) => category.mainCategoryId === categoryId
+    );
+    return selectedCategoryLevelThree !== undefined;
+  };
+
+  const hasSubcategoriesLevelFour = (categoryId: string) => {
+    const selectedCategoryLevelFour = viewSubCategoryLevelFour.find(
+      (category) => category.mainCategoryId === categoryId
+    );
+    return selectedCategoryLevelFour !== undefined;
+  };
+
   const handleCategoryLeave = () => {
     setActiveCategory(null);
     setActiveSubcategories(null);
-    // setActiveSubcategoriesLevelTwo(null);
+    setActiveSubcategoriesLevelTwo(null);
+    setActiveSubcategoriesLevelThree(null);
+    setActiveSubcategoriesLevelFour(null);
     setIsHover(false);
   };
 
-  const handleSubCategoryHover = (_id: any) => {
-    console.log({ activeSubcategoriesLevelTwo });
-    if (!activeSubcategoriesLevelTwo) {
+  const handleSubCategoryLevel = (_id: any) => {
+    console.log({ activeSubcategoriesLevelThree });
+    if (!activeSubcategoriesLevelFour) {
       setActiveSubcategories(_id);
       setActiveSubcategoriesLevelTwo(_id);
+      setActiveSubcategoriesLevelThree(_id);
+      setActiveSubcategoriesLevelFour(_id);
     }
   };
 
@@ -182,6 +250,7 @@ const AllCategories = () => {
                       )}
                     </div>
                   </a>
+                  {/* handle sub category level one */}
                   {activeCategory === category._id &&
                     viewSubCategoryList.length > 0 && (
                       <ul
@@ -200,18 +269,18 @@ const AllCategories = () => {
                               }
                             >
                               <div className=" flex flex-row items-center justify-between hover:cursor-pointer">
-                                <div> {subcategory.name} </div>
+                                <div> {subcategory?.name} </div>
                                 {hasSubcategoriesLevelTwo(subcategory?._id) && (
                                   <IoIosArrowForward className="text-gray-500" />
                                 )}
                               </div>
                             </a>
+                            {/* handle sub category level two */}
                             {activeSubcategories === subcategory._id &&
                               viewSubCategoryLevelTwoList.length > 0 && (
                                 <ul
                                   className="text-[13px] py-2  p-3  bg-white border border-gray absolute ml-[258px] top-[-0.125rem] z-30 min-w-[17rem] min-h-[29.5rem]"
                                   onMouseEnter={() => setIsHover(true)}
-                                  // onMouseLeave={handleCategoryLeave}
                                 >
                                   {viewSubCategoryLevelTwoList.map(
                                     (subcategory, subIndex) => (
@@ -224,13 +293,105 @@ const AllCategories = () => {
                                             )
                                           }
                                           onMouseEnter={() => {
-                                            handleSubCategoryHover(
+                                            handleCategoryLevelThreeHover(
                                               subcategory._id
                                             );
                                           }}
                                         >
-                                          {subcategory.name}
+                                          <div className=" flex flex-row items-center justify-between hover:cursor-pointer">
+                                            <div> {subcategory?.name} </div>
+                                            {hasSubcategoriesLevelThree(
+                                              subcategory?._id
+                                            ) && (
+                                              <IoIosArrowForward className="text-gray-500" />
+                                            )}
+                                          </div>
                                         </a>
+                                        {/* handle sub category level three category */}
+                                        {activeSubcategoriesLevelTwo ===
+                                          subcategory._id &&
+                                          viewSubCategoryLevelThreeList.length >
+                                            0 && (
+                                            <ul
+                                              className="text-[13px] py-2  p-3  bg-white border border-gray absolute ml-[258px] top-[-0.125rem] z-30 min-w-[17rem] min-h-[29.5rem]"
+                                              onMouseEnter={() =>
+                                                setIsHover(true)
+                                              }
+                                            >
+                                              {viewSubCategoryLevelThreeList.map(
+                                                (subcategory, subIndex) => (
+                                                  <li key={subIndex}>
+                                                    <a
+                                                      className="block px-2 py-2 pt-5 text-gray-500 hover:text-[#4BB62E] hover:cursor-pointer"
+                                                      onClick={() =>
+                                                        getProductByCategory(
+                                                          subcategory._id
+                                                        )
+                                                      }
+                                                      onMouseEnter={() => {
+                                                        handleCategoryLevelFourHover(
+                                                          subcategory._id
+                                                        );
+                                                      }}
+                                                    >
+                                                      <div className=" flex flex-row items-center justify-between hover:cursor-pointer">
+                                                        <div>
+                                                          {" "}
+                                                          {subcategory?.name}
+                                                        </div>
+                                                        {hasSubcategoriesLevelFour(
+                                                          subcategory?._id
+                                                        ) && (
+                                                          <IoIosArrowForward className="text-gray-500" />
+                                                        )}
+                                                      </div>
+                                                    </a>
+                                                    {/* handle sub category level four */}
+                                                    {activeSubcategoriesLevelThree ===
+                                                      subcategory._id &&
+                                                      viewSubCategoryLevelFourList.length >
+                                                        0 && (
+                                                        <ul
+                                                          className="text-[13px] py-2  p-3  bg-white border border-gray absolute ml-[258px] top-[-0.125rem] z-30 min-w-[17rem] min-h-[29.5rem]"
+                                                          onMouseEnter={() =>
+                                                            setIsHover(true)
+                                                          }
+                                                        >
+                                                          {viewSubCategoryLevelFourList.map(
+                                                            (
+                                                              subcategory,
+                                                              subIndex
+                                                            ) => (
+                                                              <li
+                                                                key={subIndex}
+                                                              >
+                                                                <a
+                                                                  className="block px-2 py-2 pt-5 text-gray-500 hover:text-[#4BB62E] hover:cursor-pointer"
+                                                                  onClick={() =>
+                                                                    getProductByCategory(
+                                                                      subcategory._id
+                                                                    )
+                                                                  }
+                                                                  onMouseEnter={() => {
+                                                                    handleSubCategoryLevel(
+                                                                      subcategory._id
+                                                                    );
+                                                                  }}
+                                                                >
+                                                                  {
+                                                                    subcategory?.name
+                                                                  }
+                                                                </a>
+                                                              </li>
+                                                            )
+                                                          )}
+                                                        </ul>
+                                                      )}
+                                                  </li>
+                                                )
+                                              )}
+                                            </ul>
+                                          )}
                                       </li>
                                     )
                                   )}
