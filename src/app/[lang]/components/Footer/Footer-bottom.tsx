@@ -120,7 +120,7 @@ export default function BottomFooter() {
               </p>
               <p className="text-gray-400 text-[12px]">
                 <Link
-                  href="/#"
+                  href="/cookie"
                   className="hover:underline hover:underline-offset-1"
                 >
                   Cookie

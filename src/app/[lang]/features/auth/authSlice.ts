@@ -1,5 +1,7 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import baseUrl, {axiosRequest} from "../../../../../utils/baseUrl";
+import axios from 'axios';
+import Swal from "sweetalert2";
 
 const makeRequest = axiosRequest();
 
@@ -25,10 +27,15 @@ export type AuthType = {
     password: string;
 };
 export const socialAuth = createAsyncThunk('auth/social', async (payload: UserType) => {
-    return await makeRequest({url: `${baseUrl}/auth/social`, data: payload, method: "post"})
+    // return await makeRequest({url: `${baseUrl}/auth/social`, data: payload, method: "post"})
+    const res = await axios.post(`${baseUrl}/auth/social`,payload)
+    return res.data
 });
+
 export const generalAuth = createAsyncThunk('auth/general', async (payload: AuthType) => {
-    return await makeRequest({url: `${baseUrl}/users/login`, data: payload, method: "post"})
+    // return await makeRequest({url: `${baseUrl}/users/login`, data: payload, method: "post"})
+    const res = await axios.post(`${baseUrl}/auth/signin`,payload)
+    return res.data
 });
 
 const initialState: AuthStateType = {
@@ -91,11 +98,20 @@ const authSlice = createSlice({
                 localStorage.setItem("userData", btoa(JSON.stringify(action.payload)))
             })
             .addCase(generalAuth.rejected, (state, action) => {
+                console.log("generalAuth.rejected")
                 state.loading = false;
                 state.currentUser = null;
                 state.error = action.error.message;
 
                 localStorage.removeItem("userData")
+                Swal.fire({
+                    title: 'Login Failed',
+                    text: 'Your email or password is incorrect',
+                    icon: 'error',
+                    confirmButtonText: 'Ok',
+                    confirmButtonColor: '#2563eb',
+                    
+                  })
             });
     },
 });

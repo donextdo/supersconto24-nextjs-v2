@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import baseUrl from "../../../../../../utils/baseUrl";
 import Swal from "sweetalert2";
+import useAuthCheckHook from "../../Hooks/useAuthCheck";
 
 const AccountDetails = () => {
     const [modal, setModal] = useState(false)
@@ -12,57 +13,57 @@ const AccountDetails = () => {
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    let id = localStorage.getItem("id");
-    
-    useEffect(() => {
-        
-        fetchData()
-        
-       
-      }, []);
+    const { isLoggedIn, authUser, logOut } = useAuthCheckHook()
 
-      async function fetchData() {
+
+    useEffect(() => {
+        if (authUser?._id) {
+            fetchData()
+        }
+    }, [authUser?._id]);
+
+    async function fetchData() {
         try {
-            const res = await axios.get(`${baseUrl}/users/${id}`); 
-           console.log(res.data)
-           const data = res.data;
-           setFirstName(data.firstName);
-           setLastName(data.lastName);
-           setDisplayName(data.displayName);
-           setEmail(data.email);
+            const res = await axios.get(`${baseUrl}/users/${authUser._id}`);
+            console.log(res.data)
+            const data = res.data;
+            setFirstName(data.firstName);
+            setLastName(data.lastName);
+            setDisplayName(data.displayName);
+            setEmail(data.email);
 
 
         } catch (err) {
             console.log(err);
         }
-      }
+    }
 
     const handleSaveChanges = async () => {
- 
+
         const data = {
             firstName: firstName,
             lastName: lastName,
             displayName: displayName,
-            email:email,
-           
-          }
-          try {
-            const response = await axios.patch(`${baseUrl}/users/${id}`, data);
+            email: email,
+
+        }
+        try {
+            const response = await axios.patch(`${baseUrl}/users/${authUser._id}`, data);
             console.log(response.data); // do something with the response data
-            if (response.status==200){
+            if (response.status == 200) {
                 Swal.fire({
-                  title: 'Success',
-                  text: 'Your account details has been updated successfully',
-                  icon: 'success',
-                  confirmButtonText: 'Done',
-                  confirmButtonColor: '#8DC14F',
-                  
+                    title: 'Success',
+                    text: 'Your account details has been updated successfully',
+                    icon: 'success',
+                    confirmButtonText: 'Done',
+                    confirmButtonColor: '#8DC14F',
+
                 })
-                
-              }
-          } catch (error) {
+
+            }
+        } catch (error) {
             console.log(error); // handle the error
-          }
+        }
     };
 
     return (

@@ -258,16 +258,19 @@ const Checkout = () => {
                     shippingPhone: ship.shippingAddress?.shippingphone,
                 },
             };
-
+            console.log(orderObj)
             try {
                 const response = await axios.post(`${baseUrl}/neworder/place`, orderObj);
                 if (response.status == 201) {
                     router.push(`/ordermessage?orderId=${response.data.orderNumber}`);
                 }
             } catch (err) {
-                window.location.href = '/account'
+                // window.location.href = '/account'
+            console.log("catch error")
+
             }
         } else {
+            console.log("else error")
             router.push("/account")
         }
     };

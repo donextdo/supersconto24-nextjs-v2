@@ -24,6 +24,7 @@ const LoginCard = () => {
 
     useEffect(() => {
         (window as any).handleCredentialResponse = handleCredentialResponse;
+
     }, []);
 
     function handleCredentialResponse(response: any) {
@@ -49,6 +50,7 @@ const LoginCard = () => {
         const details = {
             email: email,
             password: password,
+            role: 2
         };
         dispatch(generalAuth(details))
     };
@@ -69,10 +71,12 @@ const LoginCard = () => {
         const details = {
             email: userNameOrEmail,
             password: regPassword,
+            userType: 2,
+            role: 2
         };
         console.log("response.data : ", details);
         try {
-            const response = await axios.post(`${baseUrl}/users/register`, details);
+            const response = await axios.post(`${baseUrl}/auth/signup`, details);
 
             if (response.status == 201 || response.status == 200) {
                 Swal.fire({
@@ -87,6 +91,7 @@ const LoginCard = () => {
                     heightAuto: true,
                     position: "bottom",
                 });
+                 localStorage.setItem("id", response.data._id);
                 
                 dispatch(generalAuth(details))
 
@@ -171,10 +176,50 @@ const LoginCard = () => {
                                 data-width="302"
                             ></div>
                         </div>
-                        {/*<div className="mb-4">
+                        <div className="mb-4">
                             <button
-                                className="flex items-center w-[302px] border border-gray-300 text-black h-[45px] pl-[10px] rounded-md">
-                                 <FaFacebook className="mr-2" />
+                                className="flex items-center w-[302px] border border-gray-300 text-black h-[45px] pl-[10px] rounded-md"
+                                onClick={() => {
+                                    /* global FB*/
+                                    let FB = (window as any).FB;
+                                    FB.getLoginStatus((res:any) => {
+                                        if (res.status === "connected")
+                                            FB.logout()
+
+                                        FB.login(function (response:any) {
+                                            console.log(response)
+                                            if (response.authResponse) {
+                                                console.log('Welcome!  Fetching your information.... ');
+                                                FB.api(
+                                                    '/me',
+                                                    'GET',
+                                                    {"fields": "id,name,email,birthday,location,picture"},
+                                                    function (response:any) {
+                                                        if (response.error) {
+                                                            // addToast('Error occured! try again', {
+                                                            //     appearance: 'error',
+                                                            //     autoDismiss: true
+                                                            // });
+                                                        } else {
+                                                            const userData = {
+                                                                name: response.name,
+                                                                email: response.email,
+                                                                picture: response.picture.data.url,
+                                                            }
+                                                            console.log(userData)
+                                                            handleCredentialResponse(userData)
+                                                        }
+                                                    }
+                                                );
+                                            } else {
+                                                console.log('User cancelled login or did not fully authorize.');
+                                            }
+                                        }, {scope: 'email, public_profile'});
+                                    })
+
+                                }}
+                            >
+                                 {/*<FaFacebook className="mr-2" />*/}
                                 <img
                                     width="25"
                                     height="25"
@@ -183,7 +228,7 @@ const LoginCard = () => {
                                 />
                                 <span className="ml-3">Sign in with Facebook</span>
                             </button>
-                        </div>*/}
+                        </div>
                         <div>
                             <p
                                 className="text-center text-[#636466] font-semibold text-[13px] cursor-pointer"
@@ -220,7 +265,7 @@ const LoginCard = () => {
                             <div className="flex items-center justify-between">
                                 <div>
                                     <a
-                                        href="#"
+                                        href="/lost-password"
                                         className="text-gray-500 hover:text-gray-700 text-[13px]"
                                     >
                                         Forgot password?

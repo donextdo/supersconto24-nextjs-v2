@@ -84,9 +84,10 @@ const TopHeader = ({lang}: { lang: string }) => {
                                     </Link>
                                 </li>
                                 <li>
-                                    <a onClick={handleAccount}>
+                                    <a onClick={handleAccount} className="cursor-pointer">
                                         <p>My account</p>
                                     </a>
+                                    
                                 </li>
                                 <li>
                                     <Link href="/wishlist">

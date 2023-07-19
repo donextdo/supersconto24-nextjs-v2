@@ -3,6 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import baseUrl from "../../../../utils/baseUrl";
 import { useRouter, useSearchParams } from "next/navigation";
+import useAuthCheckHook from "../components/Hooks/useAuthCheck";
 
 interface Order {
   orderId: string;
@@ -59,6 +60,9 @@ const OrderMessage = () => {
   const searchParams = useSearchParams();
   const orderId = searchParams.get("orderId");
 
+  const {isLoggedIn, authUser, logOut} = useAuthCheckHook()
+
+
   // const { orderId, message } = router.query;
   const [order, setOrder] = useState<Order>({
     orderId: "",
@@ -111,12 +115,7 @@ const OrderMessage = () => {
     },
   });
 
-  let id: any;
-
-  if (typeof localStorage !== "undefined") {
-    id = localStorage.getItem("id");
-  }
-
+  
   useEffect(() => {
     fetchData();
   }, [orderId]);
@@ -151,7 +150,7 @@ const OrderMessage = () => {
         </div>
         <div>
           <h1 className="text-sm font-semibold">Email</h1>
-          <p className="text-[13px]">email</p>
+          <p className="text-[13px]">{authUser?.email}</p>
         </div>
         <div>
           <h1 className="text-sm font-semibold">Total</h1>
