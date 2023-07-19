@@ -17,6 +17,7 @@ import html2pdf from "html2pdf.js";
 import useCartItemsHook from "@/app/[lang]/components/Hooks/useCartItemsHook";
 import {Product} from "@/app/[lang]/features/product/product";
 import useAuthCheckHook from "@/app/[lang]/components/Hooks/useAuthCheck";
+import Swal from "sweetalert2";
 
 // import { PDFDocument, StandardFonts } from 'pdf-lib';
 // import fs from 'fs';
@@ -104,8 +105,23 @@ const Cart: FC<CartType> = () => {
 
 
     const handleClear = () => {
-        localStorage.setItem('cartItems', '[]');
-        dispatch(calSubTotal(12));
+        Swal.fire({
+            title: 'Success',
+            text: 'You have successfully removed all items from your cart.',
+            icon: 'success',
+            showCancelButton: true, // Add this line to show the cancel button
+            confirmButtonText: 'Done',
+            cancelButtonText: 'Cancel', // Add this line to set the cancel button text
+            confirmButtonColor: '#8DC14F',
+          }).then((result) => {
+            if (result.isConfirmed) {
+              localStorage.setItem('cartItems', '[]');
+              dispatch(calSubTotal(12));
+              setCartObj([]);
+            }
+          });
+        // localStorage.setItem('cartItems', '[]');
+        // dispatch(calSubTotal(12));
     };
 
     function handleClick() {

@@ -63,7 +63,7 @@ export const SearchItem = () => {
   };
 
   return (
-    <div className="flex flex-col xl:w-[500px] w-full md:w-full lg:w-96 place-content-center relative">
+    <div className="flex flex-col xl:w-[420px] w-full md:w-full lg:w-96 place-content-center relative">
       <div className="flex relative w-full">
         <input
           type="text"

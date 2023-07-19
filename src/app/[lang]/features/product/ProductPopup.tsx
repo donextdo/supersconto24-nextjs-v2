@@ -131,8 +131,11 @@ const ProductPopup = ({ setProductPopup, proId }: any) => {
     };
 
     const handleDecrement = (product: Product) => {
-        removeProductFromCart({ ...product, count: 1 });
-        setCount((prevState) => prevState - 1);
+        if(count>1){
+            removeProductFromCart({ ...product, count: 1 });
+             setCount((prevState) => prevState - 1);
+        }
+        
     };
 
     const handleAddToCart = (data: any) => {
@@ -227,7 +230,7 @@ const ProductPopup = ({ setProductPopup, proId }: any) => {
 
                         <div className="grid grid-cols-1 lg:grid-cols-5 w-full">
                             <div className="col-span-3">
-                                <div className="relative  max-h-[579.2px] max-w-[466.66px] ">
+                                <div className="relative  ">
                                     <div className="absolute max-w-[88.41px] max-h-[49px] flex flex-col items-start gap-1 p-2">
                                         {data?.discount && (
                                             <div className=" font-semibold max-w-[45.39px] max-h-[24px] px-4 py-1 bg-sky-400 text-white rounded text-[10px] flex items-center justify-center">
@@ -248,8 +251,7 @@ const ProductPopup = ({ setProductPopup, proId }: any) => {
                                     </div>
                                     <div className="hover:cursor-pointer flex items-center justify-center px-12 ">
                                         <img
-                                            width={390}
-                                            height={436}
+                                            className="w-full h-full object-cover"
                                             src={data?.product_image}
                                             alt="mainImage"
                                         />

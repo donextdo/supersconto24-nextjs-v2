@@ -9,7 +9,7 @@ import logo from "../../../../../assets/logo/logo.png";
 // import getConfig from "next/config";
 import { Location } from "../Location/Location";
 // import SideNavBar from "../SideNavBar/SideNavbar";
-import React, { useState } from "react";
+import React, { JSXElementConstructor, ReactElement, ReactFragment, useState } from "react";
 import CartPopup from "@/app/[lang]/features/cart/popup-cart/CartPopup";
 import useCurrency from "@/app/[lang]/components/Hooks/useCurrencyHook";
 import useCartItemsHook from "@/app/[lang]/components/Hooks/useCartItemsHook";
@@ -17,6 +17,7 @@ import { BiCurrentLocation } from "react-icons/bi";
 import { updateParamValue } from "../../../../../utils/baseUrl";
 import { useRouter } from "next/navigation";
 import SideNavBar from "../SideNavBar/SideNavBar";
+import useAuthCheckHook from "../Hooks/useAuthCheck";
 
 const Header = () => {
     const [cart, setCart] = useState(false);
@@ -24,9 +25,26 @@ const Header = () => {
     const { getPrice } = useCurrency()
     const { cartCount, cartAmount } = useCartItemsHook()
     const router = useRouter()
- 
+    const { isLoggedIn, authUser, logOut } = useAuthCheckHook()
 
 
+    let email: string | null;
+    let username;
+    let extractedUsername: any
+
+    // review name
+    if (authUser) {
+        if (authUser?.email !== null) {
+            username = authUser?.email.split("@")[0]; // Extract the username from the email
+            extractedUsername = username.replace(/"/g, "");
+        } else {
+            // Handle the case when the email value is null
+        }
+    } else {
+        // Handle the case when the value is null
+        // For example, you could set a default value
+    }
+    let initials = extractedUsername?.charAt(0).toUpperCase()
     const handleClick = () => {
         setCart(!cart)
     };
@@ -53,6 +71,7 @@ const Header = () => {
         }
     }
 
+    console.log("da", authUser)
     return (
         <>
             <div className="hidden md:block container mx-auto xl:px-40 px-5 sticky top-0 z-50 bg-white ">
@@ -92,13 +111,20 @@ const Header = () => {
                     </div>
 
                     <div className="basis-1/4 flex  justify-end items-center font-semibold">
-                        <div className="mx-4">
-                            <a onClick={() => window.location.href = '/account'}>
-                                <button className="border rounded-full p-2">
-                                    <AiOutlineUser className="text-2xl" />
-                                </button>
-                            </a>
-                        </div>
+                        {authUser?._id ? (
+                            <div className="mx-4 h-10 w-10 rounded-full bg-[#233a95] flex items-center justify-center text-white text-xl cursor-pointer">
+                                <a onClick={() => window.location.href = '/account'}>
+                                    {initials}</a></div>
+                        ) : (
+                            <div className="mx-4">
+                                <a onClick={() => window.location.href = '/account'}>
+                                    <button className="border rounded-full p-2">
+                                        <AiOutlineUser className="text-2xl" />
+                                    </button>
+                                </a>
+                            </div>
+                        )}
+
                         <div className="mr-4">{getPrice(cartAmount)}</div>
                         <div
                             className="relative"

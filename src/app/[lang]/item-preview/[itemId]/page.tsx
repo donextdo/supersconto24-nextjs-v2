@@ -180,8 +180,10 @@ const ItemPages = ({params}: IProps) => {
     };
 
     const handleDecrement = (product: Product) => {
-        removeProductFromCart({...product, count: 1})
-        setCount(prevState => prevState - 1)
+        if(count>1){
+            removeProductFromCart({ ...product, count: 1 });
+             setCount((prevState) => prevState - 1);
+        }
     };
 
 

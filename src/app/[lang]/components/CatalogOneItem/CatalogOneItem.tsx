@@ -12,6 +12,8 @@ import ProductPopup from "../../features/product/ProductPopup"
 import CartPopup from "@/app/[lang]/features/cart/popup-cart/CartPopup";
 import logo from "../../../../../assets/logo/logo.png";
 import useCartItemsHook from "@/app/[lang]/components/Hooks/useCartItemsHook";
+import axios from "axios"
+import baseUrl from "../../../../../utils/baseUrl"
 
 interface Props {
     catalog?: any
@@ -26,6 +28,7 @@ const CatalogCarousel: React.FC<Props> = ({catalog, params}) => {
     const [showModal, setShowModal] = useState({show: false, item: null})
     const [cart, setCart] = useState(false);
     const {cartCount} = useCartItemsHook()
+    const [shopName, setShopName] = useState('')
 
 
     useEffect(() => {
@@ -35,6 +38,16 @@ const CatalogCarousel: React.FC<Props> = ({catalog, params}) => {
         }
     }, [catalog])
 
+    useEffect(() => {
+        fetchShopData()
+    }, [catalog])
+
+    const fetchShopData = async () => {
+        const response = await axios.get(`${baseUrl}/shop/find/${catalog.shop_id}`)
+        console.log("shop details", response.data)
+        const sName = response.data.shop_name
+        setShopName(sName)
+    }
 
     const formattedDate = useMemo(() => {
         return new Date(catalog.expiredate).toLocaleDateString("en-GB")
@@ -62,7 +75,7 @@ const CatalogCarousel: React.FC<Props> = ({catalog, params}) => {
                     </div>
                     <div className='text-center'>
                         <p className="font-semibold">{catalog.title}</p>
-                        <p className="text-sm">Expire Date - {formattedDate}</p>
+                        <p className="text-sm">{shopName}</p>
                     </div>
                     <div
                         className="relative mr-2"
