@@ -102,7 +102,7 @@ const AllCategories = () => {
   const handleCategoryLeave = () => {
     setActiveCategory(null);
     setActiveSubcategories(null);
-    setActiveSubcategoriesLevelTwo(null);
+    // setActiveSubcategoriesLevelTwo(null);
     setIsHover(false);
   };
 
@@ -115,7 +115,7 @@ const AllCategories = () => {
   };
 
   const getProductByCategory = async (_id: any) => {
-    console.log("id : ", _id);
+    console.log("sub Category level two : ", _id);
     setHomeOpen(false);
     router.push(`/filterProduct?categoryId=${_id}`);
   };
@@ -211,7 +211,7 @@ const AllCategories = () => {
                                 <ul
                                   className="text-[13px] py-2  p-3  bg-white border border-gray absolute ml-[258px] top-[-0.125rem] z-30 min-w-[17rem] min-h-[29.5rem]"
                                   onMouseEnter={() => setIsHover(true)}
-                                  onMouseLeave={() => handleCategoryLeave}
+                                  // onMouseLeave={handleCategoryLeave}
                                 >
                                   {viewSubCategoryLevelTwoList.map(
                                     (subcategory, subIndex) => (
