@@ -74,7 +74,7 @@ const Header = () => {
     console.log("da", authUser)
     return (
         <>
-            <div className="hidden md:block container mx-auto xl:px-40 px-5 sticky top-0 z-50 bg-white ">
+            <div className="hidden md:block container mx-auto xl:px-40 px-5 sticky top-0 z-1 bg-white ">
                 <div className=" flex items-center flex-row  py-2">
                     <div className="basis-1/4 text-4xl font-bold text-[#223994] flex justify-start">
                         <Link href="/">
