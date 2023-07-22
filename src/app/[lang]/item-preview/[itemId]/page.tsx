@@ -346,7 +346,7 @@ const ItemPages = ({params}: IProps) => {
 
                         <div className="grid grid-cols-1 lg:grid-cols-7 w-full ">
                             <div className="col-span-3">
-                                <div className="relative  max-h-[579.2px] max-w-[466.66px] ">
+                                <div className="relative max-w-[466.66px] ">
                                     <div
                                         className="absolute max-w-[88.41px] max-h-[49px] flex flex-col items-start gap-1 p-2">
                                         {data?.discount && (
