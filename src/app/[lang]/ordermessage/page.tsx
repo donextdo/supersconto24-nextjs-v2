@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import baseUrl from "../../../../utils/baseUrl";
 import { useRouter, useSearchParams } from "next/navigation";
 import useAuthCheckHook from "../components/Hooks/useAuthCheck";
+import useCurrency from "../components/Hooks/useCurrencyHook";
 
 interface Order {
   orderId: string;
@@ -21,6 +22,7 @@ interface Order {
       brand: string;
       description: string;
       front: string;
+      discount: number;
     };
     orderquantity: number;
 
@@ -59,6 +61,8 @@ const OrderMessage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const orderId = searchParams.get("orderId");
+  const { getPrice } = useCurrency();
+
 
   const {isLoggedIn, authUser, logOut} = useAuthCheckHook()
 
@@ -83,6 +87,7 @@ const OrderMessage = () => {
           description: "",
           price: 0,
           front: "",
+          discount: 0
         },
       },
     ],
@@ -123,16 +128,27 @@ const OrderMessage = () => {
   async function fetchData() {
     console.log("hi");
     try {
-      console.log("dddddd : ", orderId);
+      // console.log("dddddd : ", orderId);
       const res = await axios.get(`${baseUrl}/neworder/${orderId}`);
-      console.log(res.data);
+      console.log("aaa",res.data);
       setOrder(res.data);
     } catch (err) {
       console.log(err);
     }
   }
+
+  let discountedPrice = 0
+  let newPrice = 0
+
+  // if (item.discount) {
+  //     discountedPrice = item.unit_price * (item.discount / 100);
+  //     newPrice = item.unit_price - discountedPrice;
+  // } else {
+  //     newPrice = item.unit_price;
+  // }
+
   return (
-    <div className="mx-20 xl:mx-36">
+    <div className="container mx-auto xl:px-40 px-5">
       <div
         className="w-full border-2 border-dashed border-[#00b853] text-lg md:text-2xl leading-5 md:leading-6 py-3 md:py-8 px-3 md:px-10 my-20 text-center font-medium"
         style={{ color: "#00b853" }}
@@ -154,7 +170,7 @@ const OrderMessage = () => {
         </div>
         <div>
           <h1 className="text-sm font-semibold">Total</h1>
-          <p className="text-[13px]">Rs {order?.totalprice?.toFixed(2)}</p>
+          <p className="text-[13px]">{getPrice(order?.totalprice?.toFixed(2))}{' '}</p>
         </div>
         <div className="">
           <h1 className="text-sm font-semibold">Payment method:</h1>
@@ -179,7 +195,7 @@ const OrderMessage = () => {
               {item.productDetails?.name}{" "}
               <span className="font-semibold">x {item.orderquantity}</span>
             </div>
-            <div className="w-1/3 py-2">{item.productDetails?.price}</div>
+            <div className="w-1/3 py-2"> {( item.productDetails.price - item.productDetails.price * (item.productDetails.discount / 100)).toFixed(2)}</div>
           </div>
         ))}
         {/* <div className="flex border border-gray-300 ">
@@ -188,7 +204,7 @@ const OrderMessage = () => {
         </div> */}
         <div className="flex border border-gray-300 ">
           <div className="w-2/3 px-2 py-2">Subtotal:</div>
-          <div className="w-1/3 py-2">Rs {order?.totalprice.toFixed(2)}</div>
+          <div className="w-1/3 py-2">{getPrice(order?.totalprice.toFixed(2))}</div>
         </div>
         <div className="flex border border-gray-300 ">
           <div className="w-2/3 px-2 py-2">Payment method:</div>
@@ -196,7 +212,7 @@ const OrderMessage = () => {
         </div>
         <div className="flex border border-gray-300 ">
           <div className="w-2/3 px-2 py-2">Total:</div>
-          <div className="w-1/3 py-2">Rs {order?.totalprice.toFixed(2)}</div>
+          <div className="w-1/3 py-2">{getPrice(order?.totalprice.toFixed(2))}</div>
         </div>
       </div>
       <h2 className="font-semibold  mt-4 mb-2">BILLING DETAILS</h2>

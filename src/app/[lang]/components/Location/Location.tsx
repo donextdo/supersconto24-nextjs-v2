@@ -1,10 +1,10 @@
 "use client"
-import {useCallback, useEffect, useState} from "react";
-import {MdKeyboardArrowDown} from "react-icons/md";
-import {FiSearch} from "react-icons/fi";
-import {useRouter, useSearchParams} from "next/navigation";
-import {updateParamValue} from "../../../../../utils/baseUrl";
-import {BiCurrentLocation} from "react-icons/bi";
+import { useCallback, useEffect, useState } from "react";
+import { MdKeyboardArrowDown } from "react-icons/md";
+import { FiSearch } from "react-icons/fi";
+import { useRouter, useSearchParams } from "next/navigation";
+import { updateParamValue } from "../../../../../utils/baseUrl";
+import { BiCurrentLocation } from "react-icons/bi";
 import PlacesServiceStatus = google.maps.places.PlacesServiceStatus;
 import AutocompletePrediction = google.maps.places.AutocompletePrediction;
 import PlaceResult = google.maps.places.PlaceResult;
@@ -56,7 +56,7 @@ export const Location = () => {
                     {
                         input: searchTerm,
                     },
-                    (predictions: AutocompletePrediction[] | null , status: PlacesServiceStatus ) => {
+                    (predictions: AutocompletePrediction[] | null, status: PlacesServiceStatus) => {
                         if (status === google.maps.places.PlacesServiceStatus.OK) {
                             // Process the predictions as needed
                             setResult(predictions);
@@ -90,7 +90,7 @@ export const Location = () => {
         console.log("placeService: ", placeService);
 
         placeService.getDetails(
-            {placeId: item.place_id},
+            { placeId: item.place_id },
             (
                 placeResult: PlaceResult | null,
                 placeStatus: PlacesServiceStatus
@@ -106,13 +106,13 @@ export const Location = () => {
                     const formattedAddress = placeResult.formatted_address;
                     setSelectedLocation(formattedAddress!)
 
-                    console.log("Formatted Address: ", {formattedAddress, lat, lng});
+                    console.log("Formatted Address: ", { formattedAddress, lat, lng });
                     // router.push(`/?${createQueryString("lat", lat ?? null)}&${createQueryString("long", lng ?? null)}`, {shallow: false})
                     const data = [
                         { key: 'lat', value: lat },
                         { key: 'long', value: lng },
                     ];
-                    router.push(updateParamValue(data), {shallow: false})
+                    router.push(updateParamValue(data), { shallow: false })
                     setShowModal(false)
 
                 }
@@ -121,11 +121,11 @@ export const Location = () => {
     }
 
     function getAddressFromCoordinates(lat: number, lng: number): void {
-        console.log("getAddressFromCoordinates", {lat, lng})
+        console.log("getAddressFromCoordinates", { lat, lng })
         const geocoder = new google.maps.Geocoder();
         const latLng = new google.maps.LatLng(lat, lng);
 
-        geocoder.geocode({location: latLng}, (results: any, status: any) => {
+        geocoder.geocode({ location: latLng }, (results: any, status: any) => {
             if (
                 status === google.maps.GeocoderStatus.OK &&
                 results &&
@@ -143,13 +143,13 @@ export const Location = () => {
 
     function getMyLocation() {
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(({coords}) => {
+            navigator.geolocation.getCurrentPosition(({ coords }) => {
                 getAddressFromCoordinates(coords.latitude, coords.longitude)
                 const data = [
                     { key: 'lat', value: coords.latitude },
                     { key: 'long', value: coords.longitude },
                 ];
-                router.push(updateParamValue(data), {shallow: false})
+                router.push(updateParamValue(data), { shallow: false })
                 // router.push(`/?${createQueryString("lat", String(coords.latitude))}&${createQueryString("long", String(coords.longitude))}`, {shallow: false})
             });
         }
@@ -159,7 +159,7 @@ export const Location = () => {
     return (
         <div className=" z-40">
             <div
-                className="border border-gray-200 rounded-md relative mx-6 flex flex-row justify-start items-center h-[60px] w-[200px] py-6 px-4 shadow-sm cursor-pointer md:ml-3 "
+                className="border border-gray-200 rounded-md relative mx-6 flex flex-row justify-start items-center h-[60px] w-[200px] 2xl:w-[250px] py-6 px-4 shadow-sm cursor-pointer md:ml-3 "
                 onClick={handleModal}
             >
                 <div className="flex-grow flex flex-col">
@@ -167,12 +167,12 @@ export const Location = () => {
                         Your Location
                     </div>
                     <div
-                        className="truncate w-[130px] text-[13px] self-start font-semibold overflow-hidden whitespace-nowrap text-[#233a95] pr-4">
+                        className="truncate w-[150px] 2xl:w-[200px] text-[13px] self-start font-semibold overflow-hidden whitespace-nowrap text-[#233a95] pr-4 break-words">
                         {selectedLocation ?? "Select a location"}
                     </div>
                 </div>
                 <div className="flex-shrink flex justify-center items-center w-6 ">
-                    <MdKeyboardArrowDown className="text-xl text-gray-400"/>
+                    <MdKeyboardArrowDown className="text-xl text-gray-400" />
                 </div>
             </div>
             {showModal && (
@@ -189,8 +189,8 @@ export const Location = () => {
                             className="hidden sm:inline-block sm:align-middle sm:h-screen"
                             aria-hidden="true"
                         >
-              &#8203;
-            </span>
+                            &#8203;
+                        </span>
                         <div
                             className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-[420px] sm:w-[420px] sm:p-6 relative w-[420px] h-[530px]">
                             <button
@@ -241,13 +241,13 @@ export const Location = () => {
                                 </div>
                                 <div
                                     className="location  mt-5"
-                                    style={{maxHeight: "300px", overflowY: "scroll"}}
+                                    style={{ maxHeight: "300px", overflowY: "scroll" }}
                                 >
                                     <div
                                         className="flex items-center justify-between px-2 py-4 bg-white text-gray-700 text-sm cursor-pointer"
                                         onClick={() => getMyLocation()}>
                                         <button className="hover:text-black hover:opacity-80 flex items-center gap-1 rounded-full border border-gray-200 px-2 h-9 bg-[#4285f4] text-white">
-                                            Get Current Location <BiCurrentLocation className="text-lg text-black"/>
+                                            Get Current Location <BiCurrentLocation className="text-lg text-black" />
                                         </button>
                                         <div
                                             className="rounded-full text-gray-400 font-semibold w-20 px-3 text-xs h-8 border border-gray-200 flex justify-center items-center"
@@ -258,7 +258,7 @@ export const Location = () => {
                                             Clear All
                                         </div>
                                     </div>
-                                    <hr/>
+                                    <hr />
                                     <>
                                         {result.map((item: any) => (
                                             <div
@@ -270,7 +270,7 @@ export const Location = () => {
                                                         {item.description}
                                                     </div>
                                                 </div>
-                                                <hr/>
+                                                <hr />
                                             </div>
                                         ))}</>
                                 </div>

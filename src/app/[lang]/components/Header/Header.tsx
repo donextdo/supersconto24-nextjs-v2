@@ -75,79 +75,83 @@ const Header = () => {
     return (
         <>
             <div className="hidden md:block container mx-auto xl:px-40 px-5 sticky top-0 z-50 bg-white ">
-                <div className=" flex items-center flex-row  py-2">
-                    <div className="basis-1/4 text-4xl font-bold text-[#223994] flex justify-start">
-                        <Link href="/">
-                            <div className="h-[50px] w-auto ">
-                                <Image
-                                    src={logo}
-                                    alt="item1"
-                                    style={{
-                                        objectFit: "contain",
-                                        backgroundColor: "white",
-                                        width: "100%",
-                                        height: "100%",
-                                    }}
-                                    width={450}
-                                    height={400}
-                                />
-                            </div>
-                        </Link>
-                    </div>
-                    <div className="flex justify-start items-center basis-1/4 lg:visible md:visible invisible">
-                        <Location />
-                    </div>
-                    <div className="flex justify-start items-center font-semibold">
-                        <div className="mx-4">
-                            <a onClick={() => getMyLocation()}>
-                                <button className="border rounded-full p-2">
-                                    <BiCurrentLocation className="text-lg text-black" />
-                                </button>
-                            </a>
+                <div className=" flex items-center justify-between  py-2">
+                    <div className="flex">
+                        <div className="text-4xl font-bold text-[#223994] flex justify-start">
+                            <Link href="/">
+                                <div className="h-[50px] w-auto ">
+                                    <Image
+                                        src={logo}
+                                        alt="item1"
+                                        style={{
+                                            objectFit: "contain",
+                                            backgroundColor: "white",
+                                            width: "100%",
+                                            height: "100%",
+                                        }}
+                                        width={450}
+                                        height={400}
+                                    />
+                                </div>
+                            </Link>
                         </div>
-                    </div>
-                    <div className="basis-2/4 search-bar">
-                        <SearchItem />
-                    </div>
-
-                    <div className="basis-1/4 flex  justify-end items-center font-semibold">
-                        {authUser?._id ? (
-                            <div className="mx-4 h-10 w-10 rounded-full bg-[#233a95] flex items-center justify-center text-white text-xl cursor-pointer">
-                                <a onClick={() => window.location.href = '/account'}>
-                                    {initials}</a></div>
-                        ) : (
+                        <div className="flex justify-start items-center lg:visible md:visible invisible">
+                            <Location />
+                        </div>
+                        <div className="flex justify-start items-center font-semibold">
                             <div className="mx-4">
-                                <a onClick={() => window.location.href = '/account'}>
+                                <a onClick={() => getMyLocation()}>
                                     <button className="border rounded-full p-2">
-                                        <AiOutlineUser className="text-2xl" />
+                                        <BiCurrentLocation className="text-lg text-black" />
                                     </button>
                                 </a>
                             </div>
-                        )}
+                        </div>
+                    </div>
+                    <div className="flex">
+                        <div className=" search-bar">
+                            <SearchItem />
+                        </div>
 
-                        <div className="mr-4">{getPrice(cartAmount)}</div>
-                        <div
-                            className="relative"
-                            onMouseEnter={handleEnter}
-                            onMouseLeave={handleLeave}
-                        >
-                            <button
-                                className="border border-[#fff1ee] bg-[#fff1ee] rounded-full p-2"
-                                onClick={handleClick}
-                            >
-                                <SlHandbag className="text-2xl text-[#ea2b0f]" />
-                            </button>
-
-                            {cart && <CartPopup />}
-                            {cartCount > 0 && (
-                                <div
-                                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full h-5 w-5 flex items-center justify-center">
-                                    {cartCount}
+                        <div className=" flex justify-end items-center font-semibold">
+                            {authUser?._id ? (
+                                <div className="mx-4 h-10 w-10 rounded-full bg-[#233a95] flex items-center justify-center text-white text-xl cursor-pointer">
+                                    <a onClick={() => window.location.href = '/account'}>
+                                        {initials}</a></div>
+                            ) : (
+                                <div className="mx-4">
+                                    <a onClick={() => window.location.href = '/account'}>
+                                        <button className="border rounded-full p-2">
+                                            <AiOutlineUser className="text-2xl" />
+                                        </button>
+                                    </a>
                                 </div>
                             )}
-                        </div>
-                        <div>
 
+                            <div className="mr-4">{getPrice(cartAmount)}</div>
+                            <div
+                                className="relative"
+                                onMouseEnter={handleEnter}
+                                onMouseLeave={handleLeave}
+                            >
+                                <button
+                                    className="border border-[#fff1ee] bg-[#fff1ee] rounded-full p-2"
+                                    onClick={handleClick}
+                                >
+                                    <SlHandbag className="text-2xl text-[#ea2b0f]" />
+                                </button>
+
+                                {cart && <CartPopup />}
+                                {cartCount > 0 && (
+                                    <div
+                                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full h-5 w-5 flex items-center justify-center">
+                                        {cartCount}
+                                    </div>
+                                )}
+                            </div>
+                            <div>
+
+                            </div>
                         </div>
                     </div>
                 </div>
