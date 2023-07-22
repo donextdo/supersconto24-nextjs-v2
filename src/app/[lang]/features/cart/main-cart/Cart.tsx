@@ -18,6 +18,8 @@ import useCartItemsHook from "@/app/[lang]/components/Hooks/useCartItemsHook";
 import {Product} from "@/app/[lang]/features/product/product";
 import useAuthCheckHook from "@/app/[lang]/components/Hooks/useAuthCheck";
 import Swal from "sweetalert2";
+import logoImg from "../../../../../../assets/logo/logo.png";
+
 
 // import { PDFDocument, StandardFonts } from 'pdf-lib';
 // import fs from 'fs';
@@ -113,13 +115,13 @@ const Cart: FC<CartType> = () => {
             confirmButtonText: 'Done',
             cancelButtonText: 'Cancel', // Add this line to set the cancel button text
             confirmButtonColor: '#8DC14F',
-          }).then((result) => {
+        }).then((result) => {
             if (result.isConfirmed) {
-              localStorage.setItem('cartItems', '[]');
-              dispatch(calSubTotal(12));
-              setCartObj([]);
+                localStorage.setItem('cartItems', '[]');
+                dispatch(calSubTotal(12));
+                setCartObj([]);
             }
-          });
+        });
         // localStorage.setItem('cartItems', '[]');
         // dispatch(calSubTotal(12));
     };
@@ -165,6 +167,19 @@ const Cart: FC<CartType> = () => {
 
             const clone = componentRef.current.cloneNode(true) as HTMLDivElement;
 
+            // Load the logo image
+            const logoImage = new Image();
+            logoImage.src = logoImg.src; // Replace with the actual path to your logo image
+
+            // Add the logo to the cloned component
+            const logoContainer = document.createElement('div');
+            logoContainer.style.position = 'absolute';
+            logoContainer.style.top = '0';
+            logoContainer.style.right = '0';
+            logoContainer.style.width = '100px';
+            logoContainer.style.height = '100px';
+            logoContainer.appendChild(logoImage);
+            clone.insertBefore(logoContainer, clone.firstChild);
             const buttons = clone.querySelectorAll('button');
             buttons.forEach((button) => button.remove());
 
@@ -188,9 +203,25 @@ const Cart: FC<CartType> = () => {
             };
 
             const clone = componentRef.current.cloneNode(true) as HTMLDivElement;
+            clone.style.paddingTop = '24px';
+
+            // Load the logo image
+            const logoImage = new Image();
+            logoImage.src = logoImg.src; // Replace with the actual path to your logo image
+
+            // Add the logo to the cloned component
+            const logoContainer = document.createElement('div');
+            logoContainer.style.position = 'absolute';
+            logoContainer.style.top = '0';
+            logoContainer.style.right = '0';
+            logoContainer.style.width = '100px';
+            logoContainer.style.height = '100px';
+            logoContainer.appendChild(logoImage);
+            clone.insertBefore(logoContainer, clone.firstChild);
 
             const buttons = clone.querySelectorAll('button');
             buttons.forEach((button) => button.remove());
+            console.log(clone);
             html2pdf().from(clone).set(opt).save('shopping-list.pdf');
         }
     };
@@ -200,12 +231,26 @@ const Cart: FC<CartType> = () => {
             const opt = {
                 margin: 0.5,
                 filename: 'shopping-list.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+                image: {type: 'jpeg', quality: 0.98},
+                html2canvas: {scale: 2},
+                jsPDF: {unit: 'in', format: 'letter', orientation: 'portrait'},
             };
 
             const clone = componentRef.current.cloneNode(true) as HTMLDivElement;
+
+            // Load the logo image
+            const logoImage = new Image();
+            logoImage.src = logoImg.src; // Replace with the actual path to your logo image
+
+            // Add the logo to the cloned component
+            const logoContainer = document.createElement('div');
+            logoContainer.style.position = 'absolute';
+            logoContainer.style.top = '0';
+            logoContainer.style.right = '0';
+            logoContainer.style.width = '100px';
+            logoContainer.style.height = '100px';
+            logoContainer.appendChild(logoImage);
+            clone.insertBefore(logoContainer, clone.firstChild);
 
             const buttons = clone.querySelectorAll('button');
             buttons.forEach((button) => button.remove());
@@ -311,17 +356,17 @@ const Cart: FC<CartType> = () => {
                         <div className="mt-8" ref={componentRef}>
                             {/* header */}
                             <div className="grid grid-cols-4 sm:grid-cols-12 gap-2 border-b border-[#71778e] pb-3">
-                                <div className="col-span-2 sm:col-span-4 text-xs text-[#71778e] font-semibold">
-                                    Product
+                                <div className="sm:col-span-2 text-xs text-[#71778e] font-semibold">
+                                   
                                 </div>
-                                <div className="text-xs sm:col-span-1"></div>
-                                <div className="text-xs text-[#71778e] font-semibold hidden sm:block">
+                                <div className="text-xs sm:col-span-3">Product</div>
+                                <div className="text-xs text-[#71778e] font-semibold ">
                                     Price
                                 </div>
                                 <div className="text-xs text-[#71778e] font-semibold hidden sm:block">
-                                    Discounted price
+                                    Discount
                                 </div>
-                                <div className="text-xs text-[#71778e] font-semibold sm:col-span-2">
+                                <div className="text-xs text-[#71778e] font-semibold sm:col-span-2 sm:text-center">
                                     Quantity
                                 </div>
                                 <div className="text-xs text-[#71778e] font-semibold hidden sm:block">

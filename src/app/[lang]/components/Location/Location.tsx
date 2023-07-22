@@ -8,6 +8,7 @@ import { BiCurrentLocation } from "react-icons/bi";
 import PlacesServiceStatus = google.maps.places.PlacesServiceStatus;
 import AutocompletePrediction = google.maps.places.AutocompletePrediction;
 import PlaceResult = google.maps.places.PlaceResult;
+import {AiFillCloseCircle} from "react-icons/ai";
 
 interface LocationType {
     dollar_min: any;
@@ -29,6 +30,7 @@ export const Location = () => {
     };
 
     useEffect(() => {
+        console.log("eff sp")
         const lat = Number(searchParams.get("lat"))
         const long = Number(searchParams.get("long"))
         const delayDebounceFn = setInterval(() => {
@@ -44,6 +46,7 @@ export const Location = () => {
 
 
     useEffect(() => {
+        console.log("eff st")
 
         let delayDebounceFn: any
         if (searchTerm) {
@@ -230,12 +233,20 @@ export const Location = () => {
                                             <input
                                                 type="text"
                                                 placeholder="Search your area"
-                                                className="bg-gray-100 border border-gray-100 rounded-md py-2 px-3 w-64 h-14"
+                                                className="bg-gray-100 border border-gray-100 rounded-md py-2 px-3 w-64 h-14 flex-1"
                                                 value={searchTerm}
                                                 onChange={(event) => {
                                                     setSearchTerm(event.target.value)
                                                 }}
                                             />
+                                            <div
+                                                className=" text-gray-400 px-3 flex justify-center items-center cursor-pointer"
+                                                onClick={() => {
+                                                    setSearchTerm("")
+                                                    setResult([])
+                                                }}>
+                                                <AiFillCloseCircle/>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -245,18 +256,12 @@ export const Location = () => {
                                 >
                                     <div
                                         className="flex items-center justify-between px-2 py-4 bg-white text-gray-700 text-sm cursor-pointer"
-                                        onClick={() => getMyLocation()}>
-                                        <button className="hover:text-black hover:opacity-80 flex items-center gap-1 rounded-full border border-gray-200 px-2 h-9 bg-[#4285f4] text-white">
-                                            Get Current Location <BiCurrentLocation className="text-lg text-black" />
+                                        >
+                                        <button className="hover:text-black hover:opacity-80 flex items-center gap-1 rounded-full border border-gray-200 px-2 h-9 bg-[#4285f4] text-white"
+                                                onClick={() => getMyLocation()}>
+                                            Get Current Location <BiCurrentLocation className="text-lg text-black"/>
                                         </button>
-                                        <div
-                                            className="rounded-full text-gray-400 font-semibold w-20 px-3 text-xs h-8 border border-gray-200 flex justify-center items-center"
-                                            onClick={() => {
-                                                setSearchTerm("")
-                                                setResult([])
-                                            }}>
-                                            Clear All
-                                        </div>
+
                                     </div>
                                     <hr />
                                     <>

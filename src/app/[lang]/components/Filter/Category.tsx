@@ -15,6 +15,7 @@ const Category = ({ categoryId }: any) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        console.log("data awad categoryId? ", categoryId);
         const response = await axios.get(`${baseUrl}/category/${categoryId}`);
         setSubCategory(response.data);
         setIsEmpty(response.data.length === 0);
