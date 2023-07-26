@@ -10,7 +10,7 @@ const CartCard = ({item, index,  handleDecrement, handleIncrement, handleDelete,
 
     return (
         <div
-            className="grid grid-cols-4 sm:grid-cols-12 grid-2 gap-1 border-b py-3 h-28 items-center relative bg-white"
+            className={`grid grid-cols-4 sm:grid-cols-12 grid-2 gap-1 border-b py-3 h-28 items-center relative ${item.expired? 'bg-gray-300':''}`}
             key={index}
         >
             <div className="h-[95px] sm:col-span-2">
@@ -28,7 +28,8 @@ const CartCard = ({item, index,  handleDecrement, handleIncrement, handleDelete,
                 />
             </div>
             <div className="sm:col-span-3 col-span-1 text-sm  ">
-                {item.product_name}
+                <p className="text-sm ">{item.product_name}</p>
+                <p className="text-sm ">expire</p>
             </div>
             <div className="hidden sm:block text-gray-400 text-sm line-through mr-2 my-1 font-[1.125rem]">{price}</div>
             <div className="col-span-1">{newPrice}</div>
