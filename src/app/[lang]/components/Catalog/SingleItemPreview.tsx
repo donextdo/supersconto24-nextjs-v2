@@ -1,10 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Image from "next/image";
 import marked from '../../../../../assets/right/marked.png'
-import {useDispatch, useSelector} from 'react-redux';
 import {Product} from '../../features/product/product';
-import {RootState} from '../../redux/store';
-import useCartItemsHook from "@/app/[lang]/components/Hooks/useCartItemsHook";
 
 
 interface Props {
@@ -54,8 +51,8 @@ const SingleItemPreview: React.FC<Props> = ({
                     return (
 
                         <div className="selection-div" key={`interactive-div-${index}`} style={{
-                            background: "white",
-                            opacity: 0.5,
+                            background: "none",
+                            opacity: 1,
                             width: crop.width * scaleX,
                             height: crop.height * scaleY,
                             transform: `translate(${crop.x * scaleX}px, ${crop.y * scaleY}px)`
@@ -72,8 +69,8 @@ const SingleItemPreview: React.FC<Props> = ({
                                 alt="LOGO"
                                 className='h-11 sm:h-9 md:h-11 w-auto'
                                 style={{
-                                    width: `${crop.width * scaleX * 0.8}px`,
-                                    height: `${crop.height * scaleY * 0.8}px`,
+                                    width: `${crop.width * scaleX }px`,
+                                    height: `${crop.height * scaleY }px`,
 
                                 }}
                             />}

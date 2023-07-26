@@ -44,10 +44,13 @@ const UseCartItemsHook = () => {
         let cartCountCalculated = 0
         cartItems.forEach((item) => {
             cartCountCalculated += item.count
-            if (!item.discount) {
-                cartAmountCalculated += item.count * item.unit_price;
-            } else {
-                cartAmountCalculated += item.count * (item.unit_price - (item.unit_price * (item.discount / 100)));
+
+            if (!item.expired){
+                if (!item.discount) {
+                    cartAmountCalculated += item.count * item.unit_price;
+                } else {
+                    cartAmountCalculated += item.count * (item.unit_price - (item.unit_price * (item.discount / 100)));
+                }
             }
         })
         return {cartAmountCalculated, cartCountCalculated}
@@ -69,7 +72,10 @@ const UseCartItemsHook = () => {
                 const fetchedCartItems = data.map((item: Product) => {
                     const itemInCart: any = localCart.find((p: Product) => p._id === item._id);
                     if (itemInCart) {
-                        return {...item, count: itemInCart.count || 0};
+                        const expireDate = new Date(item?.catelog_book_id?.expiredate);
+                        const currentDate = new Date();
+                        const expired = currentDate > expireDate;
+                        return {...item, count: itemInCart.count || 0, expired};
                     }
                     return item;
                 });
@@ -86,6 +92,8 @@ const UseCartItemsHook = () => {
                     setCartAmount(0)
                     setCartCount(0)
                 }
+
+                console.log({fetchedCartItems});
 
             }).catch((error) => {
                 console.error("error : ", error);
