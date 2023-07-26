@@ -9,6 +9,7 @@ import { calSubTotal } from "../features/cart/cartSlice";
 import useCartItemsHook from "../components/Hooks/useCartItemsHook";
 import { useRouter } from "next/navigation";
 import useAuthCheckHook from "../components/Hooks/useAuthCheck";
+import Swal from "sweetalert2";
 
 
 interface WIshlist {
@@ -102,22 +103,19 @@ const Wishlist = () => {
             const res = await axios.get(`${baseUrl}/catelog/item/find/${item.productId}`);
             console.log(res.data)
             const itemProduct = res.data
-            // const itemIndex = items.findIndex((itemOne: any) => itemOne._id === itemProduct._id);
-            // if (itemIndex === -1) {
-            //     const newItem = { ...itemProduct, count: 1 };
-            //     items.push(newItem);
-            //     localStorage.setItem('cartItems', JSON.stringify(items));
-            //     dispatch(calSubTotal(12));
-
-
-            // } else {
-            //     items[itemIndex].count += 1;
-            //     localStorage.setItem('cartItems', JSON.stringify(items));
-            //     dispatch(calSubTotal(12));
-
-            // }
+           
         addProductToCart({ ...itemProduct, count: 1 })
-
+        Swal.fire({
+            title:
+                '<span style="font-size: 18px">Item has been added to your card</span>',
+            width: 400,
+            timer: 1500,
+            color: "white",
+            background: "#00B853",
+            showConfirmButton: false,
+            heightAuto: true,
+            position: "bottom-end",
+        });
 
 
         } catch (err) {
@@ -137,6 +135,18 @@ const Wishlist = () => {
                 console.log(res.data)
                 const itemProduct = res.data
                 addProductToCart({ ...itemProduct, count: 1 })
+
+                Swal.fire({
+                    title:
+                        '<span style="font-size: 18px">Items have been added to your card</span>',
+                    width: 400,
+                    timer: 1500,
+                    color: "white",
+                    background: "#00B853",
+                    showConfirmButton: false,
+                    heightAuto: true,
+                    position: "bottom-end",
+                });
 
                 // const itemIndex = items.findIndex((itemOne: any) => itemOne._id === itemProduct._id);
                 // if (itemIndex === -1) {
@@ -173,6 +183,17 @@ const Wishlist = () => {
                 const itemProduct = res.data
                  addProductToCart({ ...itemProduct, count: 1 })
 
+                 Swal.fire({
+                    title:
+                        '<span style="font-size: 18px">Items have been added to your card</span>',
+                    width: 400,
+                    timer: 1500,
+                    color: "white",
+                    background: "#00B853",
+                    showConfirmButton: false,
+                    heightAuto: true,
+                    position: "bottom-end",
+                });
                 // const itemIndex = items.findIndex((itemOne: any) => itemOne._id === itemProduct._id);
                 // if (itemIndex === -1) {
                 //     const newItem = { ...itemProduct, count: 1 };

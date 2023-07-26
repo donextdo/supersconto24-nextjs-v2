@@ -478,59 +478,6 @@ const Cart: FC<CartType> = () => {
                                 </tr>
 
                                 <tr>
-                                    <td className="text-[13px] pb-3 text-right">
-                                        <label className="inline-flex -gap-1">
-                                            <span className="mr-2">Local pickup</span>
-                                            <input
-                                                type="radio"
-                                                name="cart"
-                                            />
-                                        </label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td className="text-right text-[12.5px] pb-4">
-                                        Shipping to <span className="font-semibold">AL.</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td className="text-right text-[13px]  text-[#2bbef9] pb-4">
-                                        <button onClick={handleClick}> Change address</button>
-                                        {showInputs && (
-                                            <div className="flex flex-col justify-end text-right">
-                                                <input
-                                                    type="text"
-                                                    className="w-full px-4 h-11 bg-gray-100 rounded-md mt-2 ml-2 pl-4 text-sm"
-                                                    placeholder="Country"
-                                                    value={country}
-                                                    onChange={(e) => setCountry(e.target.value)}
-                                                />
-                                                <input
-                                                    type="text"
-                                                    className="w-full px-4 h-11 bg-gray-100 rounded-md mt-2 ml-2 pl-4 text-sm"
-                                                    placeholder="City"
-                                                    value={townCity}
-                                                    onChange={(e) => setTownCity(e.target.value)}
-                                                />
-                                                <input
-                                                    type="text"
-                                                    className="w-full px-4 h-11 bg-gray-100 rounded-md mt-2 ml-2 pl-4 text-sm"
-                                                    placeholder="Postcode/Zip"
-                                                    value={zipCode}
-                                                    onChange={(e) => setZipCode(e.target.value)}
-                                                />
-
-                                                <button
-                                                    className="bg-[#233a95] text-white py-2.5 px-4 rounded-md text-xs h-11 w-[104px] mt-3"
-                                                    onClick={handleUpdateShipping}
-                                                >
-                                                    Update
-                                                </button>
-                                            </div>
-                                        )}
-                                    </td>
-                                </tr>
-                                <tr>
                                     <td className="border-y border-[#e4e5ee] text-[13px] font-semibold pb-4">
                                         Total
                                     </td>

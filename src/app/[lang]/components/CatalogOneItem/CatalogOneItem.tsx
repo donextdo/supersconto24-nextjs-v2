@@ -74,8 +74,9 @@ const CatalogCarousel: React.FC<Props> = ({catalog, params}) => {
                         </Link>
                     </div>
                     <div className='text-center'>
-                        <p className="font-semibold">{catalog.title}</p>
-                        <p className="text-sm">{shopName}</p>
+                        <p className="font-semibold">{catalog.title} - {shopName}</p>
+                        <p className="text-sm"></p>
+                        <p className="text-xs">Expire Date - {formattedDate}</p>
                     </div>
                     <div
                         className="relative mr-2"

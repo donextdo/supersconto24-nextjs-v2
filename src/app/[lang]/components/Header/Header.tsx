@@ -71,10 +71,10 @@ const Header = () => {
         }
     }
 
-    console.log("da", authUser)
+    // console.log("da", authUser)
     return (
         <>
-            <div className="hidden md:block container mx-auto xl:px-40 px-5 sticky top-0 z-50 bg-white ">
+            <div className="hidden md:block container mx-auto xl:px-40 px-5 sticky top-0 z-40 bg-white ">
                 <div className=" flex items-center justify-between  py-2">
                     <div className="flex">
                         <div className="text-4xl font-bold text-[#223994] flex justify-start">

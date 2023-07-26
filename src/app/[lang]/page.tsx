@@ -16,6 +16,7 @@ import FeaturedFlyer from "./components/FeaturedFlyer/FeaturedFlyer";
 import ContactAds from "./components/ImageAds/ContactAds";
 import FirstPurchaceAds from "./components/ImageAds/FirstPurchaceAds";
 import { Metadata } from "next";
+import CitiesList from "./components/Cities/CitiesList";
 
 export const metadata: Metadata = {
     title: "Supersconto | Home",
@@ -83,6 +84,10 @@ export default async function page({
 
             <div className="mt-8">
                 <ShopsList />
+            </div>
+
+            <div className="mt-8">
+                <CitiesList />
             </div>
 
             <div className="mt-8">

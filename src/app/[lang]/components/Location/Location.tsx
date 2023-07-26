@@ -170,7 +170,7 @@ export const Location = () => {
                         Your Location
                     </div>
                     <div
-                        className="truncate w-[150px] 2xl:w-[200px] text-[13px] self-start font-semibold overflow-hidden whitespace-nowrap text-[#233a95] pr-4 break-words">
+                        className="truncate w-[150px] 2xl:w-[200px] text-[11px] self-start font-semibold overflow-hidden whitespace-nowrap text-[#233a95] pr-4 break-words">
                         {selectedLocation ?? "Select a location"}
                     </div>
                 </div>

@@ -116,6 +116,17 @@ export const ProductCard: FC<Props> = ({ product }) => {
             try {
                 const response = await axios.post(`${baseUrl}/users/wishList/${authUser._id}`, wishListObj);
                 console.log(response.data); // do something with the response data
+                Swal.fire({
+                    title:
+                        '<span style="font-size: 18px">Item has been added to your wishlist</span>',
+                    width: 400,
+                    timer: 1500,
+                    color: "white",
+                    background: "#00B853",
+                    showConfirmButton: false,
+                    heightAuto: true,
+                    position: "bottom-end",
+                });
             } catch (error) {
                 console.log(error); // handle the error
             }
