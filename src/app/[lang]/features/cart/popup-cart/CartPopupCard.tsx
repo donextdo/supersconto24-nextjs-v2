@@ -33,7 +33,9 @@ const CartPopupCard = ({item, handleRemove, getPrice}: any) => {
                 <p className="text-xs ">{item.product_name}</p>
                 <p className="text-xs mt-2">{item.count || 0} × <span
                     className="text-[#008C45]"> {getPrice(newPrice)}</span></p>
+                    {item.expired && (
                 <p className="text-xs mt-2">expire</p>
+                    )}
 
             </div>
             <button className="absolute bg-[#008C45] rounded-full p-0.5 text-white left-4 top-4"

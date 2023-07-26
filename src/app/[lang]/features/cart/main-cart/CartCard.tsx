@@ -29,7 +29,9 @@ const CartCard = ({item, index,  handleDecrement, handleIncrement, handleDelete,
             </div>
             <div className="sm:col-span-3 col-span-1 text-sm  ">
                 <p className="text-sm ">{item.product_name}</p>
+                {item.expired && (
                 <p className="text-sm ">expire</p>
+                )}
             </div>
             <div className="hidden sm:block text-gray-400 text-sm line-through mr-2 my-1 font-[1.125rem]">{price}</div>
             <div className="col-span-1">{newPrice}</div>
