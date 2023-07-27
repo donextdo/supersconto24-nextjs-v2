@@ -35,7 +35,7 @@ const CartCard = ({item, index,  handleDecrement, handleIncrement, handleDelete,
             </div>
             <div className="hidden sm:block text-gray-400 text-sm line-through mr-2 my-1 font-[1.125rem]">{price}</div>
             <div className="col-span-1">{newPrice}</div>
-            <div className="flex sm:col-span-2">
+            <div className={`flex sm:col-span-2 ${item.expired? 'pointer-events-none cursor-not-allowed':''}`}>
                 <button
                     className="p-2 bg-[#edeef5] rounded-full w-[30px] flex items-center"
                     onClick={() => handleDecrement(item)}

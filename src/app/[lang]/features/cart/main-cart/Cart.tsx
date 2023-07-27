@@ -315,15 +315,17 @@ const Cart: FC<CartType> = () => {
     const getShopTotal = (products: any[]) => {
         console.log(products)
         const shopAmount = products.reduce((acc, item) => {
-            if (typeof item.discount === "undefined") {
-                console.log("no discount", item, acc)
+            if (!item.expired){
+                if (typeof item.discount === "undefined") {
+                    console.log("no discount", item, acc)
 
-                acc += item.count * item.unit_price;
-            } else {
-                acc +=
-                    item.count *
-                    (item.unit_price - item.unit_price * (item.discount / 100));
-                console.log("has discount", item, acc)
+                    acc += item.count * item.unit_price;
+                } else {
+                    acc +=
+                        item.count *
+                        (item.unit_price - item.unit_price * (item.discount / 100));
+                    console.log("has discount", item, acc)
+                }
             }
             return acc
         }, 0)

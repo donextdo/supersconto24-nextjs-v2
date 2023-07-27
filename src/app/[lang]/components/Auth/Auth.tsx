@@ -6,9 +6,12 @@ import LoginCard from "@/app/[lang]/components/LoginPartTwo/loginCard";
 
 const Auth = () => {
     const {isLoggedIn, authUser, logOut} = useAuthCheck()
+    const userData = localStorage.getItem("userData") ?? null
+
+    console.log({isLoggedIn})
     return (
         <div>
-            {isLoggedIn ? <MyAccount /> : <LoginCard />}
+            {(isLoggedIn && userData) ? <MyAccount /> : <LoginCard />}
         </div>
     );
 };

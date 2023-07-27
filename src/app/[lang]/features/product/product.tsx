@@ -70,6 +70,9 @@ export interface Product {
     product_description: string;
     unit_price: number;
     product_image: string;
+    catelog_book_id?: any;
+    expired?: boolean;
+
 }
 
 export interface MainCategory {
