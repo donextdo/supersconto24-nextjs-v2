@@ -100,11 +100,16 @@ const MainFlyerList = ({ dictionary, locale }: MainFlyerListType) => {
         }
     }
 
-    console.log("render", productList);
 
     const showMoreItem = () => {
         setVisible((prevValue) => prevValue + 8);
     };
+
+    console.log("render", productList);
+    const activeProduct = productList.filter((product:any)=>product.active === true)
+    
+    
+    console.log(activeProduct)
 
     return (
         <div>
@@ -113,7 +118,7 @@ const MainFlyerList = ({ dictionary, locale }: MainFlyerListType) => {
          overflow-y-scroll overflow-x-hidden scrollbar-w-2 sm:grid-cols-4
         xxl:grid-cols-4 pt-4"
             >
-                {productList?.slice(0, visible).map((flyer: any, index: number) => (  
+                {activeProduct?.slice(0, visible).map((flyer: any, index: number) => (  
                         <a
                             onClick={() => {
                                 window.location.href = `/catalog-preview/${flyer._id

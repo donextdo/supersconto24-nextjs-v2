@@ -243,7 +243,8 @@ export const ProductCard: FC<Props> = ({ product }) => {
                 </div>
 
                 {/* add to cart and count */}
-                <div
+                {/* {product.quantity > 0 && ( */}
+                    <div
                     className="mx-4 border-black text-black py-2 px-4 mt-1 rounded-full md:invisible group-hover:visible md:group-hover:-translate-y-3 md:group-hover:ease-in transition duration-150">
                     {(count == undefined || count < 1) && (
                         <button
@@ -277,6 +278,8 @@ export const ProductCard: FC<Props> = ({ product }) => {
                         </div>
                     )}
                 </div>
+                {/* )} */}
+                
             </div>
             {productPopup && (
                 <ProductPopup setProductPopup={setProductPopup} proId={proId} />

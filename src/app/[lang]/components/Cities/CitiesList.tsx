@@ -13,6 +13,7 @@ const CitiesList = () => {
     fetchData()
   }, []);
 
+  
   async function fetchData() {
     try {
       const res = await axios.get(`${baseUrl}/shop`);
@@ -24,15 +25,18 @@ const CitiesList = () => {
     }
   }
   const cities = shops.map((shop: any) => shop.city);
-  console.log("city", cities)
+  const uniqueCities = Array.from(new Set(cities));
+  // console.log("city", cities)
+  // console.log("new city", uniqueCities)
+
   return (
     <div className="flex flex-col gap-6 ">
       <h2 className="text-lg font-semibold">CITIES WITH NEARBY OFFERS</h2>
       <div className="">
         <section className="w-full">
           <Slider padding="px-10 py-10">
-            {shops.map((city: any, index: number) => (
-              <Link key={index} href={`/city/${city.city}`}>
+            {uniqueCities.map((city: any, index: number) => (
+              <Link key={index} href={`/city/${city}`}>
                 < CitiesCard city={city} key={index} />
               </Link>
             ))}
