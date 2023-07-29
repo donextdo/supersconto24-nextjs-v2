@@ -13,7 +13,9 @@ const FeaturedFlyer = () => {
         return shuffled.slice(0, count); // Return the first 'count' items
     };
 
-    const featuredProducts = productList.filter(product => product.flyer === true);
+    const featuredProducts = productList.filter(product => product.flyer === true && product.active == true);
+    
+
 
     return (
         <>
