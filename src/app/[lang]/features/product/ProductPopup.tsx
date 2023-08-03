@@ -307,7 +307,7 @@ const ProductPopup = ({ setProductPopup, proId }: any) => {
 
                                                 <button
                                                     type="button"
-                                                    className="px-4 hover:bg-yellow-400 border-gray-500 bg-gray-300  text-[20px]   rounded-full  font-medium"
+                                                    className={`px-4 hover:bg-yellow-400 border-gray-500 bg-gray-300  text-[20px]   rounded-full  font-medium ${(data.quantity==count)?'pointer-events-none cursor-not-allowed':''}`}
                                                     onClick={() => handleIncrement(data)}
                                                 >
                                                     +

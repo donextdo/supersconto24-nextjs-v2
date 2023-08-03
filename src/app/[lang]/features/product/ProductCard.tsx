@@ -216,7 +216,7 @@ export const ProductCard: FC<Props> = ({ product }) => {
                     </div>
 
                     <div
-                        className="my-1 font-[.6875rem] text-xs pt-2 text-green-600 uppercase font-semibold tracking-[.005em]">
+                        className={`my-1 font-[.6875rem] text-xs pt-2 uppercase font-semibold tracking-[.005em] ${product.quantity>0?'text-green-600':'text-red-500'}`}>
                         {product.quantity > 0 ? "In Stock" : "Out of Stock"}
                     </div>
 
@@ -249,7 +249,7 @@ export const ProductCard: FC<Props> = ({ product }) => {
                     {(count == undefined || count < 1) && (
                         <button
                             type="button"
-                            className=" bg-primary text-white h-8  rounded-full w-full "
+                            className= {`bg-primary text-white h-8  rounded-full w-full ${product.quantity<1?'pointer-events-none cursor-not-allowed':''}`}
                             onClick={() => handleAddToCart(product)}
                         >
                             Add to cart
@@ -270,7 +270,7 @@ export const ProductCard: FC<Props> = ({ product }) => {
                             </div>
                             <button
                                 type="button"
-                                className="px-4 max-h-[34px] border border-gray-500 bg-yellow-500 rounded-br-3xl rounded-tr-3xl "
+                                className={`px-4 max-h-[34px] border border-gray-500 bg-yellow-500 rounded-br-3xl rounded-tr-3xl ${(product.quantity==count)?'pointer-events-none cursor-not-allowed':''}`}
                                 onClick={() => handleIncrement(product)}
                             >
                                 +

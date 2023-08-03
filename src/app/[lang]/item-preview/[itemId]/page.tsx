@@ -21,6 +21,7 @@ import AdditionalInformation from "../../components/ViewItem/Details/AdditionalI
 import Swal from "sweetalert2";
 import useCartItemsHook from "@/app/[lang]/components/Hooks/useCartItemsHook";
 import useCurrency from "@/app/[lang]/components/Hooks/useCurrencyHook";
+import siteUrl from "../../../../../utils/siteUrl";
 
 // interface ItemData {
 //     description: string;
@@ -225,7 +226,7 @@ const ItemPages = ({params}: IProps) => {
         return {discountedPrice, newPrice}
     }, [data])
 
-    const encodedUrl = encodeURIComponent(`${baseUrl}/item-preview/${itemId}`);
+    const encodedUrl = encodeURIComponent(`${siteUrl}/item-preview/${itemId}`);
     const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
     const twitterShareUrl = `https://twitter.com/intent/tweet?url=${encodedUrl}`;
     const pinterestShareUrl = `https://pinterest.com/pin/create/bookmarklet/?url=${encodedUrl}`;
@@ -487,7 +488,7 @@ const ItemPages = ({params}: IProps) => {
 
                                                 <button
                                                     type="button"
-                                                    className="px-4 hover:bg-yellow-400 border-gray-500 bg-gray-300  text-[20px]   rounded-full  font-medium"
+                                                    className={`px-4 hover:bg-yellow-400 border-gray-500 bg-gray-300  text-[20px]   rounded-full  font-medium ${(data.quantity==count)?'pointer-events-none cursor-not-allowed':''}`}
                                                     onClick={() => handleIncrement(data)}
                                                 >
                                                     +

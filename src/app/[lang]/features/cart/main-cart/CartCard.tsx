@@ -8,6 +8,7 @@ import useCartItemsHook from "@/app/[lang]/components/Hooks/useCartItemsHook";
 
 const CartCard = ({item, index,  handleDecrement, handleIncrement, handleDelete,price,newPrice,subTotal, count}: any) => {
 
+    const isQuantityEqualToCount = item.quantity === count;
     return (
         <div
             className={`grid grid-cols-4 sm:grid-cols-12 grid-2 gap-1 border-b py-3 h-28 items-center relative ${item.expired? 'bg-gray-300':''}`}
@@ -46,7 +47,7 @@ const CartCard = ({item, index,  handleDecrement, handleIncrement, handleDelete,
                     {count}
                 </p>
                 <button
-                    className="p-2 bg-[#edeef5] rounded-full w-[30px] flex items-center"
+                    className={`p-2 bg-[#edeef5] rounded-full w-[30px] flex items-center ${isQuantityEqualToCount?'pointer-events-none cursor-not-allowed':''}`}
                     onClick={() => handleIncrement(item)}
                 >
                     <FaPlus className="text-xs "/>

@@ -85,7 +85,7 @@ const PageNavBar = () => {
           )}
         </div>
 
-        <div className="font-semibold rounded-full bg-[#F0FAFF] relative " onMouseEnter={toggleHome} onMouseLeave={toggleHomeLeave} >
+        <div className="font-semibold rounded-full bg-[#F0FAFF] relative" onMouseEnter={toggleHome} onMouseLeave={toggleHomeLeave} >
           <button className="lg:py-2 lg:px-4">
             <div className="text-[#4BB62E] flex text-[15px]  font-ff-headings">
                 Our Menu
@@ -181,17 +181,19 @@ const PageNavBar = () => {
             </Link>
           </button>
         </li> */}
+
+
         {/* Blog */}
-        <li className="font-semibold font-ff-headings">
+        <div className="font-semibold ">
           <button className="lg:py-2 lg:px-4 lg:ml-4  hover:rounded-full  hover:bg-[#F0FAFF]">
             <Link href="/blog" className="text-gray-700 hover:text-[#4BB62E]">
               BLOG
             </Link>
           </button>
-        </li>
+        </div>
 
         {/* Contact */}
-        <li className="font-semibold font-ff-headings">
+        <div className="font-semibold font-ff-headings">
           <button className="lg:py-2 lg:px-4 lg:ml-4 hover:rounded-full hover:bg-[#F0FAFF]">
             <Link
               href="/contact"
@@ -200,7 +202,7 @@ const PageNavBar = () => {
               CONTACT
             </Link>
           </button>
-        </li>
+        </div>
       </div>
       {/* Shop DropDown */}
       {/* {shopOpen && (

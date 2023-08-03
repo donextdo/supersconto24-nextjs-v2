@@ -528,28 +528,7 @@ const Cart: FC<CartType> = () => {
                                 {getPrice(cartAmount)}
                             </td>
                         </tr>
-                        <tr>
-                            <td className="text-[13px] pb-3 text-right">
-                                <label className="inline-flex -gap-1">
-                                    <span className="mr-2">Local pickup</span>
-                                    <input
-                                        type="radio"
-                                        name="vendor"
-                                        // onChange={handleRadioChange}
-                                    />
-                                </label>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="text-right text-[12.5px] pb-4">
-                                Shipping to <span className="font-semibold">AL.</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="text-right text-[13px] border-b border-[#e4e5ee] text-[#2bbef9] pb-4">
-                                Change address
-                            </td>
-                        </tr>
+                       
                         <tr>
                             <td className="border-b border-[#e4e5ee] text-[13px] font-semibold pb-4">
                                 Total
