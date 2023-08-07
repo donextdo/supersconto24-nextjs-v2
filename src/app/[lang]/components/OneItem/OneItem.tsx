@@ -1,70 +1,24 @@
 'use client'
-import {
-    FaFacebookF,
-    FaLinkedin,
-    FaPinterest,
-    FaReddit,
-    FaShippingFast,
-    FaStar,
-    FaTwitter,
-    FaWhatsapp
-} from "react-icons/fa";
-import React, {ReactElement, useEffect, useMemo, useState} from "react";
+import {FaShippingFast, FaStar,} from "react-icons/fa";
+import React, {ReactElement, useMemo, useState} from "react";
 import {GiMedicinePills} from "react-icons/gi";
 import {BsCheckLg} from "react-icons/bs";
-import axios from "axios";
-import { MainCategory, Product, SubCategory } from "../../features/product/product";
+import {Product} from "../../features/product/product";
 import Review from "../ViewItem/Details/Review";
 import useCartItemsHook from "../Hooks/useCartItemsHook";
 import useCurrency from "../Hooks/useCurrencyHook";
 import Swal from "sweetalert2";
-import siteUrl from "../../../../../utils/siteUrl";
 import Description from "../ViewItem/Details/Description";
 import AdditionalInformation from "../ViewItem/Details/AdditionalInformation";
 import Social from "./Socaial";
 
 
-
 const OneItem = ({tag, data, mainCategory, subCategory, allreview, itemId}:any) => {
-    // const [mainCategory, setMainCategory] = useState<MainCategory>({_id: "", name: ""})
-    // const [subCategory, setSubCategory] = useState<SubCategory>({_id: "", mainCategoryId: "", name: ""})
     const [isColor, setIsColor] = useState(1);
-    // const [allreview, setAllreview] = useState<Array<Review>>([]);
-    const [categoryName, setcategoryname] = useState();
     const [count, setCount] = useState(1);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const {cartItems, addProductToCart, removeProductFromCart} = useCartItemsHook()
     const {getPrice} = useCurrency()
-
-
-    // async function getCategory() {
-    //     try {
-    //         const res = await axios.get(`${baseUrl}/category/categories/${data.product_category}`);
-    //         console.log(res.data)
-    //         setMainCategory(res.data);
-    //     } catch (err) {
-    //         console.log(err);
-    //     }
-    // }
-
-    // async function getSubCategory() {
-    //     try {
-    //         const res = await axios.get(`${baseUrl}/category/subcategories/${data.product_sub_category}`);
-    //         console.log(res.data)
-    //         setSubCategory(res.data);
-    //     } catch (err) {
-    //         console.log(err);
-    //     }
-    // }
-
-    // async function getReviews() {
-    //     try {
-    //         const res = await axios.get(`${baseUrl}/reviews/getReview/${itemId}`);
-    //         setAllreview(res.data);
-    //     } catch (err) {
-    //         console.log(err);
-    //     }
-    // }
 
     let totalReviewCount = 0;
 
@@ -74,7 +28,7 @@ const OneItem = ({tag, data, mainCategory, subCategory, allreview, itemId}:any) 
         }
     }
 
-    console.log(totalReviewCount);
+    console.log({mainCategory, subCategory});
 
     let averageReviewCount = 0;
     const approvedReviews = allreview.filter((review:any) => review.reviewStatus === 'approved');
@@ -111,7 +65,6 @@ const OneItem = ({tag, data, mainCategory, subCategory, allreview, itemId}:any) 
         }
     };
 
-
     const handleAddToCart = (data: any) => {
         addProductToCart({...data, count: 1})
 
@@ -130,11 +83,9 @@ const OneItem = ({tag, data, mainCategory, subCategory, allreview, itemId}:any) 
 
     };
 
-
     const handleChange = (id: any) => {
         setIsColor(id);
     };
-
 
     const {discountedPrice, newPrice} = useMemo(() => {
         let discountedPrice = 0
@@ -150,65 +101,6 @@ const OneItem = ({tag, data, mainCategory, subCategory, allreview, itemId}:any) 
         return {discountedPrice, newPrice}
     }, [data])
 
-    // const encodedUrl = encodeURIComponent(`${siteUrl}/item-preview/${itemId}`);
-    // const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
-    // const twitterShareUrl = `https://twitter.com/intent/tweet?url=${encodedUrl}`;
-    // const pinterestShareUrl = `https://pinterest.com/pin/create/bookmarklet/?url=${encodedUrl}`;
-    // const linkedinShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;
-    // const redditShareUrl = `https://www.reddit.com/submit?url=${encodedUrl}`;
-    // const whatsappShareUrl = `https://wa.me/?text=${encodedUrl}`;
-
-    // const facebookShareClick = (e: any) => {
-    //     e.preventDefault();
-    //     window.open(
-    //         facebookShareUrl,
-    //         "facebook-share-dialog",
-    //         "width=626,height=436"
-    //     );
-    // };
-
-    // const twitterShareClick = (e: any) => {
-    //     e.preventDefault();
-    //     window.open(
-    //         twitterShareUrl,
-    //         "twitter-share-dialog",
-    //         "width=626,height=436"
-    //     );
-    // };
-
-    // const pinterestShareClick = (e: any) => {
-    //     e.preventDefault();
-    //     window.open(
-    //         pinterestShareUrl,
-    //         "pinterest-share-dialog",
-    //         "width=626,height=436"
-    //     );
-    // };
-
-    // const linkedinShareClick = (e: any) => {
-    //     e.preventDefault();
-    //     window.open(
-    //         linkedinShareUrl,
-    //         "linkedin-share-dialog",
-    //         "width=626,height=436"
-    //     );
-    // };
-
-    // const redditShareClick = (e: any) => {
-    //     e.preventDefault();
-    //     window.open(redditShareUrl, "reddit-share-dialog", "width=626,height=436");
-    // };
-
-    // const whatsappShareClick = (e: any) => {
-    //     e.preventDefault();
-    //     window.open(
-    //         whatsappShareUrl,
-    //         "whatsapp-share-dialog",
-    //         "width=626,height=436"
-    //     );
-    // };
-
-
     const openModal = () => {
         setIsModalOpen(true);
     };
@@ -218,11 +110,11 @@ const OneItem = ({tag, data, mainCategory, subCategory, allreview, itemId}:any) 
     };
 
 
-    const breadcrumbs = [
+    /*const breadcrumbs = [
         {title: "Home", url: "/"},
         {title: `${categoryName}`, url: `/item-preview/${itemId}`},
         {title: `${data.product_name}`},
-    ];
+    ];*/
 
     const MAX_TITLE_LENGTH = 20; // Set your desired character limit
     const [expanded, setExpanded] = useState(false);
@@ -233,7 +125,7 @@ const OneItem = ({tag, data, mainCategory, subCategory, allreview, itemId}:any) 
             <div className="bg-[#f7f8fd] ">
                 <div className="container mx-auto xl:px-40 px-5 py-6 ">
                     <div className=" ">
-                        {/* <Breadcrumbs crumbs={breadcrumbs}></Breadcrumbs> */}
+                         {/*<Breadcrumbs crumbs={breadcrumbs}></Breadcrumbs> */}
                     </div>
                     {/* working one */}
                     <div className=" bg-white drop-shadow rounded-md px-6 pb-5 pt-5">
