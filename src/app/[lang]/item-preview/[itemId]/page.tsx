@@ -13,28 +13,36 @@ type Props = {
     params: { itemId: string };
     searchParams: { [key: string]: string | string[] | undefined };
 };
+
 export async function generateMetadata(
-    { params, searchParams }: Props,
-    parent?: ResolvingMetadata,
+    { params, searchParams }: Props, parent: ResolvingMetadata
 ): Promise<Metadata> {
-    // read route params
-    const id = params.itemId;
+    try {
+        // read route params
+        const id = params.itemId;
 
-    // fetch data
-    const product = await fetch(`${baseUrl}/catelog/item/find/${id}`, {cache: 'no-store'}).then((res) => res.json());
+        // fetch data
+        const product = await fetchItem(id);
 
 
-    return {
-       title: `Supersconto | ${product.product_name}`,
-       description: product.product_description ?? `best selling items at supersconto24 store`,
-        openGraph: {
-            images: [product.product_image],
+        return {
             title: `Supersconto | ${product.product_name}`,
             description: product.product_description ?? `best selling items at supersconto24 store`,
-            type:"website"
-        },
-    };
+            openGraph: {
+                images: [product.product_image],
+                title: `Supersconto | ${product.product_name}`,
+                description: product.product_description ?? `best selling items at supersconto24 store`,
+                type:"website"
+            },
+        };
+    } catch (e) {
+        return {
+            title: `Supersconto | Not found`,
+            description: `Product not found`,
+        }
+    }
 }
+
 async function fetchItem(itemId: string) {
     const res = await fetch(`${baseUrl}/catelog/item/find/${itemId}`, {cache: 'no-store'})
     if (!res.ok) return undefined
@@ -61,10 +69,10 @@ const ItemPages = async ({params}: IProps) => {
     }
 
 
-
     return (
         <>
-            <OneItem tag={tag} data={data} allreview={allReview} subCategory={subCategory} mainCategory={mainCategory}
+            <OneItem tag={tag} data={data} allreview={allReview} subCategory={subCategory}
+                     mainCategory={mainCategory}
                      itemId={itemId}/>
         </>
     );
