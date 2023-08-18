@@ -361,7 +361,8 @@ const Cart: FC<CartType> = () => {
                                 <div className="sm:col-span-2 text-xs text-[#71778e] font-semibold">
                                    
                                 </div>
-                                <div className="text-xs sm:col-span-3">Product</div>
+                                <div className="text-xs sm:col-span-2">Product</div>
+                               
                                 <div className="text-xs text-[#71778e] font-semibold ">
                                     Price
                                 </div>
@@ -371,6 +372,7 @@ const Cart: FC<CartType> = () => {
                                 <div className="text-xs text-[#71778e] font-semibold sm:col-span-2 sm:text-center">
                                     Quantity
                                 </div>
+                                <div className="text-xs sm:col-span-1 hidden sm:block">A.quantity</div>
                                 <div className="text-xs text-[#71778e] font-semibold hidden sm:block">
                                     Subtotal
                                 </div>

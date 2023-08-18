@@ -11,6 +11,7 @@ import {Product} from "@/app/[lang]/features/product/product";
 import baseUrl from "../../../../../utils/baseUrl";
 import useCartItemsHook from "@/app/[lang]/components/Hooks/useCartItemsHook";
 import useAuthCheckHook from "@/app/[lang]/components/Hooks/useAuthCheck";
+import useCartProductsHook from "../Hooks/useCartProductsHook";
 
 export interface OrderObj {
     userId: string;
@@ -53,6 +54,7 @@ const Checkout = () => {
     const [selectedRadio, setSelectedRadio] = useState("");
     const {getPrice} = useCurrency();
     const {cartItems, cartCount, cartAmount, addProductToCart, removeProductFromCart} = useCartItemsHook()
+    // const {cartItems, cartAmount} = useCartProductsHook()
     const [ship, setShip] = useState({
         shippingAddress: {
             apartment: "",
@@ -69,11 +71,14 @@ const Checkout = () => {
         },
     });
     const {isLoggedIn, authUser, logOut} = useAuthCheckHook()
+    
 
     useEffect(() => {
         if (isLoggedIn && authUser) {
             getUserDetails(authUser._id);
         }
+       
+        
     }, [isLoggedIn, authUser]);
 
     const handleEmailChange = (e: any) => {
@@ -276,6 +281,7 @@ const Checkout = () => {
     };
 
     console.log("checkout => ", {isLoggedIn, authUser})
+    console.log(cartAmount)
     return (
         <div className="container mx-auto xl:px-40 px-5 ">
             <section className=" my-5 flex justify-between">

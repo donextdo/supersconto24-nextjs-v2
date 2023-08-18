@@ -51,7 +51,7 @@ const ProductList = () => {
           </div> */}
         </div>
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 shadow-lg">
         {products.slice(0, 4).map((product) => (
           <ProductCard key={product._id} product={product} />
         ))}

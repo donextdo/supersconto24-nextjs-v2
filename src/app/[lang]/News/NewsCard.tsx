@@ -11,11 +11,11 @@ const NewsCard = ({ item }: any) => {
     });
     return (
         <div className="space-y-4">
-            <div className="h-[200px] w-full rounded-md">
+            <div className="h-[200px] w-full rounded-md shadow-lg">
                 <img
                     src={item.image}
                     alt={item.title}
-                    className="object-cover h-full w-full bg-gray-500 rounded-md"
+                    className="object-cover h-full w-full bg-gray-500 rounded-md shadow-lg"
                 />
             </div>
             <div className="w-full space-y-2">

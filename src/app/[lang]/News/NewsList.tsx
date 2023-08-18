@@ -24,7 +24,7 @@ const NewsList = () => {
     return (
         <div className="flex flex-col w-full gap-6">
             <h2 className="text-lg font-semibold">NEWS</h2>
-            <div className="w-full grid grid-cols-2 md:grid-cols-4 xl:grid-cols-5 gap-4">
+            <div className="w-full grid grid-cols-2 md:grid-cols-4 xl:grid-cols-5 gap-4 ">
                 {news.map((item:any ,index:any)=>(    
                 <NewsCard key={index} item={item}/>
                 ))}

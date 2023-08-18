@@ -249,7 +249,7 @@ export const ProductCard: FC<Props> = ({ product }) => {
                     {(count == undefined || count < 1) && (
                         <button
                             type="button"
-                            className= {`bg-primary text-white h-8  rounded-full w-full ${product.quantity<1?'pointer-events-none cursor-not-allowed':''}`}
+                            className= {`bg-primary text-white h-8  rounded-full w-full ${product.quantity<1?'':''}`}
                             onClick={() => handleAddToCart(product)}
                         >
                             Add to cart

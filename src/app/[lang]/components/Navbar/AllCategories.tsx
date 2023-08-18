@@ -189,7 +189,7 @@ const AllCategories = () => {
   };
 
   useEffect(() => {
-    if (pathname === "/en") {
+    if (pathname === "/en" || pathname === "/it") {
       setHomeOpen(true);
       handleCategoryLeave();
     } else {
@@ -205,7 +205,7 @@ const AllCategories = () => {
   return (
     <div className="">
       <button
-        className="w-[214px] h-[50px] rounded-full border border-[#4BB62E] "
+        className="w-64 min-w-[17rem] h-[50px]  border border-[#4BB62E] rounded-t-lg"
         onClick={toggleHome}
       >
         <div>
@@ -226,7 +226,7 @@ const AllCategories = () => {
       </button>
       {homeOpen && (
         <div
-          className="text-[13px] w-64 py-2 min-w-[17rem]   bg-white mt-2.5 border border-gray m-auto absolute p-3 z-30"
+          className="text-[13px] w-64 py-2 min-w-[17rem]  bg-white   m-auto absolute p-3 z-30 shadow-lg border border-[#4BB62E] rounded-b-lg"
           onMouseLeave={handleCategoryLeave}
         >
           <ul className="relative">

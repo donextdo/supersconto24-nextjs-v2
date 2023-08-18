@@ -162,7 +162,7 @@ export const Location = () => {
     return (
         <div className=" z-40">
             <div
-                className="border border-gray-200 rounded-md relative mx-6 flex flex-row justify-start items-center h-[60px] w-[200px] 2xl:w-[250px] py-6 px-4 shadow-sm cursor-pointer md:ml-3 "
+                className="border border-green-500 rounded-l-md relative ml-6 flex flex-row justify-start items-center h-[60px] w-[200px] 2xl:w-[250px] py-6 px-4 cursor-pointer md:ml-3 bg-gray-50"
                 onClick={handleModal}
             >
                 <div className="flex-grow flex flex-col">

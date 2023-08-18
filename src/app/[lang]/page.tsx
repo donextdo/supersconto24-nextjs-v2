@@ -31,7 +31,7 @@ export default async function page({
     console.log("render page", dictionary);
 
     return (
-        <div className="container mx-auto xl:px-40 px-5">
+        <div className="container mx-auto xl:px-40 px-5 ">
             {/* <NewProductList /> */}
             <div className="grid grid-cols-4 gap-1">
                 {/* left side */}
