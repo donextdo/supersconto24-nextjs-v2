@@ -108,8 +108,17 @@ export const Location = () => {
                     const lng = placeResult.geometry?.location?.lng();
                     const formattedAddress = placeResult.formatted_address;
                     setSelectedLocation(formattedAddress!)
+                    const addressComponents = placeResult.address_components;
 
-                    console.log("Formatted Address: ", { formattedAddress, lat, lng });
+                    // Find the component that represents the city or administrative area level 1
+                    const cityComponent = addressComponents?.find(
+                      (component) =>
+                      component.types.includes('administrative_area_level_2') || component.types.includes('political')
+                    );
+                    
+                    // Extract the city name from the cityComponent object
+                    const cityName = cityComponent ? cityComponent.short_name : 'City not found';
+                    console.log("Formatted Address: ", { formattedAddress, lat, lng , cityName});
                     // router.push(`/?${createQueryString("lat", lat ?? null)}&${createQueryString("long", lng ?? null)}`, {shallow: false})
                     const data = [
                         { key: 'lat', value: lat },

@@ -53,7 +53,7 @@ const Checkout = () => {
     const router = useRouter();
     const [selectedRadio, setSelectedRadio] = useState("");
     const {getPrice} = useCurrency();
-    const {cartItems, cartCount, cartAmount, addProductToCart, removeProductFromCart} = useCartItemsHook()
+    // const {cartItems, cartCount, cartAmount, addProductToCart, removeProductFromCart} = useCartItemsHook()
     // const {cartItems, cartAmount} = useCartProductsHook()
     const [ship, setShip] = useState({
         shippingAddress: {
@@ -71,15 +71,90 @@ const Checkout = () => {
         },
     });
     const {isLoggedIn, authUser, logOut} = useAuthCheckHook()
-    
+    const [cartItems, setCartItems] = useState<Product []>([])
+    const [cartAmount, setCartAmount] = useState(0)
 
     useEffect(() => {
         if (isLoggedIn && authUser) {
             getUserDetails(authUser._id);
         }
        
-        
+        fetchCart()
     }, [isLoggedIn, authUser]);
+
+    const getCartItems = async (cartItemsAr: Product[]) => {
+        // console.log("getCartItems", cartItemsAr)
+        // return axios({
+        //     url: `${baseUrl}/catelog/item/find-list`,
+        //     data: {items: cartItemsAr.map((i: any) => i._id)},
+        //     method: "post",
+        // })
+        try {
+            const response = await axios.post(`${baseUrl}/catelog/item/find-list`, {
+              items: cartItemsAr.map((item) => item._id)
+            });  
+            const responseData = response.data;   
+            setCartItems(prevCartItems => [...prevCartItems, ...responseData]);
+          } catch (error) {
+            console.error("Error fetching cart items:", error);
+          }
+
+    }
+
+    const calCartDetails = (cartItems: Product[]) => {
+        let cartAmountCalculated = 0
+       
+        cartItems.forEach((item) => {
+            
+
+            if (!item.expired){
+                if (!item.discount) {
+                    cartAmountCalculated += item.count * item.unit_price;
+                } else {
+                    cartAmountCalculated += item.count * (item.unit_price - (item.unit_price * (item.discount / 100)));
+                }
+            }
+        })
+        return {cartAmountCalculated}
+    }
+
+    const fetchCart = () => {
+        const localCart = localStorage.getItem("cartProducts") ? JSON.parse(localStorage.getItem("cartProducts")!) : []
+        
+        if (localCart.length > 0) {
+
+            getCartItems(localCart).then((data:any) => {
+                const fetchedCartItems = data.map((item: Product) => {
+                    const itemInCart: any = localCart.find((p: Product) => p._id === item._id);
+                    if (itemInCart) {
+                        const expireDate = new Date(item?.catelog_book_id?.expiredate);
+                        const currentDate = new Date();
+                        const expired = currentDate > expireDate;
+                        return {...item, count: itemInCart.count || 0, expired};
+                    }
+                    return item;
+                });
+
+                if (fetchedCartItems.length > 0) {
+                    const {cartAmountCalculated} = calCartDetails(fetchedCartItems)
+                } else {
+                    setCartItems([])
+                    setCartAmount(0)
+                    
+                }
+
+                console.log({fetchedCartItems});
+
+            }).catch((error) => {
+                console.error("error : ", error);
+            });
+
+        } else {
+            setCartItems([])
+            setCartAmount(0)
+            
+        }
+    }
 
     const handleEmailChange = (e: any) => {
         const newEmail = e.target.value;
