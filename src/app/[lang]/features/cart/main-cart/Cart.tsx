@@ -1,24 +1,25 @@
 "use client";
 
-import React, {FC, useEffect, useRef, useState} from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import {useDispatch} from "react-redux";
-import {calSubTotal} from "../cartSlice";
+import { useDispatch } from "react-redux";
+import { calSubTotal } from "../cartSlice";
 import axios from "axios";
 // import baseUrl from "../../../../utils/baseUrl";
-import {useReactToPrint} from "react-to-print";
+import { useReactToPrint } from "react-to-print";
 import baseUrl from "../../../../../../utils/baseUrl";
 import CartCard from "./CartCard";
 import useCurrency from "@/app/[lang]/components/Hooks/useCurrencyHook";
-import {HiOutlineDocumentDownload} from "react-icons/hi";
-import {TfiEmail} from "react-icons/tfi";
-import {BsPrinter} from "react-icons/bs";
+import { HiOutlineDocumentDownload } from "react-icons/hi";
+import { TfiEmail } from "react-icons/tfi";
+import { BsPrinter } from "react-icons/bs";
 import html2pdf from "html2pdf.js";
 import useCartItemsHook from "@/app/[lang]/components/Hooks/useCartItemsHook";
-import {Product} from "@/app/[lang]/features/product/product";
+import { Product } from "@/app/[lang]/features/product/product";
 import useAuthCheckHook from "@/app/[lang]/components/Hooks/useAuthCheck";
 import Swal from "sweetalert2";
 import logoImg from "../../../../../../assets/logo/logo.png";
+import CartSideBar from "./CartSideBar";
 
 
 // import { PDFDocument, StandardFonts } from 'pdf-lib';
@@ -61,12 +62,16 @@ const Cart: FC<CartType> = () => {
         cartshippingEmail: "",
     });
     const componentRef = useRef<any>(null);
-    const {getPrice} = useCurrency()
-    const {cartItems, cartCount, cartAmount, addProductToCart, removeProductFromCart, fetchCart} = useCartItemsHook()
-    const {isLoggedIn, authUser, logOut} = useAuthCheckHook()
+    const { getPrice } = useCurrency()
+    const { cartItems, cartCount, cartAmount, addProductToCart, removeProductFromCart, fetchCart } = useCartItemsHook()
+    const { isLoggedIn, authUser, logOut } = useAuthCheckHook()
+    const [productCart, setProductCart] = useState([])
+    let [amount, setAmount] = useState(0)
+    
 
     useEffect(() => {
         fetchCart()
+        fetchcartProduct()
     }, [])
 
 
@@ -82,6 +87,23 @@ const Cart: FC<CartType> = () => {
         else
             setCartObj([])
     }, [cartItems])
+
+    const fetchcartProduct = () => {
+        const localCart = localStorage.getItem("cartProducts") ? JSON.parse(localStorage.getItem("cartProducts")!) : []
+        setProductCart(localCart)
+
+       let cartAmountCalculated = 0
+       
+        localCart.forEach((item:any) => {         
+                if (!item.discount) {
+                    cartAmountCalculated += item.count * item.unit_price;
+                    setAmount(cartAmountCalculated)
+                } else {
+                    cartAmountCalculated += item.count * (item.unit_price - (item.unit_price * (item.discount / 100)));
+                    setAmount(cartAmountCalculated)
+                }
+        })
+    }
 
     async function getUserById(id: string) {
         try {
@@ -197,9 +219,9 @@ const Cart: FC<CartType> = () => {
             const opt = {
                 margin: 0.5,
                 filename: 'shopping-list.pdf',
-                image: {type: 'jpeg', quality: 0.98},
-                html2canvas: {scale: 2},
-                jsPDF: {unit: 'in', format: 'letter', orientation: 'portrait'},
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
             };
 
             const clone = componentRef.current.cloneNode(true) as HTMLDivElement;
@@ -231,9 +253,9 @@ const Cart: FC<CartType> = () => {
             const opt = {
                 margin: 0.5,
                 filename: 'shopping-list.pdf',
-                image: {type: 'jpeg', quality: 0.98},
-                html2canvas: {scale: 2},
-                jsPDF: {unit: 'in', format: 'letter', orientation: 'portrait'},
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
             };
 
             const clone = componentRef.current.cloneNode(true) as HTMLDivElement;
@@ -282,7 +304,7 @@ const Cart: FC<CartType> = () => {
         if (cartItems.length > 0) {
             fetch(`${baseUrl}/catelog/item/find-list`, {
                 method: "post",
-                headers: {"Content-Type": "application/json"},
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     items: cartItems.map((i: any) => i._id),
                 }),
@@ -315,7 +337,7 @@ const Cart: FC<CartType> = () => {
     const getShopTotal = (products: any[]) => {
         console.log(products)
         const shopAmount = products.reduce((acc, item) => {
-            if (!item.expired){
+            if (!item.expired) {
                 if (typeof item.discount === "undefined") {
                     console.log("no discount", item, acc)
 
@@ -335,12 +357,12 @@ const Cart: FC<CartType> = () => {
 
     const handleIncrement = (product: Product) => {
         console.log(`handle increment =>  ${product._id}`)
-        addProductToCart({...product, count: 1})
+        addProductToCart({ ...product, count: 1 })
     };
 
     const handleDecrement = (product: Product) => {
         console.log(`handle decrement =>  ${product._id}`)
-        removeProductFromCart({...product, count: 1})
+        removeProductFromCart({ ...product, count: 1 })
     };
 
     const handleDelete = (product: Product) => {
@@ -348,6 +370,7 @@ const Cart: FC<CartType> = () => {
     };
 
     console.log("cartObj : ", cartObj);
+    console.log("cart : ", amount);
 
     return (
         <div className="container mx-auto xl:px-40 px-5 mt-24 mb-20">
@@ -359,9 +382,10 @@ const Cart: FC<CartType> = () => {
                             {/* header */}
                             <div className="grid grid-cols-4 sm:grid-cols-12 gap-2 border-b border-[#71778e] pb-3">
                                 <div className="sm:col-span-2 text-xs text-[#71778e] font-semibold">
-                                   
+
                                 </div>
-                                <div className="text-xs sm:col-span-3">Product</div>
+                                <div className="text-xs sm:col-span-2">Product</div>
+
                                 <div className="text-xs text-[#71778e] font-semibold ">
                                     Price
                                 </div>
@@ -371,6 +395,7 @@ const Cart: FC<CartType> = () => {
                                 <div className="text-xs text-[#71778e] font-semibold sm:col-span-2 sm:text-center">
                                     Quantity
                                 </div>
+                                <div className="text-xs sm:col-span-1 hidden sm:block">A.quantity</div>
                                 <div className="text-xs text-[#71778e] font-semibold hidden sm:block">
                                     Subtotal
                                 </div>
@@ -442,16 +467,16 @@ const Cart: FC<CartType> = () => {
 
                             <div className="inline-flex gap-2">
                                 <button className="bg-[#233a95] text-white py-2.5 px-4 rounded-md text-xs h-11"
-                                        onClick={handleDownload}><HiOutlineDocumentDownload className=" h-4 w-4"/>
+                                    onClick={handleDownload}><HiOutlineDocumentDownload className=" h-4 w-4" />
                                 </button>
                                 <button className="bg-[#233a95] text-white py-2.5 px-4 rounded-md text-xs h-11"
-                                        onClick={handleEmail}><TfiEmail className=" h-4 w-4"/></button>
+                                    onClick={handleEmail}><TfiEmail className=" h-4 w-4" /></button>
 
                                 <button
                                     className="bg-[#233a95] text-white py-2.5 px-4 rounded-md text-xs h-11"
                                     onClick={handlePrint}
                                 >
-                                    <BsPrinter className=" h-4 w-4"/>
+                                    <BsPrinter className=" h-4 w-4" />
                                 </button>
                                 <button
                                     className="bg-[#233a95] text-white py-2.5 px-4 rounded-md text-xs h-11 w-[104px] hidden md:block"
@@ -467,26 +492,33 @@ const Cart: FC<CartType> = () => {
                         <div
                             className="w-80 border border-[#e4e5ee] p-4 rounded-md h-full hidden xl:block ml-8 bg-white">
                             <h2 className="font-semibold mb-3">CART TOTALS</h2>
-                            <hr/>
+                            <hr />
+                            <table className="w-full">
+                        <tbody>
+                            {productCart.map((item: any, index: number) => (
+                                <CartSideBar getPrice={getPrice} item={item} key={index} />
+                            ))}
+                        </tbody>
+                    </table>
                             <table className="w-full">
                                 <tbody>
-                                <tr>
-                                    <td className="border-b border-[#e4e5ee] py-3 font-semibold text-[13px]">
-                                        Subtotal
-                                    </td>
-                                    <td className="border-b border-[#e4e5ee] py-3 text-[15px] text-right">
-                                        {getPrice(cartAmount)}
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td className="border-b border-[#e4e5ee] py-3 font-semibold text-[13px]">
+                                            Subtotal
+                                        </td>
+                                        <td className="border-b border-[#e4e5ee] py-3 text-[15px] text-right">
+                                            {getPrice(amount)}
+                                        </td>
+                                    </tr>
 
-                                <tr>
-                                    <td className="border-y border-[#e4e5ee] text-[13px] font-semibold pb-4">
-                                        Total
-                                    </td>
-                                    <td className="border-y border-[#e4e5ee] text-right font-semibold text-xl py-4">
-                                        {getPrice(cartAmount)}
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td className="border-y border-[#e4e5ee] text-[13px] font-semibold pb-4">
+                                            Total
+                                        </td>
+                                        <td className="border-y border-[#e4e5ee] text-right font-semibold text-xl py-4">
+                                            {getPrice(amount)}
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
 
@@ -517,26 +549,34 @@ const Cart: FC<CartType> = () => {
                 {/* Cart Totals */}
                 <div className="w-full border border-[#e4e5ee] mt-10 p-4 rounded-md xl:hidden">
                     <h2 className="font-semibold mb-3">CART TOTALS</h2>
-                    <hr/>
+                    <hr />
                     <table className="w-full">
                         <tbody>
-                        <tr>
-                            <td className="border-b border-[#e4e5ee] py-3 font-semibold text-[13px]">
-                                Subtotal
-                            </td>
-                            <td className="border-b border-[#e4e5ee] py-3 text-[15px] text-right">
-                                {getPrice(cartAmount)}
-                            </td>
-                        </tr>
-                       
-                        <tr>
-                            <td className="border-b border-[#e4e5ee] text-[13px] font-semibold pb-4">
-                                Total
-                            </td>
-                            <td className="border-b border-[#e4e5ee] text-right font-semibold text-xl py-4">
-                                {getPrice(cartAmount)}
-                            </td>
-                        </tr>
+                            {productCart.map((item: any, index: number) => (
+                                <CartSideBar getPrice={getPrice} item={item} key={index} />
+                            ))}
+                            
+                        </tbody>
+                    </table>
+                    <table className="w-full">
+                        <tbody>
+                            <tr>
+                                <td className="border-b border-[#e4e5ee] py-3 font-semibold text-[13px]">
+                                    Subtotal
+                                </td>
+                                <td className="border-b border-[#e4e5ee] py-3 text-[15px] text-right">
+                                    {getPrice(amount)}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td className="border-b border-[#e4e5ee] text-[13px] font-semibold pb-4">
+                                    Total
+                                </td>
+                                <td className="border-b border-[#e4e5ee] text-right font-semibold text-xl py-4">
+                                    {getPrice(amount)}
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
 

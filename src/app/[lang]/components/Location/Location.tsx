@@ -108,8 +108,17 @@ export const Location = () => {
                     const lng = placeResult.geometry?.location?.lng();
                     const formattedAddress = placeResult.formatted_address;
                     setSelectedLocation(formattedAddress!)
+                    const addressComponents = placeResult.address_components;
 
-                    console.log("Formatted Address: ", { formattedAddress, lat, lng });
+                    // Find the component that represents the city or administrative area level 1
+                    const cityComponent = addressComponents?.find(
+                      (component) =>
+                      component.types.includes('administrative_area_level_2') || component.types.includes('political')
+                    );
+                    
+                    // Extract the city name from the cityComponent object
+                    const cityName = cityComponent ? cityComponent.short_name : 'City not found';
+                    console.log("Formatted Address: ", { formattedAddress, lat, lng , cityName});
                     // router.push(`/?${createQueryString("lat", lat ?? null)}&${createQueryString("long", lng ?? null)}`, {shallow: false})
                     const data = [
                         { key: 'lat', value: lat },
@@ -162,7 +171,7 @@ export const Location = () => {
     return (
         <div className=" z-40">
             <div
-                className="border border-gray-200 rounded-md relative mx-6 flex flex-row justify-start items-center h-[60px] w-[200px] 2xl:w-[250px] py-6 px-4 shadow-sm cursor-pointer md:ml-3 "
+                className="border border-green-500 rounded-l-md relative ml-6 flex flex-row justify-start items-center h-[60px] w-[200px] 2xl:w-[250px] py-6 px-4 cursor-pointer md:ml-3 bg-gray-50"
                 onClick={handleModal}
             >
                 <div className="flex-grow flex flex-col">

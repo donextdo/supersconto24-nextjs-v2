@@ -34,7 +34,7 @@ const Slider: React.FC<Props> = ({children, padding, gap}) => {
     <Card padding={padding ? padding : 'px-10 py-4'} styleClass='rounded-md relative'>
         
         <div ref={rowRef}
-        className={`w-full grid grid-flow-col-dense overflow-x-hidden scrollbar-hide ${gap ? gap : 'gap-4'}`}>
+        className={`w-full grid grid-flow-col-dense overflow-x-hidden scrollbar-hide  ${gap ? gap : 'gap-4'}`}>
             { children} 
         
         </div>

@@ -31,6 +31,7 @@ const MainFlyerList = ({ dictionary, locale }: MainFlyerListType) => {
     const [coordinates, setCoordinates] = useState<any>();
     // const [productList, setProductList] = useState<any>()
     const [visible, setVisible] = useState(8);
+    const [height, setHeight] = useState(48);
     const productList = useSelector((state: RootState) => state.flyer.flyers);
     const dispatch = useDispatch<AppDispatch>();
     const pathname = usePathname();
@@ -112,11 +113,11 @@ const MainFlyerList = ({ dictionary, locale }: MainFlyerListType) => {
     console.log(activeProduct)
 
     return (
-        <div>
+        <div className="rounded-lg border border-[#4BB62E] bg-white">
             <div
-                className="w-full h-[48vh] grid grid-cols-2 gap-x-4 gap-y-5
-         overflow-y-scroll overflow-x-hidden scrollbar-w-2 sm:grid-cols-4
-        xxl:grid-cols-4 pt-4"
+                className={`w-full h-auto grid grid-cols-2 gap-x-4 gap-y-5
+                sm:grid-cols-4
+                xxl:grid-cols-4 pt-4  shadow-lg px-2 `}
             >
                 {activeProduct?.slice(0, visible).map((flyer: any, index: number) => (  
                         <a
@@ -133,9 +134,11 @@ const MainFlyerList = ({ dictionary, locale }: MainFlyerListType) => {
             </div>
 
             <button
-                className="w-full  bg-[#F5F5F5] py-2 px-6 text-base font-medium text-[#898989] rounded-md hover:bg-[#E7E7E7]"
+                className="w-full  bg-[#efefef] py-2 px-6 text-base font-medium text-[#898989] rounded-md hover:bg-[#E7E7E7] shadow-lg mb-2"
                 onClick={() => {
                     setVisible((prevValue) => prevValue + 8);
+                     setHeight(height + 48);
+
                 }}
             >
                 {dictionary.loadMore}

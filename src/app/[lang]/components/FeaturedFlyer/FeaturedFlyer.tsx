@@ -32,7 +32,7 @@ const FeaturedFlyer = () => {
 
                 </div>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-4 bg-white shadow-lg px-2">
                 {getRandomItems(featuredProducts, 4).map((flyer: any, index: number) => (
                     <a onClick={() => {
                         window.location.href = `/catalog-preview/${flyer._id}?currency=${searchParams.get("currency")}`

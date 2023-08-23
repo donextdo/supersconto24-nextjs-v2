@@ -189,7 +189,7 @@ const AllCategories = () => {
   };
 
   useEffect(() => {
-    if (pathname === "/en") {
+    if (pathname === "/en" || pathname === "/it") {
       setHomeOpen(true);
       handleCategoryLeave();
     } else {
@@ -205,7 +205,7 @@ const AllCategories = () => {
   return (
     <div className="">
       <button
-        className="w-[214px] h-[50px] rounded-full border border-[#4BB62E] "
+        className="w-64 min-w-[17rem] h-[50px]  border border-[#4BB62E] rounded-t-lg"
         onClick={toggleHome}
       >
         <div>
@@ -226,7 +226,7 @@ const AllCategories = () => {
       </button>
       {homeOpen && (
         <div
-          className="text-[13px] w-64 py-2 min-w-[17rem]   bg-white mt-2.5 border border-gray m-auto absolute p-3 z-30"
+          className="text-[13px] w-64 py-2 min-w-[17rem] bg-white  m-auto absolute p-3 z-30 shadow-lg border border-[#4BB62E] rounded-b-lg"
           onMouseLeave={handleCategoryLeave}
         >
           <ul className="relative">
@@ -234,7 +234,7 @@ const AllCategories = () => {
               return (
                 <li key={index} className="list-item w-full flex-row pt-3">
                   <a
-                    className={`block px-2 py-2  hover:text-[#4BB62E] group "
+                    className={`block px-2 py-2 hover:text-[#4BB62E] group "
                     ${
                       activeCategory === category._id && isHover
                         ? "text-[#4BB62E]"
@@ -244,7 +244,7 @@ const AllCategories = () => {
                     onClick={() => getProductByCategory(category?._id)}
                   >
                     <div className=" flex flex-row items-center justify-between hover:cursor-pointer">
-                      <div>{category?.name} </div>
+                      <div className="text-[15px]">{category?.name} </div>
                       {hasSubcategories(category?._id) && (
                         <IoIosArrowForward className="text-gray-500" />
                       )}

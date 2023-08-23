@@ -74,7 +74,7 @@ const Header = () => {
     // console.log("da", authUser)
     return (
         <>
-            <div className="hidden md:block container mx-auto xl:px-40 px-5 sticky top-0 z-40 bg-white ">
+            <div className="hidden md:block container mx-auto xl:px-40 px-5 sticky top-0 z-40 bg-[#f5f5f5]">
                 <div className=" flex items-center justify-between  py-2">
                     <div className="flex">
                         <div className="text-4xl font-bold text-[#223994] flex justify-start">
@@ -85,7 +85,7 @@ const Header = () => {
                                         alt="item1"
                                         style={{
                                             objectFit: "contain",
-                                            backgroundColor: "white",
+                                            
                                             width: "100%",
                                             height: "100%",
                                         }}
@@ -98,11 +98,11 @@ const Header = () => {
                         <div className="flex justify-start items-center lg:visible md:visible invisible">
                             <Location />
                         </div>
-                        <div className="flex justify-start items-center font-semibold">
-                            <div className="mx-4">
+                        <div className="flex justify-center items-center font-semibold ">
+                            <div className="">
                                 <a onClick={() => getMyLocation()}>
-                                    <button className="border rounded-full p-2">
-                                        <BiCurrentLocation className="text-lg text-black" />
+                                    <button className="h-[60px] bg-green-500 px-2 rounded-r-md">
+                                        <BiCurrentLocation className="text-lg text-white " />
                                     </button>
                                 </a>
                             </div>
