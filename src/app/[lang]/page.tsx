@@ -117,7 +117,7 @@ export default async function page({
                 <NewsLettertwo />
             </div>
 
-            <div className="footer-container">
+            {/* <div className="footer-container">
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 py-16 px-8">
                     <div className="link-set">
                         <p>Customer Care</p>
@@ -265,7 +265,7 @@ export default async function page({
                         </ul>
                     </div>
                 </div>
-            </div>
+            </div> */}
         </div>
     );
 }
