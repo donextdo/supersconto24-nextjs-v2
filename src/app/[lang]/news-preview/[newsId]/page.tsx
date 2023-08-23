@@ -2,10 +2,12 @@ import baseUrl from "../../../../../utils/baseUrl";
 import OneNewsCard from "../../News/OneNewsCard";
 import {notFound} from "next/navigation";
 import {Metadata, ResolvingMetadata} from "next";
+import {Locale} from "../../../../../i18n-config";
 
 interface IProps {
     params: {
         newsId: string;
+        lang: Locale;
     };
 }
 
@@ -28,7 +30,13 @@ export async function generateMetadata(
             title: `Supersconto | ${news.title}`,
             description: news.news_description ?? `latest news at supersconto24 store`,
             openGraph: {
-                images: [news.image],
+                images: [{
+                    url: news.image,
+                    secureUrl: news.image,
+                    alt: news?.title,
+                    width: 1200,
+                    height: 630,
+                }],
                 title: `Supersconto | ${news?.title}`,
                 description: news.description ?? `latest news at supersconto24 store`,
                 type: "website"
@@ -62,7 +70,7 @@ const NewsPage = async ({params}: IProps) => {
 
     return (
         <div>
-            <OneNewsCard news={news} newsId={newsId}/>
+            <OneNewsCard news={news} newsId={newsId} locale={params.lang}/>
         </div>
     );
 }

@@ -10,10 +10,11 @@ import useCurrency from "../Hooks/useCurrencyHook";
 import Swal from "sweetalert2";
 import Description from "../ViewItem/Details/Description";
 import AdditionalInformation from "../ViewItem/Details/AdditionalInformation";
-import Social from "./Socaial";
+import Social from "./Social";
+import siteUrl from "../../../../../utils/siteUrl";
 
 
-const OneItem = ({tag, data, mainCategory, subCategory, allreview, itemId}:any) => {
+const OneItem = ({tag, data, mainCategory, subCategory, allreview, itemId, locale}: any) => {
     const [isColor, setIsColor] = useState(1);
     const [count, setCount] = useState(1);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -31,7 +32,7 @@ const OneItem = ({tag, data, mainCategory, subCategory, allreview, itemId}:any) 
     console.log({mainCategory, subCategory});
 
     let averageReviewCount = 0;
-    const approvedReviews = allreview.filter((review:any) => review.reviewStatus === 'approved');
+    const approvedReviews = allreview.filter((review: any) => review.reviewStatus === 'approved');
     const approvedReviewsLength = approvedReviews.length;
 
     if (approvedReviewsLength > 0) {
@@ -59,9 +60,9 @@ const OneItem = ({tag, data, mainCategory, subCategory, allreview, itemId}:any) 
     };
 
     const handleDecrement = (product: Product) => {
-        if(count>1){
-            removeProductFromCart({ ...product, count: 1 });
-             setCount((prevState) => prevState - 1);
+        if (count > 1) {
+            removeProductFromCart({...product, count: 1});
+            setCount((prevState) => prevState - 1);
         }
     };
 
@@ -120,12 +121,13 @@ const OneItem = ({tag, data, mainCategory, subCategory, allreview, itemId}:any) 
     const [expanded, setExpanded] = useState(false);
 
     const titleToDisplay = expanded ? data.product_name : data.product_name?.substring(0, MAX_TITLE_LENGTH) + "...";
-    return (  
+    const encodedUrl =  encodeURIComponent(`${siteUrl}/${locale}/item-preview/${itemId}`)
+    return (
         <>
             <div className="bg-[#f7f8fd] ">
                 <div className="container mx-auto xl:px-40 px-5 py-6 ">
                     <div className=" ">
-                         {/*<Breadcrumbs crumbs={breadcrumbs}></Breadcrumbs> */}
+                        {/*<Breadcrumbs crumbs={breadcrumbs}></Breadcrumbs> */}
                     </div>
                     {/* working one */}
                     <div className=" bg-white drop-shadow rounded-md px-6 pb-5 pt-5">
@@ -304,7 +306,7 @@ const OneItem = ({tag, data, mainCategory, subCategory, allreview, itemId}:any) 
 
                                                 <button
                                                     type="button"
-                                                    className={`px-4 hover:bg-yellow-400 border-gray-500 bg-gray-300  text-[20px]   rounded-full  font-medium ${(data.quantity==count)?'pointer-events-none cursor-not-allowed':''}`}
+                                                    className={`px-4 hover:bg-yellow-400 border-gray-500 bg-gray-300  text-[20px]   rounded-full  font-medium ${(data.quantity == count) ? 'pointer-events-none cursor-not-allowed' : ''}`}
                                                     onClick={() => handleIncrement(data)}
                                                 >
                                                     +
@@ -423,86 +425,8 @@ const OneItem = ({tag, data, mainCategory, subCategory, allreview, itemId}:any) 
                                             </div>
                                         )}
 
-                                        <div >
-                                            {/* <div className="">
-                                                <a
-                                                    href={facebookShareUrl}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    onClick={facebookShareClick}
-                                                >
-                                                    <div
-                                                        className="h-[34px] w-[34px] rounded-full bg-blue-700 flex items-center justify-center">
-                                                        <FaFacebookF className="text-white"></FaFacebookF>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                            <div className="">
-                                                <a
-                                                    href={twitterShareUrl}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    onClick={twitterShareClick}
-                                                >
-                                                    <div
-                                                        className="h-[34px] w-[34px] rounded-full bg-cyan-500 flex items-center justify-center">
-                                                        <FaTwitter className="text-white"></FaTwitter>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                            <div className="">
-                                                <a
-                                                    href={pinterestShareUrl}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    onClick={pinterestShareClick}
-                                                >
-                                                    <div
-                                                        className="h-[34px] w-[34px] rounded-full bg-red-600 flex items-center justify-center">
-                                                        <FaPinterest className="text-white"></FaPinterest>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                            <div className="">
-                                                <a
-                                                    href={linkedinShareUrl}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    onClick={linkedinShareClick}
-                                                >
-                                                    <div
-                                                        className="h-[34px] w-[34px] rounded-full bg-cyan-700 flex items-center justify-center">
-                                                        <FaLinkedin className="text-white"></FaLinkedin>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                            <div className="">
-                                                <a
-                                                    href={redditShareUrl}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    onClick={redditShareClick}
-                                                >
-                                                    <div
-                                                        className="h-[34px] w-[34px] rounded-full bg-orange-600 flex items-center justify-center">
-                                                        <FaReddit className="text-white"></FaReddit>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                            <div className="">
-                                                <a
-                                                    href={whatsappShareUrl}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    onClick={whatsappShareClick}
-                                                >
-                                                    <div
-                                                        className="h-[34px] w-[34px] rounded-full bg-green-500 flex items-center justify-center">
-                                                        <FaWhatsapp className="text-white"></FaWhatsapp>
-                                                    </div>
-                                                </a>
-                                            </div> */}
-                                            <Social itemId={itemId} data={data}/>
+                                        <div>
+                                            <Social encodedUrl={encodedUrl}/>
                                         </div>
                                     </div>
                                 </div>
@@ -650,5 +574,5 @@ const OneItem = ({tag, data, mainCategory, subCategory, allreview, itemId}:any) 
         </>
     );
 }
- 
+
 export default OneItem;

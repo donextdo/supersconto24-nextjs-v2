@@ -1,25 +1,10 @@
-import { FaFacebookF, FaLinkedin, FaPinterest, FaReddit, FaTwitter, FaWhatsapp } from "react-icons/fa";
+import {FaFacebookF, FaLinkedin, FaPinterest, FaReddit, FaTwitter, FaWhatsapp} from "react-icons/fa";
 import siteUrl from "../../../../../utils/siteUrl";
 import pic1 from '../../../../../assets/flyers/flyer_1.jpg'
-import { Metadata } from "next";
-export const metadata: Metadata = {
-    title: "Supersconto | Flyer preview",
-    openGraph: {
-        title: 'Acme',
-        description: 'Acme is a...',
-        images: [
-            {
-              url: '<https://example.com/api/preview>',
-              width: 1200,
-              height: 600,
-            }
-        ]
-      },
-    
-}
+import {Metadata} from "next";
 
-const Social = ({itemId}:any) => {
-    const encodedUrl = encodeURIComponent(`${siteUrl}/item-preview/${itemId}`);
+const Social = ({encodedUrl}: { encodedUrl: string }) => {
+
     const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
     const twitterShareUrl = `https://twitter.com/intent/tweet?url=${encodedUrl}`;
     const pinterestShareUrl = `https://pinterest.com/pin/create/bookmarklet/?url=${encodedUrl}`;

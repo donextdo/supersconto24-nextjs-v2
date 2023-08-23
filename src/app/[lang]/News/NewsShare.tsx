@@ -2,8 +2,8 @@
 import { FaFacebookF, FaLinkedin, FaPinterest, FaReddit, FaTwitter, FaWhatsapp } from "react-icons/fa";
 import siteUrl from "../../../../utils/siteUrl";
 
-const NewsShare = ({ newsId }: any) => {
-    const encodedUrl = encodeURIComponent(`${siteUrl}/news-preview/${newsId}`);
+const NewsShare = ({ encodedUrl }: { encodedUrl: string }) => {
+
     const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
     const twitterShareUrl = `https://twitter.com/intent/tweet?url=${encodedUrl}`;
     const pinterestShareUrl = `https://pinterest.com/pin/create/bookmarklet/?url=${encodedUrl}`;

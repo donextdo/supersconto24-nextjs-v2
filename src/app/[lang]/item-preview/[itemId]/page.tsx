@@ -2,10 +2,12 @@ import baseUrl from "../../../../../utils/baseUrl";
 import OneItem from "../../components/OneItem/OneItem";
 import {notFound} from "next/navigation";
 import {Metadata, ResolvingMetadata} from "next";
+import {Locale} from "../../../../../i18n-config";
 
-interface IProps {
+interface ItemPagesProps {
     params: {
         itemId: string;
+        lang: Locale;
     };
 }
 
@@ -15,7 +17,7 @@ type Props = {
 };
 
 export async function generateMetadata(
-    { params, searchParams }: Props, parent: ResolvingMetadata
+    {params, searchParams}: Props, parent: ResolvingMetadata
 ): Promise<Metadata> {
     try {
         // read route params
@@ -29,10 +31,16 @@ export async function generateMetadata(
             title: `Supersconto | ${product.product_name}`,
             description: product.product_description ?? `best selling items at supersconto24 store`,
             openGraph: {
-                images: [product.product_image],
+                images: [{
+                    url: product.product_image,
+                    secureUrl: product.product_image,
+                    alt: product.product_name,
+                    width: 1200,
+                    height: 630,
+                }],
                 title: `Supersconto | ${product.product_name}`,
                 description: product.product_description ?? `best selling items at supersconto24 store`,
-                type:"website"
+                type: "website",
             },
         };
     } catch (e) {
@@ -49,7 +57,7 @@ async function fetchItem(itemId: string) {
     return res.json()
 }
 
-const ItemPages = async ({params}: IProps) => {
+const ItemPages = async ({params}: ItemPagesProps) => {
     const itemId = params.itemId
     let data: any
     let tag: any
@@ -71,7 +79,7 @@ const ItemPages = async ({params}: IProps) => {
 
     return (
         <>
-            <OneItem tag={tag} data={data} allreview={allReview} subCategory={subCategory}
+            <OneItem tag={tag} data={data} allreview={allReview} subCategory={subCategory} locale={params.lang}
                      mainCategory={mainCategory}
                      itemId={itemId}/>
         </>
