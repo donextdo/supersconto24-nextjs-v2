@@ -20,6 +20,7 @@ import useAuthCheckHook from "@/app/[lang]/components/Hooks/useAuthCheck";
 import Swal from "sweetalert2";
 import logoImg from "../../../../../../assets/logo/logo.png";
 import CartSideBar from "./CartSideBar";
+import useCartProductsHook from "@/app/[lang]/components/Hooks/useCartProductsHook";
 
 
 // import { PDFDocument, StandardFonts } from 'pdf-lib';
@@ -64,6 +65,7 @@ const Cart: FC<CartType> = () => {
     const componentRef = useRef<any>(null);
     const { getPrice } = useCurrency()
     const { cartItems, cartCount, cartAmount, addProductToCart, removeProductFromCart, fetchCart } = useCartItemsHook()
+    const { cartProducts, cartProductsAmount, removeCartProductFromCart } = useCartProductsHook()
     const { isLoggedIn, authUser, logOut } = useAuthCheckHook()
     const [productCart, setProductCart] = useState([])
     let [amount, setAmount] = useState(0)
@@ -71,7 +73,7 @@ const Cart: FC<CartType> = () => {
 
     useEffect(() => {
         fetchCart()
-        fetchcartProduct()
+        // fetchcartProduct()
     }, [])
 
 
@@ -369,8 +371,13 @@ const Cart: FC<CartType> = () => {
         removeProductFromCart(product)
     };
 
+    const handleDeleteFromCartSideBar = (product: Product) => {
+        removeCartProductFromCart(product)
+    };
+
     console.log("cartObj : ", cartObj);
     console.log("cart : ", amount);
+    console.log("cartProducts : ", cartProducts);
 
     return (
         <div className="container mx-auto xl:px-40 px-5 mt-24 mb-20">
@@ -495,8 +502,8 @@ const Cart: FC<CartType> = () => {
                             <hr />
                             <table className="w-full">
                         <tbody>
-                            {productCart.map((item: any, index: number) => (
-                                <CartSideBar getPrice={getPrice} item={item} key={index} />
+                            {cartProducts.map((item: any, index: number) => (
+                                <CartSideBar getPrice={getPrice} item={item} key={index} handleDelete={handleDeleteFromCartSideBar} />
                             ))}
                         </tbody>
                     </table>
@@ -507,7 +514,7 @@ const Cart: FC<CartType> = () => {
                                             Subtotal
                                         </td>
                                         <td className="border-b border-[#e4e5ee] py-3 text-[15px] text-right">
-                                            {getPrice(amount)}
+                                            {getPrice(cartProductsAmount)}
                                         </td>
                                     </tr>
 
@@ -516,7 +523,7 @@ const Cart: FC<CartType> = () => {
                                             Total
                                         </td>
                                         <td className="border-y border-[#e4e5ee] text-right font-semibold text-xl py-4">
-                                            {getPrice(amount)}
+                                            {getPrice(cartProductsAmount)}
                                         </td>
                                     </tr>
                                 </tbody>

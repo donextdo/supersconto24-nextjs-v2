@@ -1,17 +1,13 @@
 "use client";
 import axios from "axios";
 import {useEffect, useState} from "react";
-import {useDispatch} from "react-redux";
 
-import {usePathname, useRouter, useSearchParams} from "next/navigation";
-import {AppDispatch} from "@/app/[lang]/redux/store";
+import {useRouter} from "next/navigation";
 import CheckoutSidebar from "@/app/[lang]/components/Checkout/CheckoutSidebar";
 import useCurrency from "@/app/[lang]/components/Hooks/useCurrencyHook";
-import {Product} from "@/app/[lang]/features/product/product";
 import baseUrl from "../../../../../utils/baseUrl";
-import useCartItemsHook from "@/app/[lang]/components/Hooks/useCartItemsHook";
 import useAuthCheckHook from "@/app/[lang]/components/Hooks/useAuthCheck";
-import useCartProductsHook from "../Hooks/useCartProductsHook";
+import useCartProductsHook from "@/app/[lang]/components/Hooks/useCartProductsHook";
 
 export interface OrderObj {
     userId: string;
@@ -53,8 +49,7 @@ const Checkout = () => {
     const router = useRouter();
     const [selectedRadio, setSelectedRadio] = useState("");
     const {getPrice} = useCurrency();
-    // const {cartItems, cartCount, cartAmount, addProductToCart, removeProductFromCart} = useCartItemsHook()
-    // const {cartItems, cartAmount} = useCartProductsHook()
+    const {cartProducts, cartProductsAmount} = useCartProductsHook()
     const [ship, setShip] = useState({
         shippingAddress: {
             apartment: "",
@@ -71,90 +66,12 @@ const Checkout = () => {
         },
     });
     const {isLoggedIn, authUser, logOut} = useAuthCheckHook()
-    const [cartItems, setCartItems] = useState<Product []>([])
-    const [cartAmount, setCartAmount] = useState(0)
 
     useEffect(() => {
         if (isLoggedIn && authUser) {
             getUserDetails(authUser._id);
         }
-       
-        fetchCart()
     }, [isLoggedIn, authUser]);
-
-    const getCartItems = async (cartItemsAr: Product[]) => {
-        // console.log("getCartItems", cartItemsAr)
-        // return axios({
-        //     url: `${baseUrl}/catelog/item/find-list`,
-        //     data: {items: cartItemsAr.map((i: any) => i._id)},
-        //     method: "post",
-        // })
-        try {
-            const response = await axios.post(`${baseUrl}/catelog/item/find-list`, {
-              items: cartItemsAr.map((item) => item._id)
-            });  
-            const responseData = response.data;   
-            setCartItems(prevCartItems => [...prevCartItems, ...responseData]);
-          } catch (error) {
-            console.error("Error fetching cart items:", error);
-          }
-
-    }
-
-    const calCartDetails = (cartItems: Product[]) => {
-        let cartAmountCalculated = 0
-       
-        cartItems.forEach((item) => {
-            
-
-            if (!item.expired){
-                if (!item.discount) {
-                    cartAmountCalculated += item.count * item.unit_price;
-                } else {
-                    cartAmountCalculated += item.count * (item.unit_price - (item.unit_price * (item.discount / 100)));
-                }
-            }
-        })
-        return {cartAmountCalculated}
-    }
-
-    const fetchCart = () => {
-        const localCart = localStorage.getItem("cartProducts") ? JSON.parse(localStorage.getItem("cartProducts")!) : []
-        
-        if (localCart.length > 0) {
-
-            getCartItems(localCart).then((data:any) => {
-                const fetchedCartItems = data.map((item: Product) => {
-                    const itemInCart: any = localCart.find((p: Product) => p._id === item._id);
-                    if (itemInCart) {
-                        const expireDate = new Date(item?.catelog_book_id?.expiredate);
-                        const currentDate = new Date();
-                        const expired = currentDate > expireDate;
-                        return {...item, count: itemInCart.count || 0, expired};
-                    }
-                    return item;
-                });
-
-                if (fetchedCartItems.length > 0) {
-                    const {cartAmountCalculated} = calCartDetails(fetchedCartItems)
-                } else {
-                    setCartItems([])
-                    setCartAmount(0)
-                    
-                }
-
-                console.log({fetchedCartItems});
-
-            }).catch((error) => {
-                console.error("error : ", error);
-            });
-
-        } else {
-            setCartItems([])
-            setCartAmount(0)
-            
-        }
-    }
 
     const handleEmailChange = (e: any) => {
         const newEmail = e.target.value;
@@ -301,14 +218,14 @@ const Checkout = () => {
         if (isLoggedIn) {
             const orderObj = {
                 userId: authUser._id,
-                totalprice: cartAmount,
+                totalprice: cartProductsAmount,
                 status: "processing",
                 date: new Date().toLocaleDateString("en-US", {
                     month: "long",
                     day: "numeric",
                     year: "numeric",
                 }),
-                items: cartItems.map((item: any) => ({
+                items: cartProducts.map((item: any) => ({
                     productId: item._id,
                     orderquantity: item.count,
                     shopId: item.shop_id,
@@ -356,7 +273,7 @@ const Checkout = () => {
     };
 
     console.log("checkout => ", {isLoggedIn, authUser})
-    console.log(cartAmount)
+    console.log({cartProducts, cartProductsAmount})
     return (
         <div className="container mx-auto xl:px-40 px-5 ">
             <section className=" my-5 flex justify-between">
@@ -533,7 +450,7 @@ const Checkout = () => {
                         {/* load items and total  map method*/}
                         <table className="w-full">
                             <tbody>
-                            {cartItems.map((item: any, index: number) => (
+                            {cartProducts.map((item: any, index: number) => (
                                 <CheckoutSidebar getPrice={getPrice} item={item} key={index}/>
                             ))}
                             </tbody>
@@ -546,7 +463,7 @@ const Checkout = () => {
                                     Subtotal
                                 </td>
                                 <td className=" py-3 text-[15px] text-right border-y border-[#e4e5ee]">
-                                    {getPrice(cartAmount)}
+                                    {getPrice(cartProductsAmount)}
                                 </td>
                             </tr>
                             <tr>
@@ -554,7 +471,7 @@ const Checkout = () => {
                                     Total
                                 </td>
                                 <td className="border-b border-[#e4e5ee] text-right font-semibold text-xl py-4 ">
-                                    {getPrice(cartAmount)}
+                                    {getPrice(cartProductsAmount)}
                                 </td>
                             </tr>
                             </tbody>
@@ -644,7 +561,7 @@ const Checkout = () => {
                         zipCode == "" ||
                         phone == "" ||
                         email == "" ||
-                        cartItems.length == 0 ? (
+                        cartProducts.length == 0 ? (
                             <button
                                 className="bg-primary opacity-50 text-white py-2.5 rounded-md text-sm h-[50px] w-full text-center mt-6 font-semibold"
                                 onClick={handleOrder}
@@ -684,7 +601,7 @@ const Checkout = () => {
                     {/* load items and total  map method*/}
                     <table className="w-full">
                         <tbody>
-                        {cartItems.map((item: any, index: number) => (
+                        {cartProducts.map((item: any, index: number) => (
                             <CheckoutSidebar getPrice={getPrice} item={item} key={index}/>
                         ))}
                         </tbody>
@@ -697,7 +614,7 @@ const Checkout = () => {
                                 Subtotal
                             </td>
                             <td className=" py-3 text-[15px] text-right border-y border-[#e4e5ee]">
-                                {getPrice(cartAmount)}
+                                {getPrice(cartProductsAmount)}
                             </td>
                         </tr>
                         <tr>
@@ -705,7 +622,7 @@ const Checkout = () => {
                                 Total
                             </td>
                             <td className="border-b border-[#e4e5ee] text-right font-semibold text-xl py-4 ">
-                                {getPrice(cartAmount)}
+                                {getPrice(cartProductsAmount)}
                             </td>
                         </tr>
                         </tbody>
@@ -785,7 +702,7 @@ const Checkout = () => {
                     zipCode == "" ||
                     phone == "" ||
                     email == "" ||
-                    cartItems.length == 0? (
+                    cartProducts.length == 0? (
                         <button
                             className="bg-primary opacity-50 text-white py-2.5 rounded-md text-sm h-[50px] w-full text-center mt-6 font-semibold"
                             onClick={handleOrder}

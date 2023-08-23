@@ -2,21 +2,32 @@ import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "@/app/[lang]/redux/store";
 import {Product} from "@/app/[lang]/features/product/product";
-import {addProduct, removeProduct, setCart} from "@/app/[lang]/features/cart/cartSlice";
+import {addProduct, removeProduct, setCart} from "@/app/[lang]/features/cart/cartProductSlice";
 import baseUrl, {axiosRequest} from "../../../../../utils/baseUrl";
 
-const useCartProductsHook = () => {
-    const [cartItems, setCartItems] = useState<Product []>([])
-    const [cartCount, setCartCount] = useState(0)
-    const [cartAmount, setCartAmount] = useState(0)
-    const cartState = useSelector((state: RootState) => state.cart);
+const UseCartProductHook = () => {
+    const [cartProducts, setCartItems] = useState<Product []>([])
+    const [cartProductsCount, setCartCount] = useState(0)
+    const [cartProductsAmount, setCartAmount] = useState(0)
+    const cartState = useSelector((state: RootState) => state.cartProducts);
     const dispatch = useDispatch<AppDispatch>()
     const axios = axiosRequest();
 
     useEffect(() => {
-        fetchCart()
-       
-    }, [])
+        const cart = cartState.cartItems || []
+
+        if (cart.length === 0) {
+
+            fetchCartProduct()
+
+        } else {
+            const cartItemsState = cartState.cartItems
+            const {cartAmountCalculated, cartCountCalculated} = calCartDetails(cartItemsState)
+            setCartItems(cartItemsState)
+            setCartAmount(cartAmountCalculated)
+            setCartCount(cartCountCalculated)
+        }
+    }, [cartState.cartItems, dispatch])
 
     const getCartItems = async (cartItemsAr: Product[]) => {
         console.log("getCartItems", cartItemsAr)
@@ -44,9 +55,15 @@ const useCartProductsHook = () => {
         })
         return {cartAmountCalculated, cartCountCalculated}
     }
-    
+    const addCartProductsToCart = (product: Product) => {
+        dispatch(addProduct(product))
+    }
 
-    const fetchCart = () => {
+    const removeCartProductFromCart = (product: Product) => {
+        dispatch(removeProduct(product))
+    }
+
+    const fetchCartProduct = () => {
         const localCart = localStorage.getItem("cartProducts") ? JSON.parse(localStorage.getItem("cartProducts")!) : []
 
         if (localCart.length > 0) {
@@ -90,7 +107,7 @@ const useCartProductsHook = () => {
     }
     // console.log("render", {cartItems, cartCount, cartAmount, addProductToCart, removeProductFromCart})
 
-    return {cartItems, cartCount, cartAmount, fetchCart}
+    return {cartProducts, cartProductsCount, cartProductsAmount, addCartProductsToCart, removeCartProductFromCart, fetchCartProduct}
 };
 
-export default useCartProductsHook;
+export default UseCartProductHook;
