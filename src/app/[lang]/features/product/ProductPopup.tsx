@@ -318,7 +318,7 @@ const ProductPopup = ({ setProductPopup, proId }: any) => {
                                                 className=" bg-blue-900 text-white min-h-[34px] min-w-[140px] rounded-full  ml-4"
                                                 onClick={() => handleAddToCart(data)}
                                             >
-                                                Add to cart
+                                                Add to list
                                             </button>
                                         </div>
                                     </div>

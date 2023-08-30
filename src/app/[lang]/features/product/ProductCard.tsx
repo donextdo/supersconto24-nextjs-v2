@@ -252,7 +252,7 @@ export const ProductCard: FC<Props> = ({ product }) => {
                             className= {`bg-primary text-white h-8  rounded-full w-full ${product.quantity<1?'':''}`}
                             onClick={() => handleAddToCart(product)}
                         >
-                            Add to cart
+                            Add to list
                         </button>
                     )}
 

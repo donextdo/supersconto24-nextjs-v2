@@ -382,6 +382,7 @@ const Cart: FC<CartType> = () => {
     return (
         <div className="container mx-auto xl:px-40 px-5 mt-24 mb-20">
             <div>
+                <h1 className="text-center mb-8 text-2xl font-bold">Shopping List</h1>
                 <section className="flex justify-between h-full">
                     <div className="w-full h-full pb-10 bg-white py-2 px-4">
 
