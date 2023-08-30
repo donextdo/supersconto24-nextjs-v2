@@ -41,7 +41,7 @@ const CartPopup = () => {
 
                     <Link href="/viewcart">
                         <button className="bg-white border py-2 rounded-md text-sm h-[50px] w-full text-center">
-                            View cart
+                            View list
                         </button>
                     </Link>
                     <Link href="/checkout">
