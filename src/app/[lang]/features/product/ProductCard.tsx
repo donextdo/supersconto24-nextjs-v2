@@ -54,7 +54,7 @@ export const ProductCard: FC<Props> = ({ product }) => {
 
         Swal.fire({
             title:
-                '<span style="font-size: 18px">Item has been added to your card</span>',
+                '<span style="font-size: 18px">Item has been added to list</span>',
             width: 400,
             timer: 1500,
             color: "white",
@@ -141,7 +141,7 @@ export const ProductCard: FC<Props> = ({ product }) => {
         setProId(product);
     };
 
-    console.log({ count })
+    console.log({ product })
     return (
         <>
             <div

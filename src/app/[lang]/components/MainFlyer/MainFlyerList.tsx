@@ -107,9 +107,19 @@ const MainFlyerList = ({ dictionary, locale }: MainFlyerListType) => {
     };
 
     console.log("render", productList);
-    const activeProduct = productList.filter((product:any)=>product.active === true)
-    
-    
+    const currentDate = new Date();
+
+    const activeProduct = productList.filter((product: any) => product.active === true)
+
+
+    const notExpiredData = activeProduct.filter(item => {
+        const expireDate = new Date(item.expiredate);
+        const expired = expireDate > currentDate;
+        console.log(expired)
+        return expired
+    });
+
+    console.log("expireData", notExpiredData);
     console.log(activeProduct)
 
     return (
@@ -119,17 +129,17 @@ const MainFlyerList = ({ dictionary, locale }: MainFlyerListType) => {
                 sm:grid-cols-4
                 xxl:grid-cols-4 pt-4  shadow-lg px-2 `}
             >
-                {activeProduct?.slice(0, visible).map((flyer: any, index: number) => (  
-                        <a
-                            onClick={() => {
-                                window.location.href = `/catalog-preview/${flyer._id
-                                    }?currency=${searchParams.get("currency")}`;
-                            }}
-                            className="cursor-pointer"
-                            key={index}
-                        >
-                            <MainFlyerCard key={index} flyer={flyer} />
-                        </a>   
+                {notExpiredData?.slice(0, visible).map((flyer: any, index: number) => (
+                    <a
+                        onClick={() => {
+                            window.location.href = `/catalog-preview/${flyer._id
+                                }?currency=${searchParams.get("currency")}`;
+                        }}
+                        className="cursor-pointer"
+                        key={index}
+                    >
+                        <MainFlyerCard key={index} flyer={flyer} />
+                    </a>
                 ))}
             </div>
 
@@ -137,7 +147,7 @@ const MainFlyerList = ({ dictionary, locale }: MainFlyerListType) => {
                 className="w-full  bg-[#efefef] py-2 px-6 text-base font-medium text-[#898989] rounded-md hover:bg-[#E7E7E7] shadow-lg mb-2"
                 onClick={() => {
                     setVisible((prevValue) => prevValue + 8);
-                     setHeight(height + 48);
+                    setHeight(height + 48);
 
                 }}
             >

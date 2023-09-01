@@ -14,7 +14,7 @@ const CartCard = ({ item, index, handleDecrement, handleIncrement, handleDelete,
     console.log(item)
     return (
         <div
-            className={`grid grid-cols-4 sm:grid-cols-12 grid-2 gap-1 border-b py-3 h-28 items-center relative ${item.expired ? 'bg-gray-300' : ''}`}
+            className={`grid grid-cols-4 sm:grid-cols-12 grid-2 gap-1 border-b px-1 h-28 items-center relative ${item.expired ? 'bg-red-200' : ''}`}
             key={index}
         >
             <div className="h-[95px] sm:col-span-2">
@@ -34,7 +34,7 @@ const CartCard = ({ item, index, handleDecrement, handleIncrement, handleDelete,
             <div className="sm:col-span-2 col-span-1 text-sm  ">
                 <p className="text-sm ">{item.product_name}</p>
                 {item.expired && (
-                    <p className="text-sm ">expire</p>
+                    <p className="text-sm text-red-500 font-bold">Expired</p>
                 )}
             </div>
            

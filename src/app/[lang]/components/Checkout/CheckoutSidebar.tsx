@@ -1,7 +1,7 @@
 const CheckoutSidebar = ({item, getPrice}: any) => {
 
     return (
-        <tr className={`${item.expired? 'bg-gray-300':''}`}>
+        <tr className={`${item.expired? 'bg-red-200':''}`}>
             <td className=" py-3 text-[13px] w-[50%]">
                 <div>
                     {item.product_name}{" "}

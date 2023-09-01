@@ -70,7 +70,7 @@ const OneItem = ({tag, data, mainCategory, subCategory, allreview, itemId}:any) 
 
         Swal.fire({
             title:
-                '<span style="font-size: 18px">Item has been added to your card</span>',
+                '<span style="font-size: 18px">Item has been added to your list</span>',
             width: 400,
             timer: 1500,
             // padding: '3',

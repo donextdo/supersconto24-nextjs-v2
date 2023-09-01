@@ -63,7 +63,7 @@ const Cart: FC<CartType> = () => {
     });
     const componentRef = useRef<any>(null);
     const { getPrice } = useCurrency()
-    const { cartItems, cartCount, cartAmount, addProductToCart, removeProductFromCart, fetchCart } = useCartItemsHook()
+    const { cartItems, cartCount, cartAmount, addProductToCart, removeProductFromCart, fetchCart, removeAll } = useCartItemsHook()
     const { isLoggedIn, authUser, logOut } = useAuthCheckHook()
     const [productCart, setProductCart] = useState([])
     let [amount, setAmount] = useState(0)
@@ -130,18 +130,19 @@ const Cart: FC<CartType> = () => {
 
     const handleClear = () => {
         Swal.fire({
-            title: 'Success',
-            text: 'You have successfully removed all items from your cart.',
-            icon: 'success',
+            
+            text: 'Are you sure you want to remove all items from your cart?',
+            icon: 'warning',
             showCancelButton: true, // Add this line to show the cancel button
-            confirmButtonText: 'Done',
+            confirmButtonText: 'OK',
             cancelButtonText: 'Cancel', // Add this line to set the cancel button text
             confirmButtonColor: '#8DC14F',
         }).then((result) => {
             if (result.isConfirmed) {
-                localStorage.setItem('cartItems', '[]');
-                dispatch(calSubTotal(12));
-                setCartObj([]);
+                // localStorage.setItem('cartItems', '[]');
+                // dispatch(calSubTotal(12));
+                // setCartObj([]);
+                handleDelete()
             }
         });
         // localStorage.setItem('cartItems', '[]');
@@ -365,10 +366,13 @@ const Cart: FC<CartType> = () => {
         removeProductFromCart({ ...product, count: 1 })
     };
 
-    const handleDelete = (product: Product) => {
-        removeProductFromCart(product)
+    const handleDelete = () => {
+        removeAll()
     };
 
+    const handleRemoveAll = (product: Product) => {
+        removeProductFromCart(product)
+    };
     console.log("cartObj : ", cartObj);
     console.log("cart : ", amount);
 
@@ -381,11 +385,11 @@ const Cart: FC<CartType> = () => {
 
                         <div className="mt-8" ref={componentRef}>
                             {/* header */}
-                            <div className="grid grid-cols-4 sm:grid-cols-12 gap-2 border-b border-[#71778e] pb-3">
+                            <div className="grid grid-cols-4 sm:grid-cols-12 gap-2 border-b border-[#71778e] pb-3 h-10">
                                 <div className="sm:col-span-2 text-xs text-[#71778e] font-semibold">
 
                                 </div>
-                                <div className="text-xs sm:col-span-2">Product</div>
+                                <div className="text-xs text-[#71778e] font-semibold sm:col-span-2">Product</div>
 
                                 <div className="text-xs text-[#71778e] font-semibold ">
                                     Price
@@ -396,7 +400,7 @@ const Cart: FC<CartType> = () => {
                                 <div className="text-xs text-[#71778e] font-semibold sm:col-span-2 sm:text-center">
                                     Quantity
                                 </div>
-                                <div className="text-xs sm:col-span-1 hidden sm:block">A.quantity</div>
+                                <div className="text-xs text-[#71778e] font-semibold sm:col-span-1 hidden sm:block">Available Quantity</div>
                                 <div className="text-xs text-[#71778e] font-semibold hidden sm:block">
                                     Subtotal
                                 </div>
