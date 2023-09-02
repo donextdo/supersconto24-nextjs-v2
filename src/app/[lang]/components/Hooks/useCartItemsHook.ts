@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "@/app/[lang]/redux/store";
 import {Product} from "@/app/[lang]/features/product/product";
-import {addProduct, removeProduct, setCart} from "@/app/[lang]/features/cart/cartSlice";
+import {addProduct, removeProduct, resetProduct, setCart} from "@/app/[lang]/features/cart/cartSlice";
 import baseUrl, {axiosRequest} from "../../../../../utils/baseUrl";
 
 const UseCartItemsHook = () => {
@@ -63,6 +63,10 @@ const UseCartItemsHook = () => {
         dispatch(removeProduct(product))
     }
 
+    const removeAll = () => {
+        dispatch(resetProduct())
+    }
+
     const fetchCart = () => {
         const localCart = localStorage.getItem("cartItems") ? JSON.parse(localStorage.getItem("cartItems")!) : []
 
@@ -107,7 +111,7 @@ const UseCartItemsHook = () => {
     }
     // console.log("render", {cartItems, cartCount, cartAmount, addProductToCart, removeProductFromCart})
 
-    return {cartItems, cartCount, cartAmount, addProductToCart, removeProductFromCart, fetchCart}
+    return {cartItems, cartCount, cartAmount, addProductToCart, removeProductFromCart, fetchCart, removeAll}
 };
 
 export default UseCartItemsHook;

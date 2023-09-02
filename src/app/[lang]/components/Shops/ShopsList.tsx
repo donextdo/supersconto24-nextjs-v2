@@ -29,10 +29,10 @@ const Shops = () => {
         <div className="">
           <section className="w-full ">
             <Slider padding="px-10 py-10">
-              {shops.map((shop, index) => (
-                // <Link href={`/shop-preview/${shop._id}`} key={index}>
+              {shops.map((shop:any, index:number) => (
+                <Link href={`/shop-preview/${shop._id}`} key={index}>
                   <ShopsCard shop={shop} key={index} />
-                // </Link>
+                 </Link>
               ))}
             </Slider>
           </section>

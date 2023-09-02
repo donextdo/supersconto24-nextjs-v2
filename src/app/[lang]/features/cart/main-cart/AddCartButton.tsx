@@ -1,84 +1,78 @@
 'use client'
-import {useEffect, useState} from "react";
-import {AiOutlineShoppingCart} from "react-icons/ai";
-import useCartItemsHook from "@/app/[lang]/components/Hooks/useCartItemsHook";
-import useCartProductsHook from "@/app/[lang]/components/Hooks/useCartProductsHook";
-import * as sweetalert2 from "sweetalert2";
+import { useEffect, useState } from "react";
+import { AiOutlineShoppingCart } from "react-icons/ai";
 import Swal from "sweetalert2";
 
 const AddCartButton = (product: any) => {
-    const [newCount, setNewCount] = useState(0);
+    const [newCount, setNewCount] = useState<number>(0);
     const [isHovered, setIsHovered] = useState(false);
-    const {
-        cartProducts,
-        cartProductsCount,
-        cartProductsAmount,
-        addCartProductsToCart,
-        removeCartProductFromCart,
-        fetchCartProduct
-    } = useCartProductsHook()
 
-
-    useEffect(() => {
-        if (product.product.count > product.product.quantity) {
+    useEffect(()=>{
+        if(product.product.count > product.product.quantity){
             setNewCount(product.product.quantity)
         } else {
             setNewCount(product.product.count)
+
         }
-    }, [product.product.count, product.product.quantity])
+    },[])
 
     const handleIncrement = () => {
-        setNewCount(prevState => prevState + 1);
-        addCartProductsToCart({...product.product, count: 1})
-
+        setNewCount(newCount + 1);
     };
 
     const handleDecrement = () => {
         if (newCount > 0) {
-            setNewCount(prevState => prevState - 1)
-            removeCartProductFromCart({...product.product, count: 1})
-
-        } else {
-
+            setNewCount(newCount - 1);
         }
     };
 
     const handleAddtoCart = () => {
-        console.log(product.product.quantity, newCount)
+        const cartItemsString = localStorage.getItem("cartProducts");
+        const items = cartItemsString ? JSON.parse(cartItemsString) : [];
 
-        if ((product.product.quantity != 0) && (product.product.quantity >= newCount))
-            addCartProductsToCart({...product.product, count: newCount})
-        else
-            Swal.fire({
-                title:
-                    '<span style="font-size: 18px">Cannot add more than the available quantity</span>',
-                width: 400,
-                timer: 1500,
-                // padding: '3',
-                color: "white",
-                background: "#00B853",
-                showConfirmButton: false,
-                heightAuto: true,
-                position: "bottom-end",
-            });
+        const itemIndex = items.findIndex((item: any) => item._id === product._id);
 
+        if (itemIndex === -1) {
+            const newItem = { ...product.product, count: newCount };
+            items.push(newItem);
+            localStorage.setItem("cartProducts", JSON.stringify(items));
+
+        } else {
+            items[itemIndex].count = newCount;
+            localStorage.setItem("cartProducts", JSON.stringify(items));
+
+        }
+
+        const title = product.product.product_name +  " has been added to your cart"
+        Swal.fire({
+            title: `<span style="font-size: 18px">${title}</span>`,
+            width: 400,
+            timer: 1500,
+            color: "white",
+            background: "#00B853",
+            showConfirmButton: false,
+            heightAuto: true,
+            position: "bottom-end",
+        });
     }
 
+    console.log(product.product.quantity)
     return (
-        <div className="relative" onMouseEnter={() => product.product.quantity > 0 && setIsHovered(true)}
-             onMouseLeave={() => setIsHovered(false)}>
+        <div className="relative" onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}>
             {isHovered && (
                 <div className="absolute bottom-full left-0 bg-white border border-gray-300 p-2 rounded shadow">
                     <div className="flex items-center space-x-2">
                         <button
-                            className="bg-gray-300 px-2 py-1 rounded"
+                            className="bg-gray-300 w-8 h-8 rounded"
                             onClick={handleDecrement}
                         >
                             -
                         </button>
-                        <span className="text-xl">{newCount}</span>
+                        {/* <span className="text-xl">{newCount}</span> */}
+                        <input type="number" value={newCount} name="quantity" onChange={(e) => setNewCount(parseInt(e.target.value, 10))} disabled={product.product.expired==true}  className="appearance-none w-12 border p-1 text-center"/>
                         <button
-                            className={`bg-gray-300 px-2 py-1 rounded ${product.product.quantity <= newCount ? 'pointer-events-none cursor-not-allowed' : ''}`}
+                            className={`bg-gray-300 w-8 h-8 rounded ${product.product.quantity <= newCount ? 'pointer-events-none cursor-not-allowed' : ''}`}
                             onClick={handleIncrement}
                         >
                             +
@@ -87,10 +81,10 @@ const AddCartButton = (product: any) => {
                 </div>
             )}
             <button
-                className={`bg-[#e5e7eb] rounded-full p-1 ${product.product.quantity <= newCount ? 'pointer-events-none cursor-not-allowed' : ''}`}
+             className={ `rounded-full p-1  ${product.product.expired ? 'bg-gray-50' : 'bg-primary'}`}
                 onClick={handleAddtoCart}
             >
-                <AiOutlineShoppingCart className="text-xl font-semibold text-black"/>
+                <AiOutlineShoppingCart className={`text-xl font-semibold  ${product.product.expired ? 'text-gray-400' : 'text-white'}`}  />
 
             </button>
         </div>

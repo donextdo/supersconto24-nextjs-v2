@@ -20,7 +20,6 @@ import useAuthCheckHook from "@/app/[lang]/components/Hooks/useAuthCheck";
 import Swal from "sweetalert2";
 import logoImg from "../../../../../../assets/logo/logo.png";
 import CartSideBar from "./CartSideBar";
-import useCartProductsHook from "@/app/[lang]/components/Hooks/useCartProductsHook";
 
 
 // import { PDFDocument, StandardFonts } from 'pdf-lib';
@@ -64,8 +63,7 @@ const Cart: FC<CartType> = () => {
     });
     const componentRef = useRef<any>(null);
     const { getPrice } = useCurrency()
-    const { cartItems, cartCount, cartAmount, addProductToCart, removeProductFromCart, fetchCart } = useCartItemsHook()
-    const { cartProducts, cartProductsAmount, removeCartProductFromCart } = useCartProductsHook()
+    const { cartItems, cartCount, cartAmount, addProductToCart, removeProductFromCart, fetchCart, removeAll } = useCartItemsHook()
     const { isLoggedIn, authUser, logOut } = useAuthCheckHook()
     const [productCart, setProductCart] = useState([])
     let [amount, setAmount] = useState(0)
@@ -73,7 +71,7 @@ const Cart: FC<CartType> = () => {
 
     useEffect(() => {
         fetchCart()
-        // fetchcartProduct()
+        fetchcartProduct()
     }, [])
 
 
@@ -132,18 +130,19 @@ const Cart: FC<CartType> = () => {
 
     const handleClear = () => {
         Swal.fire({
-            title: 'Success',
-            text: 'You have successfully removed all items from your cart.',
-            icon: 'success',
+            
+            text: 'Are you sure you want to remove all items from your cart?',
+            icon: 'warning',
             showCancelButton: true, // Add this line to show the cancel button
-            confirmButtonText: 'Done',
+            confirmButtonText: 'OK',
             cancelButtonText: 'Cancel', // Add this line to set the cancel button text
             confirmButtonColor: '#8DC14F',
         }).then((result) => {
             if (result.isConfirmed) {
-                localStorage.setItem('cartItems', '[]');
-                dispatch(calSubTotal(12));
-                setCartObj([]);
+                // localStorage.setItem('cartItems', '[]');
+                // dispatch(calSubTotal(12));
+                // setCartObj([]);
+                handleDelete()
             }
         });
         // localStorage.setItem('cartItems', '[]');
@@ -367,32 +366,30 @@ const Cart: FC<CartType> = () => {
         removeProductFromCart({ ...product, count: 1 })
     };
 
-    const handleDelete = (product: Product) => {
+    const handleDelete = () => {
+        removeAll()
+    };
+
+    const handleRemoveAll = (product: Product) => {
         removeProductFromCart(product)
     };
-
-    const handleDeleteFromCartSideBar = (product: Product) => {
-        removeCartProductFromCart(product)
-    };
-
     console.log("cartObj : ", cartObj);
     console.log("cart : ", amount);
-    console.log("cartProducts : ", cartProducts);
 
     return (
         <div className="container mx-auto xl:px-40 px-5 mt-24 mb-20">
             <div>
-                <h1 className="text-center mb-8 text-2xl font-bold">Shopping List</h1>
+                <h1 className="mb-8 text-2xl font-bold">Shopping List</h1>
                 <section className="flex justify-between h-full">
                     <div className="w-full h-full pb-10 bg-white py-2 px-4">
 
                         <div className="mt-8" ref={componentRef}>
                             {/* header */}
-                            <div className="grid grid-cols-4 sm:grid-cols-12 gap-2 border-b border-[#71778e] pb-3">
+                            <div className="grid grid-cols-4 sm:grid-cols-12 gap-2 border-b border-[#71778e] pb-3 h-10">
                                 <div className="sm:col-span-2 text-xs text-[#71778e] font-semibold">
 
                                 </div>
-                                <div className="text-xs sm:col-span-2">Product</div>
+                                <div className="text-xs text-[#71778e] font-semibold sm:col-span-2">Product</div>
 
                                 <div className="text-xs text-[#71778e] font-semibold ">
                                     Price
@@ -403,7 +400,7 @@ const Cart: FC<CartType> = () => {
                                 <div className="text-xs text-[#71778e] font-semibold sm:col-span-2 sm:text-center">
                                     Quantity
                                 </div>
-                                <div className="text-xs sm:col-span-1 hidden sm:block">A.quantity</div>
+                                <div className="text-xs text-[#71778e] font-semibold sm:col-span-1 hidden sm:block">Available Quantity</div>
                                 <div className="text-xs text-[#71778e] font-semibold hidden sm:block">
                                     Subtotal
                                 </div>
@@ -503,8 +500,8 @@ const Cart: FC<CartType> = () => {
                             <hr />
                             <table className="w-full">
                         <tbody>
-                            {cartProducts.map((item: any, index: number) => (
-                                <CartSideBar getPrice={getPrice} item={item} key={index} handleDelete={handleDeleteFromCartSideBar} />
+                            {productCart.map((item: any, index: number) => (
+                                <CartSideBar getPrice={getPrice} item={item} key={index} />
                             ))}
                         </tbody>
                     </table>
@@ -515,7 +512,7 @@ const Cart: FC<CartType> = () => {
                                             Subtotal
                                         </td>
                                         <td className="border-b border-[#e4e5ee] py-3 text-[15px] text-right">
-                                            {getPrice(cartProductsAmount)}
+                                            {getPrice(amount)}
                                         </td>
                                     </tr>
 
@@ -524,7 +521,7 @@ const Cart: FC<CartType> = () => {
                                             Total
                                         </td>
                                         <td className="border-y border-[#e4e5ee] text-right font-semibold text-xl py-4">
-                                            {getPrice(cartProductsAmount)}
+                                            {getPrice(amount)}
                                         </td>
                                     </tr>
                                 </tbody>
