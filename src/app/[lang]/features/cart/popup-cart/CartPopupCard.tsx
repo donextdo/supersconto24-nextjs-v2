@@ -29,10 +29,14 @@ const CartPopupCard = ({item, handleRemove, getPrice}: any) => {
                     height={400}
                 />
             </div>
-            <div className="col-span-2 text-left py-2 h-20 border-b border-[#e3e4e6] pl-2">
+            <div className={`col-span-2 text-left py-2 h-20 border-b border-[#e3e4e6] pl-2 ${item.expired? 'bg-red-200 pointer-events-none ':''}`}>
                 <p className="text-xs ">{item.product_name}</p>
                 <p className="text-xs mt-2">{item.count || 0} × <span
                     className="text-[#008C45]"> {getPrice(newPrice)}</span></p>
+                    {item.expired && (
+                <p className="text-xs text-red-500 font-bold mt-2">Expired</p>
+                    )}
+
             </div>
             <button className="absolute bg-[#008C45] rounded-full p-0.5 text-white left-4 top-4"
                     onClick={() => handleRemove(item)}><IoClose className="text-white text-xs"/></button>

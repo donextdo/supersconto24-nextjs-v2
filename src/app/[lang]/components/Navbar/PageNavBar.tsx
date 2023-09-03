@@ -12,23 +12,52 @@ import { RootState } from "../../redux/store";
 
 const PageNavBar = () => {
   const [homeOpen, setHomeOpen] = useState(false);
-  const toggleHome = () => {
-    setHomeOpen(!homeOpen);
-  };
   const [shopOpen, setShopOpen] = useState(false);
+  const [allShop, setAllShop] = useState<any>([])
+
+  const toggleHome = () => {
+    setHomeOpen(true);
+  };
+
+  const toggleHomeLeave = () => {
+    setHomeOpen(false);
+  };
+
 
   const toggleShop = () => {
     setShopOpen(!shopOpen);
   };
 
-  const productList = useSelector((state: RootState) => state.flyer.flyers);
+  const toggleShopEnter = () => {
+    setShopOpen(true);
+  };
 
-  
+  const toggleShopLeave = () => {
+    setShopOpen(false);
+  };
+
+  useEffect(() => {
+    fetchShopData();
+  }, []);
+
+
+  async function fetchShopData() {
+    try {
+      const res = await axios.get(`${baseUrl}/shop`);
+      const data = res.data;
+      setAllShop(data)
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
   return (
     <div className="lg:flex lg:flex-row ">
-      <ul className="lg:space-x-1 lg:flex gap gap-0">
-         {/* Shop */}
-         <li className="font-semibold hoverable hover:rounded-full  hover:bg-[#F0FAFF] ">
+      <div className="lg:space-x-1 lg:flex gap gap-0">
+        {/* Shop */}
+        <div className="font-semibold hoverable hover:rounded-full relative hover:bg-[#F0FAFF] " onMouseEnter={toggleShopEnter} onMouseLeave={toggleShopLeave}>
           <button onClick={toggleShop} className="lg:py-2 lg:px-4">
             <div>
               <Link
@@ -42,35 +71,30 @@ const PageNavBar = () => {
           </button>
 
           {shopOpen && (
-            <div className="text-[13px] absolute w-40 py-2 mt-2 shadow-md font-medium bg-white rounded-lg z-50">
-              {productList.map((flyer, index)=>(
-                   <Link
-                   key={index}
-                   href="#"
-                   className="block px-4 py-2 text-gray-800 hover:text-[#4BB62E] "
-                 >
-                   {flyer.shop_id?.shop_name ? flyer.shop_id?.shop_name : ''}
-                 </Link>
-              ))}        
+            <div className="text-[13px] absolute w-40 py-2 top-10 shadow-md font-medium bg-white rounded-lg z-50">
+              {allShop.map((shop: any, index: number) => (
+                <Link
+                  key={index}
+                  href={`/shop-preview/${shop._id}`}
+                  className="block px-4 py-2 text-gray-800 hover:text-[#4BB62E] "
+                >
+                  {shop?.shop_name}
+                </Link>
+              ))}
             </div>
           )}
-        </li>
+        </div>
 
-        <li className="font-semibold rounded-full bg-[#F0FAFF] ">
-          <button onClick={toggleHome} className="lg:py-2 lg:px-4">
-            <div>
-              <Link
-                href="#"
-                className="text-[#4BB62E] flex text-[15px]  font-ff-headings"
-              >
+        <div className="font-semibold rounded-full bg-[#F0FAFF] relative" onMouseEnter={toggleHome} onMouseLeave={toggleHomeLeave} >
+          <button className="lg:py-2 lg:px-4">
+            <div className="text-[#4BB62E] flex text-[15px]  font-ff-headings">
                 Our Menu
                 <MdKeyboardArrowDown className="ml-2 text-xl" />
-              </Link>
             </div>
           </button>
 
           {homeOpen && (
-            <div className="text-[13px] absolute w-40 py-2 mt-2 shadow-md font-medium bg-white rounded-lg z-50">
+            <div className="text-[13px] absolute w-40 py-2 top-10 shadow-md font-medium bg-white rounded-lg z-50">
               <Link
                 href="#"
                 className="block px-4 py-2 text-gray-800 hover:text-[#4BB62E] "
@@ -103,9 +127,9 @@ const PageNavBar = () => {
               </Link>
             </div>
           )}
-        </li>
+        </div>
 
-       
+
         {/* Meats & SeaFood */}
         {/* <li className="font-semibold font-ff-headings hoverable hover:rounded-full  hover:bg-[#F0FAFF] ">
           <button
@@ -157,17 +181,19 @@ const PageNavBar = () => {
             </Link>
           </button>
         </li> */}
+
+
         {/* Blog */}
-        <li className="font-semibold font-ff-headings">
+        <div className="font-semibold ">
           <button className="lg:py-2 lg:px-4 lg:ml-4  hover:rounded-full  hover:bg-[#F0FAFF]">
             <Link href="/blog" className="text-gray-700 hover:text-[#4BB62E]">
               BLOG
             </Link>
           </button>
-        </li>
+        </div>
 
         {/* Contact */}
-        <li className="font-semibold font-ff-headings">
+        <div className="font-semibold font-ff-headings">
           <button className="lg:py-2 lg:px-4 lg:ml-4 hover:rounded-full hover:bg-[#F0FAFF]">
             <Link
               href="/contact"
@@ -176,8 +202,8 @@ const PageNavBar = () => {
               CONTACT
             </Link>
           </button>
-        </li>
-      </ul>
+        </div>
+      </div>
       {/* Shop DropDown */}
       {/* {shopOpen && (
         <div className="w-full xl:px-16 text-[13px] grid grid-flow-col py-2 mt-2 font-medium  rounded-lg grid-col-5">

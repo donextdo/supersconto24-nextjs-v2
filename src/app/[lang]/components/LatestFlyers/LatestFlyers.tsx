@@ -18,6 +18,15 @@ import { RootState } from "../../redux/store";
 const LatestFlyers = () => {
 
     const productList = useSelector((state: RootState) => state.flyer.flyers);
+    const activeProduct = productList.filter((product:any)=>product.active === true)
+    const currentDate = new Date();
+
+    const notExpiredData = activeProduct.filter(item => {
+        const expireDate = new Date(item.expiredate);
+        const expired = expireDate > currentDate;
+        return expired
+    });
+
     console.log("render", productList)
 
     return (
@@ -30,7 +39,7 @@ const LatestFlyers = () => {
                 <section className="w-full ">
                     <Slider >
 
-                    {productList?.map((flyer: any, index: number) => (
+                    {notExpiredData?.map((flyer: any, index: number) => (
                 <Link href={`/catalog-preview/${flyer._id}`} key={index}>
                     <LatestFlyersCard key={index} flyer={flyer}/>
                     </Link>

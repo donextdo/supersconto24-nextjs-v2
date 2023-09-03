@@ -4,12 +4,10 @@ const ShopsCard = ({ shop }: any) => {
     return (
         <div>
             <div className="w-[12.5rem] h-24  overflow-hidden">
-                <Image
+                <img
                     src={shop.logo_img}
                     alt={shop.shop_name}
-                    className="object-cover w-full h-full"
-                    width={450}
-                    height={400}
+                    className="object-contain w-full h-full "
                 />
             </div>
         </div>

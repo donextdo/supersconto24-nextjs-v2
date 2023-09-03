@@ -63,16 +63,16 @@ export const SearchItem = () => {
   };
 
   return (
-    <div className="flex flex-col xl:w-[500px] w-full md:w-full lg:w-96 place-content-center relative">
+    <div className="flex flex-col xl:w-[400px] 2xl:w-[500px] w-full md:w-full lg:w-96 place-content-center relative border border-gray-200 ">
       <div className="flex relative w-full">
         <input
           type="text"
           value={query}
           onChange={handleInputChange}
           placeholder="Search products..."
-          className="bg-gray-100 rounded-tl rounded-bl min-h-[60px] md:w-full lg-w-full w-1/2 pl-5 text-sm focus:outline-none "
+          className="bg-gray-50 rounded-tl rounded-bl min-h-[60px] md:w-full lg-w-full w-1/2 pl-5 text-sm focus:outline-none "
         />
-        <div className="bg-gray-100 rounded-br rounded-tr min-h-[60px] min-w-[60px]  flex items-center justify-center hover:cursor-pointer">
+        <div className="bg-gray-50 rounded-br rounded-tr min-h-[60px] min-w-[60px]  flex items-center justify-center hover:cursor-pointer ">
           <FiSearch
             type="submit"
             className="min-h-[36px] min-w-[24px] text-blue-900 "

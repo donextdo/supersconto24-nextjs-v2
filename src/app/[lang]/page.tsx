@@ -16,6 +16,8 @@ import FeaturedFlyer from "./components/FeaturedFlyer/FeaturedFlyer";
 import ContactAds from "./components/ImageAds/ContactAds";
 import FirstPurchaceAds from "./components/ImageAds/FirstPurchaceAds";
 import { Metadata } from "next";
+import CitiesList from "./components/Cities/CitiesList";
+import NewsList from "./News/NewsList";
 
 export const metadata: Metadata = {
     title: "Supersconto | Home",
@@ -29,7 +31,7 @@ export default async function page({
     console.log("render page", dictionary);
 
     return (
-        <div className="container mx-auto xl:px-40 px-5">
+        <div className="container mx-auto xl:px-40 px-5 ">
             {/* <NewProductList /> */}
             <div className="grid grid-cols-4 gap-1">
                 {/* left side */}
@@ -86,6 +88,14 @@ export default async function page({
             </div>
 
             <div className="mt-8">
+                <CitiesList />
+            </div>
+
+            <div className="mt-8">
+                <NewsList />
+            </div>
+
+            <div className="mt-8">
                 <FirstPurchaceAds />
             </div>
 
@@ -107,16 +117,16 @@ export default async function page({
                 <NewsLettertwo />
             </div>
 
-            <div className="footer-container">
+            {/* <div className="footer-container">
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 py-16 px-8">
                     <div className="link-set">
                         <p>Customer Care</p>
                         <ul>
                             <li>
-                                <a href="#">Shipping & Delivery</a>
+                                <a href="#">Customer Care</a>
                             </li>
                             <li>
-                                <a href="#">Return & Refund</a>
+                                <a href="#">Blog</a>
                             </li>
                             <li>
                                 <a href="#">Help Section</a>
@@ -125,10 +135,10 @@ export default async function page({
                                 <a href="#">Support</a>
                             </li>
                             <li>
-                                <a href="#">Shipping & Delivery</a>
+                                <a href="#">Contact Us</a>
                             </li>
                             <li>
-                                <a href="#">Return & Refund</a>
+                                <a href="#">Careers</a>
                             </li>
                             <li>
                                 <a href="#">Help Section</a>
@@ -142,10 +152,10 @@ export default async function page({
                         <p>Customer Care</p>
                         <ul>
                             <li>
-                                <a href="#">Shipping & Delivery</a>
+                                <a href="#">Customer Care</a>
                             </li>
                             <li>
-                                <a href="#">Return & Refund</a>
+                                <a href="#">Blog</a>
                             </li>
                             <li>
                                 <a href="#">Help Section</a>
@@ -154,10 +164,10 @@ export default async function page({
                                 <a href="#">Support</a>
                             </li>
                             <li>
-                                <a href="#">Shipping & Delivery</a>
+                                <a href="#">Contact Us</a>
                             </li>
                             <li>
-                                <a href="#">Return & Refund</a>
+                                <a href="#">Careers</a>
                             </li>
                             <li>
                                 <a href="#">Help Section</a>
@@ -171,10 +181,10 @@ export default async function page({
                         <p>Customer Care</p>
                         <ul>
                             <li>
-                                <a href="#">Shipping & Delivery</a>
+                                <a href="#">Customer Care</a>
                             </li>
                             <li>
-                                <a href="#">Return & Refund</a>
+                                <a href="#">Blog</a>
                             </li>
                             <li>
                                 <a href="#">Help Section</a>
@@ -183,10 +193,10 @@ export default async function page({
                                 <a href="#">Support</a>
                             </li>
                             <li>
-                                <a href="#">Shipping & Delivery</a>
+                                <a href="#">Contact Us</a>
                             </li>
                             <li>
-                                <a href="#">Return & Refund</a>
+                                <a href="#">Careers</a>
                             </li>
                             <li>
                                 <a href="#">Help Section</a>
@@ -200,10 +210,10 @@ export default async function page({
                         <p>Customer Care</p>
                         <ul>
                             <li>
-                                <a href="#">Shipping & Delivery</a>
+                                <a href="#">Customer Care</a>
                             </li>
                             <li>
-                                <a href="#">Return & Refund</a>
+                                <a href="#">Blog</a>
                             </li>
                             <li>
                                 <a href="#">Help Section</a>
@@ -212,10 +222,10 @@ export default async function page({
                                 <a href="#">Support</a>
                             </li>
                             <li>
-                                <a href="#">Shipping & Delivery</a>
+                                <a href="#">Contact Us</a>
                             </li>
                             <li>
-                                <a href="#">Return & Refund</a>
+                                <a href="#">Careers</a>
                             </li>
                             <li>
                                 <a href="#">Help Section</a>
@@ -229,10 +239,10 @@ export default async function page({
                         <p>Customer Care</p>
                         <ul>
                             <li>
-                                <a href="#">Shipping & Delivery</a>
+                                <a href="#">Customer Care</a>
                             </li>
                             <li>
-                                <a href="#">Return & Refund</a>
+                                <a href="#">Blog</a>
                             </li>
                             <li>
                                 <a href="#">Help Section</a>
@@ -241,10 +251,10 @@ export default async function page({
                                 <a href="#">Support</a>
                             </li>
                             <li>
-                                <a href="#">Shipping & Delivery</a>
+                                <a href="#">Contact Us</a>
                             </li>
                             <li>
-                                <a href="#">Return & Refund</a>
+                                <a href="#">Careers</a>
                             </li>
                             <li>
                                 <a href="#">Help Section</a>
@@ -255,7 +265,7 @@ export default async function page({
                         </ul>
                     </div>
                 </div>
-            </div>
+            </div> */}
         </div>
     );
 }

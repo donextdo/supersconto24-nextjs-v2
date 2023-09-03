@@ -8,7 +8,7 @@ import avatar from "../../../../../assets/home/avatar.jpg";
 
 export const ImageOne = () => {
   return (
-    <div className="mt-9 relative lg:mt-9 cursor-pointer">
+    <div className="mt-9 relative lg:mt-9 cursor-pointer shadow-lg">
       <Image
         src={banner1}
         alt="banner - Image"

@@ -13,6 +13,16 @@ const FeaturedFlyer = () => {
         return shuffled.slice(0, count); // Return the first 'count' items
     };
 
+    const currentDate = new Date();
+
+    const featuredProducts = productList.filter(product => product.flyer === true && product.active == true);
+    
+    const notExpiredData = featuredProducts.filter(item => {
+        const expireDate = new Date(item.expiredate);
+        const expired = expireDate > currentDate;
+        return expired
+    });
+
     return (
         <>
             <div>
@@ -28,8 +38,8 @@ const FeaturedFlyer = () => {
 
                 </div>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-4">
-                {getRandomItems(productList, 4).map((flyer: any, index: number) => (
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-4 bg-white shadow-lg px-2">
+                {getRandomItems(notExpiredData, 4).map((flyer: any, index: number) => (
                     <a onClick={() => {
                         window.location.href = `/catalog-preview/${flyer._id}?currency=${searchParams.get("currency")}`
                     }} key={index}>

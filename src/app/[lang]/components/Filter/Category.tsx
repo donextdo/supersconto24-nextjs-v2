@@ -15,6 +15,7 @@ const Category = ({ categoryId }: any) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        console.log("data awad categoryId? ", categoryId);
         const response = await axios.get(`${baseUrl}/category/${categoryId}`);
         setSubCategory(response.data);
         setIsEmpty(response.data.length === 0);
@@ -29,6 +30,7 @@ const Category = ({ categoryId }: any) => {
   const catId = searchParams.get("categoryId");
   const minP: number | null = Number(searchParams.get("min_price"));
   const maxP: number | null = Number(searchParams.get("max_price"));
+  const brand = searchParams.get("brands");
 
   const createQueryString = useCallback(
     (name: string, value: string | number) => {
@@ -40,33 +42,51 @@ const Category = ({ categoryId }: any) => {
   );
 
   const handleCtegoryClick = (categoryId: any, name: any) => {
-    let updatedCheckedCategory = {};
+    let updatedCheckedCategory: any = {}; // Update the type of updatedCheckedCategory
 
     if (checkedCategory === categoryId) {
-      router.push(
-        `/filterProduct?categoryId=${catId}&subCategories=${undefined}&${createQueryString(
-          "min_price",
-          minP
-        )}&${createQueryString("max_price", maxP)}`
-      );
-      // if the clicked category is already checked, uncheck it
-      // router.push({
-      //   pathname: router.pathname,
-      //   query: { ...router.query, subCategories: undefined },
-      // });
+      // const queryString = createQueryString("subCategories", undefined);
+
+      let url = "/filterProduct";
+      if (catId) {
+        url += `?categoryId=${catId}`;
+      }
+      if ("subCategories" == undefined) {
+        url += `&${undefined}`;
+      }
+      if (brand) {
+        url += `&${brand}`;
+      }
+      if (minP !== null && maxP !== null) {
+        url += `&${createQueryString("min_price", minP)}&${createQueryString(
+          "max_price",
+          maxP
+        )}`;
+      }
+
+      router.push(url);
     } else {
       updatedCheckedCategory = categoryId;
-      router.push(
-        `/filterProduct?categoryId=${catId}&subCategories=${categoryId}&${createQueryString(
-          "min_price",
-          minP
-        )}&${createQueryString("max_price", maxP)}`
-      );
-      // if the clicked category is not checked, check it
-      // router.push({
-      //   pathname: router.pathname,
-      //   query: { ...router.query, subCategories: categoryId },
-      // });
+      const queryString = createQueryString("subCategories", categoryId);
+
+      let url = "/filterProduct";
+      if (catId) {
+        url += `?categoryId=${catId}`;
+      }
+      if (queryString) {
+        url += `&${queryString}`;
+      }
+      if (brand) {
+        url += `&${brand}`;
+      }
+      if (minP !== null && maxP !== null) {
+        url += `&${createQueryString("min_price", minP)}&${createQueryString(
+          "max_price",
+          maxP
+        )}`;
+      }
+
+      router.push(url);
     }
 
     setCheckedCategory(updatedCheckedCategory);

@@ -12,6 +12,7 @@ import useCartItemsHook from "@/app/[lang]/components/Hooks/useCartItemsHook";
 import axios from "axios";
 import baseUrl from "../../../../../utils/baseUrl";
 import useAuthCheckHook from "@/app/[lang]/components/Hooks/useAuthCheck";
+import { useRouter } from "next/navigation";
 
 interface Props {
     product: Product;
@@ -21,6 +22,7 @@ export const ProductCard: FC<Props> = ({ product }) => {
     const [productPopup, setProductPopup] = useState(false);
     const [proId, setProId] = useState("");
     const [count, setCount] = useState(0);
+    const router = useRouter()
 
     const { getPrice } = useCurrency();
     const { cartItems, addProductToCart, removeProductFromCart } = useCartItemsHook()
@@ -52,7 +54,7 @@ export const ProductCard: FC<Props> = ({ product }) => {
 
         Swal.fire({
             title:
-                '<span style="font-size: 18px">Item has been added to your card</span>',
+                '<span style="font-size: 18px">Item has been added to list</span>',
             width: 400,
             timer: 1500,
             color: "white",
@@ -92,30 +94,46 @@ export const ProductCard: FC<Props> = ({ product }) => {
 
 
     const handleWishlist = async (product: any) => {
-        
-        const wishListObj = {
-            wishList: [
-              {
-                productId: product._id,
-                front: product.product_image,
-                title: product.product_name,
-                price: product.unit_price,
-                date: new Date().toLocaleDateString("en-US", {
-                  month: "long",
-                  day: "numeric",
-                  year: "numeric",
-                }),
-                quantity: product.quantity,
-              },
-            ],
-          };
-
-        try {
-            const response = await axios.post(`${baseUrl}/users/wishList/${authUser._id}`, wishListObj);
-            console.log(response.data); // do something with the response data
-        } catch (error) {
-            console.log(error); // handle the error
+        console.log(authUser._id)
+        if(authUser._id){
+            const wishListObj = {
+                wishList: [
+                  {
+                    productId: product._id,
+                    front: product.product_image,
+                    title: product.product_name,
+                    price: product.unit_price,
+                    date: new Date().toLocaleDateString("en-US", {
+                      month: "long",
+                      day: "numeric",
+                      year: "numeric",
+                    }),
+                    quantity: product.quantity,
+                  },
+                ],
+              };
+    
+            try {
+                const response = await axios.post(`${baseUrl}/users/wishList/${authUser._id}`, wishListObj);
+                console.log(response.data); // do something with the response data
+                Swal.fire({
+                    title:
+                        '<span style="font-size: 18px">Item has been added to your wishlist</span>',
+                    width: 400,
+                    timer: 1500,
+                    color: "white",
+                    background: "#00B853",
+                    showConfirmButton: false,
+                    heightAuto: true,
+                    position: "bottom-end",
+                });
+            } catch (error) {
+                console.log(error); // handle the error
+            }
+        }else{
+            router.push("/account")
         }
+        
     };
 
     const handlePopup = (product: any) => {
@@ -123,7 +141,7 @@ export const ProductCard: FC<Props> = ({ product }) => {
         setProId(product);
     };
 
-    console.log({ count })
+    console.log({ product })
     return (
         <>
             <div
@@ -198,7 +216,7 @@ export const ProductCard: FC<Props> = ({ product }) => {
                     </div>
 
                     <div
-                        className="my-1 font-[.6875rem] text-xs pt-2 text-green-600 uppercase font-semibold tracking-[.005em]">
+                        className={`my-1 font-[.6875rem] text-xs pt-2 uppercase font-semibold tracking-[.005em] ${product.quantity>0?'text-green-600':'text-red-500'}`}>
                         {product.quantity > 0 ? "In Stock" : "Out of Stock"}
                     </div>
 
@@ -225,15 +243,16 @@ export const ProductCard: FC<Props> = ({ product }) => {
                 </div>
 
                 {/* add to cart and count */}
-                <div
+                {/* {product.quantity > 0 && ( */}
+                    <div
                     className="mx-4 border-black text-black py-2 px-4 mt-1 rounded-full md:invisible group-hover:visible md:group-hover:-translate-y-3 md:group-hover:ease-in transition duration-150">
                     {(count == undefined || count < 1) && (
                         <button
                             type="button"
-                            className=" bg-primary text-white h-8  rounded-full w-full "
+                            className= {`bg-primary text-white h-8  rounded-full w-full ${product.quantity<1?'':''}`}
                             onClick={() => handleAddToCart(product)}
                         >
-                            Add to cart
+                            Add to list
                         </button>
                     )}
 
@@ -251,7 +270,7 @@ export const ProductCard: FC<Props> = ({ product }) => {
                             </div>
                             <button
                                 type="button"
-                                className="px-4 max-h-[34px] border border-gray-500 bg-yellow-500 rounded-br-3xl rounded-tr-3xl "
+                                className={`px-4 max-h-[34px] border border-gray-500 bg-yellow-500 rounded-br-3xl rounded-tr-3xl ${(product.quantity==count)?'pointer-events-none cursor-not-allowed':''}`}
                                 onClick={() => handleIncrement(product)}
                             >
                                 +
@@ -259,6 +278,8 @@ export const ProductCard: FC<Props> = ({ product }) => {
                         </div>
                     )}
                 </div>
+                {/* )} */}
+                
             </div>
             {productPopup && (
                 <ProductPopup setProductPopup={setProductPopup} proId={proId} />

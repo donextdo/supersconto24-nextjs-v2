@@ -1,9 +1,10 @@
-import Link from "next/link";
+
 import { useEffect, useState } from "react";
 import Bill from "../../Bill/Bill";
 import Ship from "@/app/[lang]/components/Bill/Ship";
 import axios from "axios";
 import baseUrl from "../../../../../../utils/baseUrl";
+import useAuthCheckHook from "../../Hooks/useAuthCheck";
 
 interface Address {
     orderId: string;
@@ -56,7 +57,8 @@ interface Address {
 const Address = () => {
     const [modal, setModal] = useState(false)
     const [modal1, setModal1] = useState(false)
-    let id = localStorage.getItem("id");
+    const { isLoggedIn, authUser, logOut } = useAuthCheckHook()
+
 
     const [address, setAddress] = useState<Address>({
         orderId: "",
@@ -107,12 +109,14 @@ const Address = () => {
     })
 
     useEffect(() => {
-        fetchData()
-    }, [fetchData]);
+        if (authUser?._id) {
+            fetchData()
+        }
+    }, [authUser?._id]);
 
     async function fetchData() {
         try {
-            const res = await axios.get(`${baseUrl}/users/${id}`);
+            const res = await axios.get(`${baseUrl}/users/${authUser._id}`);
             console.log(res.data)
             setAddress(res.data)
 
@@ -198,11 +202,11 @@ const Address = () => {
             } */}
 
             {
-                modal && <Bill setModal1={setModal1} setModal={setModal}/>
+                modal && <Bill setModal1={setModal1} setModal={setModal} />
             }
 
             {
-                modal1 && <Ship setModal1={setModal1} setModal={setModal}/>
+                modal1 && <Ship setModal1={setModal1} setModal={setModal} />
             }
         </div >
     );

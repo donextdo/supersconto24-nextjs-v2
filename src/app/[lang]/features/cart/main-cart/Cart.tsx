@@ -17,6 +17,11 @@ import html2pdf from "html2pdf.js";
 import useCartItemsHook from "@/app/[lang]/components/Hooks/useCartItemsHook";
 import {Product} from "@/app/[lang]/features/product/product";
 import useAuthCheckHook from "@/app/[lang]/components/Hooks/useAuthCheck";
+import Swal from "sweetalert2";
+import logoImg from "../../../../../../assets/logo/logo.png";
+import CartSideBar from "./CartSideBar";
+import useCartProductsHook from "@/app/[lang]/components/Hooks/useCartProductsHook";
+
 
 // import { PDFDocument, StandardFonts } from 'pdf-lib';
 // import fs from 'fs';
@@ -43,7 +48,6 @@ const Cart: FC<CartType> = () => {
     const [cartObj, setCartObj] = useState<any>([]);
     const [showInputs, setShowInputs] = useState(false);
     const [coupon, setCoupon] = useState("");
-    const [total, setTotal] = useState(0);
     const [shippingObj, setShippingObj] = useState({
         cartshippingFirstName: "",
         cartshippingLastName: "",
@@ -58,14 +62,15 @@ const Cart: FC<CartType> = () => {
         cartshippingEmail: "",
     });
     const componentRef = useRef<any>(null);
-    const {getPrice} = useCurrency()
-    const {cartItems, cartCount, cartAmount, addProductToCart, removeProductFromCart, fetchCart} = useCartItemsHook()
-    const {isLoggedIn, authUser, logOut} = useAuthCheckHook()
+    const { getPrice } = useCurrency()
+    const { cartItems, cartAmount, addProductToCart, removeProductFromCart, fetchCart } = useCartItemsHook()
+    const { cartProducts, cartProductsAmount, removeCartProductFromCart } = useCartProductsHook()
+    const { isLoggedIn, authUser} = useAuthCheckHook()
 
     useEffect(() => {
         fetchCart()
+        // fetchcartProduct()
     }, [])
-
 
     useEffect(() => {
         if (isLoggedIn && authUser)
@@ -102,10 +107,24 @@ const Cart: FC<CartType> = () => {
         }
     }
 
-
     const handleClear = () => {
-        localStorage.setItem('cartItems', '[]');
-        dispatch(calSubTotal(12));
+        Swal.fire({
+            
+            text: 'Are you sure you want to remove all items from your cart?',
+            icon: 'warning',
+            showCancelButton: true, // Add this line to show the cancel button
+            confirmButtonText: 'OK',
+            cancelButtonText: 'Cancel', // Add this line to set the cancel button text
+            confirmButtonColor: '#8DC14F',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                localStorage.setItem('cartItems', '[]');
+                dispatch(calSubTotal(12));
+                setCartObj([]);
+            }
+        });
+        // localStorage.setItem('cartItems', '[]');
+        // dispatch(calSubTotal(12));
     };
 
     function handleClick() {
@@ -149,6 +168,19 @@ const Cart: FC<CartType> = () => {
 
             const clone = componentRef.current.cloneNode(true) as HTMLDivElement;
 
+            // Load the logo image
+            const logoImage = new Image();
+            logoImage.src = logoImg.src; // Replace with the actual path to your logo image
+
+            // Add the logo to the cloned component
+            const logoContainer = document.createElement('div');
+            logoContainer.style.position = 'absolute';
+            logoContainer.style.top = '0';
+            logoContainer.style.right = '0';
+            logoContainer.style.width = '100px';
+            logoContainer.style.height = '100px';
+            logoContainer.appendChild(logoImage);
+            clone.insertBefore(logoContainer, clone.firstChild);
             const buttons = clone.querySelectorAll('button');
             buttons.forEach((button) => button.remove());
 
@@ -166,47 +198,86 @@ const Cart: FC<CartType> = () => {
             const opt = {
                 margin: 0.5,
                 filename: 'shopping-list.pdf',
-                image: {type: 'jpeg', quality: 0.98},
-                html2canvas: {scale: 2},
-                jsPDF: {unit: 'in', format: 'letter', orientation: 'portrait'},
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
             };
 
             const clone = componentRef.current.cloneNode(true) as HTMLDivElement;
+            clone.style.paddingTop = '24px';
+
+            // Load the logo image
+            const logoImage = new Image();
+            logoImage.src = logoImg.src; // Replace with the actual path to your logo image
+
+            // Add the logo to the cloned component
+            const logoContainer = document.createElement('div');
+            logoContainer.style.position = 'absolute';
+            logoContainer.style.top = '0';
+            logoContainer.style.right = '0';
+            logoContainer.style.width = '100px';
+            logoContainer.style.height = '100px';
+            logoContainer.appendChild(logoImage);
+            clone.insertBefore(logoContainer, clone.firstChild);
 
             const buttons = clone.querySelectorAll('button');
             buttons.forEach((button) => button.remove());
+            console.log(clone);
             html2pdf().from(clone).set(opt).save('shopping-list.pdf');
         }
     };
 
-    async function getCartItems() {
-        if (cartItems.length > 0) {
-            fetch(`${baseUrl}/catelog/item/find-list`, {
-                method: "post",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({
-                    items: cartItems.map((i: any) => i._id),
-                }),
-            })
-                .then((response) => response.json())
-                .then((responseJson) => {
-                    const cloneResponse = [...responseJson];
-                    console.log("responseJson : ", responseJson);
-                    cloneResponse.map((item) => {
-                        const itemone: any = cartItems.find((p) => p._id === item._id);
-                        item.count = itemone?.count ? itemone?.count : 0;
-                    });
-                    console.log("cloneResponse : ", cloneResponse, cartItems);
+    const handleEmail = async () => {
+        if (componentRef.current) {
+            const opt = {
+                margin: 0.5,
+                filename: 'shopping-list.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+            };
 
-                    setCartObj(groupBy([...cloneResponse], (v) => v.shop_id.shop_name + " - " + v.shop_id.address.address));
+            const clone = componentRef.current.cloneNode(true) as HTMLDivElement;
+
+            // Load the logo image
+            const logoImage = new Image();
+            logoImage.src = logoImg.src; // Replace with the actual path to your logo image
+
+            // Add the logo to the cloned component
+            const logoContainer = document.createElement('div');
+            logoContainer.style.position = 'absolute';
+            logoContainer.style.top = '0';
+            logoContainer.style.right = '0';
+            logoContainer.style.width = '100px';
+            logoContainer.style.height = '100px';
+            logoContainer.appendChild(logoImage);
+            clone.insertBefore(logoContainer, clone.firstChild);
+
+            const buttons = clone.querySelectorAll('button');
+            buttons.forEach((button) => button.remove());
+
+            const pdfBlob = await html2pdf().from(clone).set(opt).output('blob');
+
+            // Send the PDF blob to the backend
+            const formData = new FormData();
+            formData.append('pdf', pdfBlob, 'shopping-list.pdf');
+            formData.append('email', authUser.email);
+
+            // Replace 'http://backend-api-url' with your actual backend API URL
+            fetch(`${baseUrl}/neworder/send-email`, {
+                method: 'POST',
+                body: formData,
+            })
+                .then((response) => {
+                    // Handle the response from the backend, e.g., show success message
+                    console.log('Email sent successfully');
                 })
                 .catch((error) => {
-                    console.error("error : ", error);
+                    // Handle errors, e.g., show error message
+                    console.error('Error sending email:', error);
                 });
-        } else {
-            setCartObj([])
         }
-    }
+    };
 
     const groupBy = (
         x: any[],
@@ -216,15 +287,17 @@ const Cart: FC<CartType> = () => {
     const getShopTotal = (products: any[]) => {
         console.log(products)
         const shopAmount = products.reduce((acc, item) => {
-            if (typeof item.discount === "undefined") {
-                console.log("no discount", item, acc)
+            if (!item.expired) {
+                if (typeof item.discount === "undefined") {
+                    console.log("no discount", item, acc)
 
-                acc += item.count * item.unit_price;
-            } else {
-                acc +=
-                    item.count *
-                    (item.unit_price - item.unit_price * (item.discount / 100));
-                console.log("has discount", item, acc)
+                    acc += item.count * item.unit_price;
+                } else {
+                    acc +=
+                        item.count *
+                        (item.unit_price - item.unit_price * (item.discount / 100));
+                    console.log("has discount", item, acc)
+                }
             }
             return acc
         }, 0)
@@ -234,42 +307,51 @@ const Cart: FC<CartType> = () => {
 
     const handleIncrement = (product: Product) => {
         console.log(`handle increment =>  ${product._id}`)
-        addProductToCart({...product, count: 1})
+        addProductToCart({ ...product, count: 1 })
     };
 
     const handleDecrement = (product: Product) => {
         console.log(`handle decrement =>  ${product._id}`)
-        removeProductFromCart({...product, count: 1})
+        removeProductFromCart({ ...product, count: 1 })
     };
 
     const handleDelete = (product: Product) => {
         removeProductFromCart(product)
     };
 
+    const handleDeleteFromCartSideBar = (product: Product) => {
+        console.log(product)
+        removeCartProductFromCart(product)
+    };
+
     console.log("cartObj : ", cartObj);
+    console.log("cartProducts : ", cartProducts);
 
     return (
         <div className="container mx-auto xl:px-40 px-5 mt-24 mb-20">
             <div>
+                <h1 className="mb-8 text-2xl font-bold">Shopping List</h1>
                 <section className="flex justify-between h-full">
                     <div className="w-full h-full pb-10 bg-white py-2 px-4">
 
                         <div className="mt-8" ref={componentRef}>
                             {/* header */}
-                            <div className="grid grid-cols-4 sm:grid-cols-12 gap-2 border-b border-[#71778e] pb-3">
-                                <div className="col-span-2 sm:col-span-4 text-xs text-[#71778e] font-semibold">
-                                    Product
+                            <div className="grid grid-cols-4 sm:grid-cols-12 gap-2 border-b border-[#71778e] pb-3 h-10">
+                                <div className="sm:col-span-2 text-xs text-[#71778e] font-semibold">
+
                                 </div>
-                                <div className="text-xs sm:col-span-1"></div>
-                                <div className="text-xs text-[#71778e] font-semibold hidden sm:block">
+                                <div className="text-xs text-[#71778e] font-semibold sm:col-span-2">Product</div>
+
+                                <div className="text-xs text-[#71778e] font-semibold ">
                                     Price
                                 </div>
                                 <div className="text-xs text-[#71778e] font-semibold hidden sm:block">
-                                    Discounted price
+                                    Discount
                                 </div>
-                                <div className="text-xs text-[#71778e] font-semibold sm:col-span-2">
+                                <div className="text-xs text-[#71778e] font-semibold sm:col-span-2 sm:text-center">
                                     Quantity
                                 </div>
+                                <div className="text-xs text-[#71778e] font-semibold sm:col-span-1 hidden sm:block">Available Quantity</div>
                                 <div className="text-xs text-[#71778e] font-semibold hidden sm:block">
                                     Subtotal
                                 </div>
@@ -341,16 +423,16 @@ const Cart: FC<CartType> = () => {
 
                             <div className="inline-flex gap-2">
                                 <button className="bg-[#233a95] text-white py-2.5 px-4 rounded-md text-xs h-11"
-                                        onClick={handleDownload}><HiOutlineDocumentDownload className=" h-4 w-4"/>
+                                    onClick={handleDownload}><HiOutlineDocumentDownload className=" h-4 w-4" />
                                 </button>
                                 <button className="bg-[#233a95] text-white py-2.5 px-4 rounded-md text-xs h-11"
-                                        onClick={handleDownload}><TfiEmail className=" h-4 w-4"/></button>
+                                    onClick={handleEmail}><TfiEmail className=" h-4 w-4" /></button>
 
                                 <button
                                     className="bg-[#233a95] text-white py-2.5 px-4 rounded-md text-xs h-11"
                                     onClick={handlePrint}
                                 >
-                                    <BsPrinter className=" h-4 w-4"/>
+                                    <BsPrinter className=" h-4 w-4" />
                                 </button>
                                 <button
                                     className="bg-[#233a95] text-white py-2.5 px-4 rounded-md text-xs h-11 w-[104px] hidden md:block"
@@ -366,79 +448,33 @@ const Cart: FC<CartType> = () => {
                         <div
                             className="w-80 border border-[#e4e5ee] p-4 rounded-md h-full hidden xl:block ml-8 bg-white">
                             <h2 className="font-semibold mb-3">CART TOTALS</h2>
-                            <hr/>
+                            <hr />
+                            <table className="w-full">
+                        <tbody>
+                            {cartProducts.map((item: any, index: number) => (
+                                <CartSideBar getPrice={getPrice} item={item} key={index} handleDelete={handleDeleteFromCartSideBar} />
+                            ))}
+                        </tbody>
+                    </table>
                             <table className="w-full">
                                 <tbody>
-                                <tr>
-                                    <td className="border-b border-[#e4e5ee] py-3 font-semibold text-[13px]">
-                                        Subtotal
-                                    </td>
-                                    <td className="border-b border-[#e4e5ee] py-3 text-[15px] text-right">
-                                        {getPrice(cartAmount)}
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td className="border-b border-[#e4e5ee] py-3 font-semibold text-[13px]">
+                                            Subtotal
+                                        </td>
+                                        <td className="border-b border-[#e4e5ee] py-3 text-[15px] text-right">
+                                            {getPrice(cartProductsAmount)}
+                                        </td>
+                                    </tr>
 
-                                <tr>
-                                    <td className="text-[13px] pb-3 text-right">
-                                        <label className="inline-flex -gap-1">
-                                            <span className="mr-2">Local pickup</span>
-                                            <input
-                                                type="radio"
-                                                name="cart"
-                                            />
-                                        </label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td className="text-right text-[12.5px] pb-4">
-                                        Shipping to <span className="font-semibold">AL.</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td className="text-right text-[13px]  text-[#2bbef9] pb-4">
-                                        <button onClick={handleClick}> Change address</button>
-                                        {showInputs && (
-                                            <div className="flex flex-col justify-end text-right">
-                                                <input
-                                                    type="text"
-                                                    className="w-full px-4 h-11 bg-gray-100 rounded-md mt-2 ml-2 pl-4 text-sm"
-                                                    placeholder="Country"
-                                                    value={country}
-                                                    onChange={(e) => setCountry(e.target.value)}
-                                                />
-                                                <input
-                                                    type="text"
-                                                    className="w-full px-4 h-11 bg-gray-100 rounded-md mt-2 ml-2 pl-4 text-sm"
-                                                    placeholder="City"
-                                                    value={townCity}
-                                                    onChange={(e) => setTownCity(e.target.value)}
-                                                />
-                                                <input
-                                                    type="text"
-                                                    className="w-full px-4 h-11 bg-gray-100 rounded-md mt-2 ml-2 pl-4 text-sm"
-                                                    placeholder="Postcode/Zip"
-                                                    value={zipCode}
-                                                    onChange={(e) => setZipCode(e.target.value)}
-                                                />
-
-                                                <button
-                                                    className="bg-[#233a95] text-white py-2.5 px-4 rounded-md text-xs h-11 w-[104px] mt-3"
-                                                    onClick={handleUpdateShipping}
-                                                >
-                                                    Update
-                                                </button>
-                                            </div>
-                                        )}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td className="border-y border-[#e4e5ee] text-[13px] font-semibold pb-4">
-                                        Total
-                                    </td>
-                                    <td className="border-y border-[#e4e5ee] text-right font-semibold text-xl py-4">
-                                        {getPrice(cartAmount)}
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td className="border-y border-[#e4e5ee] text-[13px] font-semibold pb-4">
+                                            Total
+                                        </td>
+                                        <td className="border-y border-[#e4e5ee] text-right font-semibold text-xl py-4">
+                                            {getPrice(cartProductsAmount)}
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
 
@@ -469,47 +505,34 @@ const Cart: FC<CartType> = () => {
                 {/* Cart Totals */}
                 <div className="w-full border border-[#e4e5ee] mt-10 p-4 rounded-md xl:hidden">
                     <h2 className="font-semibold mb-3">CART TOTALS</h2>
-                    <hr/>
+                    <hr />
                     <table className="w-full">
                         <tbody>
-                        <tr>
-                            <td className="border-b border-[#e4e5ee] py-3 font-semibold text-[13px]">
-                                Subtotal
-                            </td>
-                            <td className="border-b border-[#e4e5ee] py-3 text-[15px] text-right">
-                                {getPrice(cartAmount)}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="text-[13px] pb-3 text-right">
-                                <label className="inline-flex -gap-1">
-                                    <span className="mr-2">Local pickup</span>
-                                    <input
-                                        type="radio"
-                                        name="vendor"
-                                        // onChange={handleRadioChange}
-                                    />
-                                </label>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="text-right text-[12.5px] pb-4">
-                                Shipping to <span className="font-semibold">AL.</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="text-right text-[13px] border-b border-[#e4e5ee] text-[#2bbef9] pb-4">
-                                Change address
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="border-b border-[#e4e5ee] text-[13px] font-semibold pb-4">
-                                Total
-                            </td>
-                            <td className="border-b border-[#e4e5ee] text-right font-semibold text-xl py-4">
-                                {getPrice(cartAmount)}
-                            </td>
-                        </tr>
+                            {cartProducts.map((item: any, index: number) => (
+                                <CartSideBar getPrice={getPrice} item={item} key={index} />
+                            ))}
+                            
+                        </tbody>
+                    </table>
+                    <table className="w-full">
+                        <tbody>
+                            <tr>
+                                <td className="border-b border-[#e4e5ee] py-3 font-semibold text-[13px]">
+                                    Subtotal
+                                </td>
+                                <td className="border-b border-[#e4e5ee] py-3 text-[15px] text-right">
+                                    {getPrice(cartProductsAmount)}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td className="border-b border-[#e4e5ee] text-[13px] font-semibold pb-4">
+                                    Total
+                                </td>
+                                <td className="border-b border-[#e4e5ee] text-right font-semibold text-xl py-4">
+                                    {getPrice(cartProductsAmount)}
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
 

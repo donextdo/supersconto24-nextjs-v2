@@ -11,7 +11,7 @@ import { SiApplepay } from "react-icons/si";
 import { RiMastercardFill } from "react-icons/ri";
 import { SiVisa } from "react-icons/si";
 import googleplay from '../../../../../assets/playstore/google-play.png'
-import applestore from '../../../../../assets/playstore/google-play.png'
+import applestore from '../../../../../assets/playstore/app-store.png'
 
 
 import Image from "next/image";
@@ -22,22 +22,26 @@ export default function BottomFooter() {
   return (
     <>
       <div className="my-10 ">
-        <div className="flex flex-col sm:flex-row gap-4 justify-center sm:justify-between px-2 items-center">
-          <div className="flex">
-            <div>
-              <button className="p-3 border rounded-full mr-2">
-                <FiPhoneCall />
-              </button>
-            </div>
+        <div className="flex flex-col md:flex-row gap-4 justify-center sm:justify-between px-2 items-center">
+          <div className="space-y-2">
+            <div className="flex">
+              <div>
+                <button className="p-3 border rounded-full mr-2">
+                  <FiPhoneCall />
+                </button>
+              </div>
 
-            <div className="">
+              <div className="">
 
-              <h2 className="font-semibold text-[20px] flex">{contactNumber}</h2>
-              <p className="text-gray-400 text-[11px]">Working 8:00 - 22:00</p>
+                <h2 className="font-semibold text-[20px] flex">{contactNumber}</h2>
+                <p className="text-gray-400 text-[11px]">Working 8:00 - 22:00</p>
+              </div>
             </div>
+            
           </div>
 
-          <div className="flex flex-col md:flex-row gap-2 items-center justify-end">
+
+          <div className="flex flex-col  gap-2 items-center justify-end">
             {/* <div className="ml-7 xl:ml-40 2xl:ml-96  sm:mx-10 xl:mx-0 lg:ml-16 md:ml-40">
 
               <p className="font-semibold text-[14px] xl:ml-7 md:ml-7 ">
@@ -85,6 +89,42 @@ export default function BottomFooter() {
               </Link>
             </div>
           </div>
+
+          <div className="flex flex-row gap-2">
+
+              <p className="text-gray-400 text-[12px]  ">
+                <Link
+                  href="#"
+                  className="hover:underline hover:underline-offset-1"
+                >
+                  Careers
+                </Link>
+              </p>
+              <p className="text-gray-400 text-[12px]">
+                <Link
+                  href="/about"
+                  className="hover:underline hover:underline-offset-1"
+                >
+                  About Us
+                </Link>
+              </p>
+              <p className="text-gray-400 text-[12px]">
+                <Link
+                  href="/contact"
+                  className="hover:underline hover:underline-offset-1"
+                >
+                  Contact Us
+                </Link>
+              </p>
+              <p className="text-gray-400 text-[12px]">
+                <Link
+                  href="/blog"
+                  className="hover:underline hover:underline-offset-1"
+                >
+                  Blog
+                </Link>
+              </p>
+            </div>
         </div>
 
         <hr className="my-5 " />
@@ -120,7 +160,7 @@ export default function BottomFooter() {
               </p>
               <p className="text-gray-400 text-[12px]">
                 <Link
-                  href="/#"
+                  href="/cookie"
                   className="hover:underline hover:underline-offset-1"
                 >
                   Cookie
@@ -129,7 +169,7 @@ export default function BottomFooter() {
             </div>
           </div>
           <div className="flex flex-row gap-2 ">
-            
+
             <button className="border py-0.5 px-2">
               <SiAmericanexpress className="text-xl text-gray-600" />
             </button>

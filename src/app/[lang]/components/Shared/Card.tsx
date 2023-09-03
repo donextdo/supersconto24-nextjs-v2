@@ -10,7 +10,7 @@ interface CardProps {
 
 const Card: React.FC<CardProps> = ({children, bgColor, padding, shadow, styleClass}) => {
   return (
-    <div className={`${bgColor ? bgColor : 'bg-white'} ${padding ? padding : 'px-4 py-6'} ${shadow ? shadow : 'shadow-md'} ${styleClass}`}>
+    <div className={`${bgColor ? bgColor : 'bg-white'} ${padding ? padding : 'px-4 py-6'} ${shadow ? shadow : 'shadow-lg'} ${styleClass}`}>
         {children}
     </div>
   )

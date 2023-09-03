@@ -9,7 +9,7 @@ import logo from "../../../../../assets/logo/logo.png";
 // import getConfig from "next/config";
 import { Location } from "../Location/Location";
 // import SideNavBar from "../SideNavBar/SideNavbar";
-import React, { useState } from "react";
+import React, { JSXElementConstructor, ReactElement, ReactFragment, useState } from "react";
 import CartPopup from "@/app/[lang]/features/cart/popup-cart/CartPopup";
 import useCurrency from "@/app/[lang]/components/Hooks/useCurrencyHook";
 import useCartItemsHook from "@/app/[lang]/components/Hooks/useCartItemsHook";
@@ -17,6 +17,7 @@ import { BiCurrentLocation } from "react-icons/bi";
 import { updateParamValue } from "../../../../../utils/baseUrl";
 import { useRouter } from "next/navigation";
 import SideNavBar from "../SideNavBar/SideNavBar";
+import useAuthCheckHook from "../Hooks/useAuthCheck";
 
 const Header = () => {
     const [cart, setCart] = useState(false);
@@ -24,9 +25,26 @@ const Header = () => {
     const { getPrice } = useCurrency()
     const { cartCount, cartAmount } = useCartItemsHook()
     const router = useRouter()
- 
+    const { isLoggedIn, authUser, logOut } = useAuthCheckHook()
 
 
+    let email: string | null;
+    let username;
+    let extractedUsername: any
+
+    // review name
+    if (authUser) {
+        if (authUser?.email !== null) {
+            username = authUser?.email.split("@")[0]; // Extract the username from the email
+            extractedUsername = username.replace(/"/g, "");
+        } else {
+            // Handle the case when the email value is null
+        }
+    } else {
+        // Handle the case when the value is null
+        // For example, you could set a default value
+    }
+    let initials = extractedUsername?.charAt(0).toUpperCase()
     const handleClick = () => {
         setCart(!cart)
     };
@@ -53,75 +71,87 @@ const Header = () => {
         }
     }
 
+    // console.log("da", authUser)
     return (
         <>
-            <div className="hidden md:block container mx-auto xl:px-40 px-5">
-                <div className=" flex items-center flex-row py-2">
-                    <div className="basis-1/4 text-4xl font-bold text-[#223994]">
-                        <Link href="/">
-                            <div className="h-[50px] w-auto ">
-                                <Image
-                                    src={logo}
-                                    alt="item1"
-                                    style={{
-                                        objectFit: "contain",
-                                        backgroundColor: "white",
-                                        width: "100%",
-                                        height: "100%",
-                                    }}
-                                    width={450}
-                                    height={400}
-                                />
+            <div className="hidden md:block container mx-auto xl:px-40 px-5 sticky top-0 z-40 bg-[#f5f5f5]">
+                <div className=" flex items-center justify-between  py-2">
+                    <div className="flex">
+                        <div className="text-4xl font-bold text-[#223994] flex justify-start">
+                            <Link href="/">
+                                <div className="h-[50px] w-auto ">
+                                    <Image
+                                        src={logo}
+                                        alt="item1"
+                                        style={{
+                                            objectFit: "contain",
+                                            
+                                            width: "100%",
+                                            height: "100%",
+                                        }}
+                                        width={450}
+                                        height={400}
+                                    />
+                                </div>
+                            </Link>
+                        </div>
+                        <div className="flex justify-start items-center lg:visible md:visible invisible">
+                            <Location />
+                        </div>
+                        <div className="flex justify-center items-center font-semibold ">
+                            <div className="">
+                                <a onClick={() => getMyLocation()}>
+                                    <button className="h-[60px] bg-green-500 px-2 rounded-r-md">
+                                        <BiCurrentLocation className="text-lg text-white " />
+                                    </button>
+                                </a>
                             </div>
-                        </Link>
-                    </div>
-                    <div className="flex justify-start items-center basis-1/4 lg:visible md:visible invisible">
-                        <Location />
-                    </div>
-                    <div className="flex justify-start items-center font-semibold">
-                        <div className="mx-4">
-                            <a onClick={() => getMyLocation()}>
-                                <button className="border rounded-full p-2">
-                                    <BiCurrentLocation className="text-lg text-black" />
-                                </button>
-                            </a>
                         </div>
                     </div>
-                    <div className="basis-2/4 search-bar">
-                        <SearchItem />
-                    </div>
-
-                    <div className="basis-1/4 flex  justify-end items-center font-semibold">
-                        <div className="mx-4">
-                            <a onClick={() => window.location.href = '/account'}>
-                                <button className="border rounded-full p-2">
-                                    <AiOutlineUser className="text-2xl" />
-                                </button>
-                            </a>
+                    <div className="flex">
+                        <div className=" search-bar">
+                            <SearchItem />
                         </div>
-                        <div className="mr-4">{getPrice(cartAmount)}</div>
-                        <div
-                            className="relative"
-                            onMouseEnter={handleEnter}
-                            onMouseLeave={handleLeave}
-                        >
-                            <button
-                                className="border border-[#fff1ee] bg-[#fff1ee] rounded-full p-2"
-                                onClick={handleClick}
-                            >
-                                <SlHandbag className="text-2xl text-[#ea2b0f]" />
-                            </button>
 
-                            {cart && <CartPopup />}
-                            {cartCount > 0 && (
-                                <div
-                                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full h-5 w-5 flex items-center justify-center">
-                                    {cartCount}
+                        <div className=" flex justify-end items-center font-semibold">
+                            {authUser?._id ? (
+                                <div className="mx-4 h-10 w-10 rounded-full bg-[#233a95] flex items-center justify-center text-white text-xl cursor-pointer">
+                                    <a onClick={() => window.location.href = '/account'}>
+                                        {initials}</a></div>
+                            ) : (
+                                <div className="mx-4">
+                                    <a onClick={() => window.location.href = '/account'}>
+                                        <button className="border rounded-full p-2">
+                                            <AiOutlineUser className="text-2xl" />
+                                        </button>
+                                    </a>
                                 </div>
                             )}
-                        </div>
-                        <div>
 
+                            <div className="mr-4">{getPrice(cartAmount)}</div>
+                            <div
+                                className="relative"
+                                onMouseEnter={handleEnter}
+                                onMouseLeave={handleLeave}
+                            >
+                                <button
+                                    className="border border-[#fff1ee] bg-[#fff1ee] rounded-full p-2"
+                                    onClick={handleClick}
+                                >
+                                    <SlHandbag className="text-2xl text-[#ea2b0f]" />
+                                </button>
+
+                                {cart && <CartPopup />}
+                                {cartCount > 0 && (
+                                    <div
+                                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full h-5 w-5 flex items-center justify-center">
+                                        {cartCount}
+                                    </div>
+                                )}
+                            </div>
+                            <div>
+
+                            </div>
                         </div>
                     </div>
                 </div>

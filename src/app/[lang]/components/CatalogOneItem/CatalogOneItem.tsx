@@ -1,10 +1,10 @@
 'use client'
 import Image from "next/image"
-import React, {useEffect, useMemo, useRef, useState} from "react"
-import {useSelector} from "react-redux"
-import {RootState} from "../../redux/store"
+import React, { useEffect, useMemo, useRef, useState } from "react"
+import { useSelector } from "react-redux"
+import { RootState } from "../../redux/store"
 import Link from "next/link"
-import {SlHandbag} from "react-icons/sl"
+import { SlHandbag } from "react-icons/sl"
 import nextArrow from '../../../../../public/arrow-next.svg'
 import prevArrow from '../../../../../public/arrow-prev.svg'
 import Draggable from "../Draggable/Draggable"
@@ -12,6 +12,8 @@ import ProductPopup from "../../features/product/ProductPopup"
 import CartPopup from "@/app/[lang]/features/cart/popup-cart/CartPopup";
 import logo from "../../../../../assets/logo/logo.png";
 import useCartItemsHook from "@/app/[lang]/components/Hooks/useCartItemsHook";
+import axios from "axios"
+import baseUrl from "../../../../../utils/baseUrl"
 
 interface Props {
     catalog?: any
@@ -20,12 +22,14 @@ interface Props {
     };
 }
 
-const CatalogCarousel: React.FC<Props> = ({catalog, params}) => {
+const CatalogCarousel: React.FC<Props> = ({ catalog, params }) => {
 
     const [pages, setPages] = useState([])
-    const [showModal, setShowModal] = useState({show: false, item: null})
+    const [showModal, setShowModal] = useState({ show: false, item: null })
     const [cart, setCart] = useState(false);
-    const {cartCount} = useCartItemsHook()
+    const { cartCount } = useCartItemsHook()
+    const [shopName, setShopName] = useState('')
+    const [shopAddress, setShopAddress] = useState('')
 
 
     useEffect(() => {
@@ -35,10 +39,22 @@ const CatalogCarousel: React.FC<Props> = ({catalog, params}) => {
         }
     }, [catalog])
 
+    useEffect(() => {
+        fetchShopData()
+    }, [catalog])
+
+    const fetchShopData = async () => {
+        const response = await axios.get(`${baseUrl}/shop/find/${catalog.shop_id}`)
+        console.log("shop details", response.data)
+        const sName = response.data.shop_name
+        const sAddress = response.data.address.address
+        setShopName(sName)
+        setShopAddress(sAddress)
+    }
 
     const formattedDate = useMemo(() => {
         return new Date(catalog.expiredate).toLocaleDateString("en-GB")
-    },[catalog.expiredate])
+    }, [catalog.expiredate])
 
     const handleClick = () => {
         setCart(!cart)
@@ -57,12 +73,20 @@ const CatalogCarousel: React.FC<Props> = ({catalog, params}) => {
                 <div className='flex justify-between mx-2 items-center py-4'>
                     <div className='ml-12 '>
                         <Link href="/">
-                            <Image src={logo} alt="LOGO" className='h-11 sm:h-9 md:h-11 w-auto'/>
+                            <Image src={logo} alt="LOGO" className='h-11 sm:h-9 md:h-11 w-auto' />
                         </Link>
                     </div>
                     <div className='text-center'>
-                        <p className="font-semibold">{catalog.title}</p>
-                        <p className="text-sm">Expire Date - {formattedDate}</p>
+                        {/* <p className="font-semibold">{catalog.title} - {shopName}</p>
+                        <p className="text-xs">{shopAddress}</p>
+                        <p className="text-xs">Expire Date - {formattedDate}</p> */}
+                        <p className="">
+                            <span className="text-md font-semibold">{catalog.title}</span> <span className="text-xs font-normal">| Exp. Date - {formattedDate}</span>
+                        </p>
+                        <p>
+                        <span className="text-md font-semibold">{shopName}</span><span className="text-xs font-normal">, {shopAddress}</span>
+                        </p>
+
                     </div>
                     <div
                         className="relative mr-2"
@@ -73,10 +97,10 @@ const CatalogCarousel: React.FC<Props> = ({catalog, params}) => {
                             className="border border-[#fff1ee] bg-[#fff1ee] rounded-full p-2"
                             onClick={handleClick}
                         >
-                            <SlHandbag className="text-2xl text-[#ea2b0f]"/>
+                            <SlHandbag className="text-2xl text-[#ea2b0f]" />
                         </button>
 
-                        {cart && <CartPopup/>}
+                        {cart && <CartPopup />}
                         {cartCount > 0 && (
                             <div
                                 className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full h-5 w-5 flex items-center justify-center">
@@ -89,14 +113,14 @@ const CatalogCarousel: React.FC<Props> = ({catalog, params}) => {
             </div>
             <div className="catalog-component">
 
-                <Draggable pages={pages} setShowModal={setShowModal}/>
+                <Draggable pages={pages} setShowModal={setShowModal} />
 
                 {showModal.show && showModal.item &&
                     <ProductPopup proId={showModal.item}
-                                  setProductPopup={() => setShowModal(prevState => ({
-                                      ...prevState,
-                                      show: false
-                                  }))}/>}
+                        setProductPopup={() => setShowModal(prevState => ({
+                            ...prevState,
+                            show: false
+                        }))} />}
 
             </div>
         </div>
@@ -104,7 +128,7 @@ const CatalogCarousel: React.FC<Props> = ({catalog, params}) => {
 }
 
 export default CatalogCarousel;
-export function NextArrowCircle({className, style, onClick}: any) {
+export function NextArrowCircle({ className, style, onClick }: any) {
     return (
         <div
             className={`${className}`}
@@ -112,12 +136,12 @@ export function NextArrowCircle({className, style, onClick}: any) {
             onClick={onClick}
             draggable={false}
         >
-            <Image fill src={nextArrow} alt={""}/>
+            <Image fill src={nextArrow} alt={""} />
         </div>
     );
 }
 
-export function PrevArrowCircle({className, style, onClick}: any) {
+export function PrevArrowCircle({ className, style, onClick }: any) {
     return (
         <div
             className={`${className}`}
@@ -125,7 +149,7 @@ export function PrevArrowCircle({className, style, onClick}: any) {
             onClick={onClick}
             draggable={false}
         >
-            <Image fill src={prevArrow} alt={""}/>
+            <Image fill src={prevArrow} alt={""} />
         </div>
     );
 }

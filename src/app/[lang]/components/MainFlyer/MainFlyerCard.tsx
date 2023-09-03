@@ -22,7 +22,7 @@ const MainFlyerCard = ({ flyer }: any) => {
             <div className="grid grid-cols-5 gap-2 ">
                 <div className="col-span-3 ">
                     <h1 className="font-bold text-md text-ellipsis overflow-hidden ...">{flyer.title}</h1>
-                    <h1 className="text-xs font-medium">{flyer.shop_id?.shop_name ? flyer.shop_id?.shop_name : '' }</h1>
+                    <h1 className="text-xs font-medium">{flyer.shop_id?.customized_shop_name ? flyer.shop_id?.customized_shop_name :  flyer.shop_id?.shop_name }</h1>
                 </div>
                 <div className="col-span-2 space-y-1.5">
                     <h1 className="text-sm text-black text-right font-semibold">
