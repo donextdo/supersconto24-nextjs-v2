@@ -1,25 +1,26 @@
 "use client";
 
-import React, { FC, useEffect, useRef, useState } from "react";
+import React, {FC, useEffect, useRef, useState} from "react";
 import Link from "next/link";
-import { useDispatch } from "react-redux";
-import { calSubTotal } from "../cartSlice";
+import {useDispatch} from "react-redux";
+import {calSubTotal} from "../cartSlice";
 import axios from "axios";
 // import baseUrl from "../../../../utils/baseUrl";
-import { useReactToPrint } from "react-to-print";
+import {useReactToPrint} from "react-to-print";
 import baseUrl from "../../../../../../utils/baseUrl";
 import CartCard from "./CartCard";
 import useCurrency from "@/app/[lang]/components/Hooks/useCurrencyHook";
-import { HiOutlineDocumentDownload } from "react-icons/hi";
-import { TfiEmail } from "react-icons/tfi";
-import { BsPrinter } from "react-icons/bs";
+import {HiOutlineDocumentDownload} from "react-icons/hi";
+import {TfiEmail} from "react-icons/tfi";
+import {BsPrinter} from "react-icons/bs";
 import html2pdf from "html2pdf.js";
 import useCartItemsHook from "@/app/[lang]/components/Hooks/useCartItemsHook";
-import { Product } from "@/app/[lang]/features/product/product";
+import {Product} from "@/app/[lang]/features/product/product";
 import useAuthCheckHook from "@/app/[lang]/components/Hooks/useAuthCheck";
 import Swal from "sweetalert2";
 import logoImg from "../../../../../../assets/logo/logo.png";
 import CartSideBar from "./CartSideBar";
+import useCartProductsHook from "@/app/[lang]/components/Hooks/useCartProductsHook";
 
 
 // import { PDFDocument, StandardFonts } from 'pdf-lib';
@@ -47,7 +48,6 @@ const Cart: FC<CartType> = () => {
     const [cartObj, setCartObj] = useState<any>([]);
     const [showInputs, setShowInputs] = useState(false);
     const [coupon, setCoupon] = useState("");
-    const [total, setTotal] = useState(0);
     const [shippingObj, setShippingObj] = useState({
         cartshippingFirstName: "",
         cartshippingLastName: "",
@@ -63,17 +63,14 @@ const Cart: FC<CartType> = () => {
     });
     const componentRef = useRef<any>(null);
     const { getPrice } = useCurrency()
-    const { cartItems, cartCount, cartAmount, addProductToCart, removeProductFromCart, fetchCart, removeAll } = useCartItemsHook()
-    const { isLoggedIn, authUser, logOut } = useAuthCheckHook()
-    const [productCart, setProductCart] = useState([])
-    let [amount, setAmount] = useState(0)
-    
+    const { cartItems, cartAmount, addProductToCart, removeProductFromCart, fetchCart } = useCartItemsHook()
+    const { cartProducts, cartProductsAmount, removeCartProductFromCart } = useCartProductsHook()
+    const { isLoggedIn, authUser} = useAuthCheckHook()
 
     useEffect(() => {
         fetchCart()
-        fetchcartProduct()
+        // fetchcartProduct()
     }, [])
-
 
     useEffect(() => {
         if (isLoggedIn && authUser)
@@ -87,23 +84,6 @@ const Cart: FC<CartType> = () => {
         else
             setCartObj([])
     }, [cartItems])
-
-    const fetchcartProduct = () => {
-        const localCart = localStorage.getItem("cartProducts") ? JSON.parse(localStorage.getItem("cartProducts")!) : []
-        setProductCart(localCart)
-
-       let cartAmountCalculated = 0
-       
-        localCart.forEach((item:any) => {         
-                if (!item.discount) {
-                    cartAmountCalculated += item.count * item.unit_price;
-                    setAmount(cartAmountCalculated)
-                } else {
-                    cartAmountCalculated += item.count * (item.unit_price - (item.unit_price * (item.discount / 100)));
-                    setAmount(cartAmountCalculated)
-                }
-        })
-    }
 
     async function getUserById(id: string) {
         try {
@@ -127,7 +107,6 @@ const Cart: FC<CartType> = () => {
         }
     }
 
-
     const handleClear = () => {
         Swal.fire({
             
@@ -139,10 +118,9 @@ const Cart: FC<CartType> = () => {
             confirmButtonColor: '#8DC14F',
         }).then((result) => {
             if (result.isConfirmed) {
-                // localStorage.setItem('cartItems', '[]');
-                // dispatch(calSubTotal(12));
-                // setCartObj([]);
-                handleDelete()
+                localStorage.setItem('cartItems', '[]');
+                dispatch(calSubTotal(12));
+                setCartObj([]);
             }
         });
         // localStorage.setItem('cartItems', '[]');
@@ -301,35 +279,6 @@ const Cart: FC<CartType> = () => {
         }
     };
 
-    async function getCartItems() {
-        if (cartItems.length > 0) {
-            fetch(`${baseUrl}/catelog/item/find-list`, {
-                method: "post",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    items: cartItems.map((i: any) => i._id),
-                }),
-            })
-                .then((response) => response.json())
-                .then((responseJson) => {
-                    const cloneResponse = [...responseJson];
-                    console.log("responseJson : ", responseJson);
-                    cloneResponse.map((item) => {
-                        const itemone: any = cartItems.find((p) => p._id === item._id);
-                        item.count = itemone?.count ? itemone?.count : 0;
-                    });
-                    console.log("cloneResponse : ", cloneResponse, cartItems);
-
-                    setCartObj(groupBy([...cloneResponse], (v) => v.shop_id.shop_name + " - " + v.shop_id.address.address));
-                })
-                .catch((error) => {
-                    console.error("error : ", error);
-                });
-        } else {
-            setCartObj([])
-        }
-    }
-
     const groupBy = (
         x: any[],
         f: (arg0: any, arg1: any, arg2: any) => string | number
@@ -366,15 +315,17 @@ const Cart: FC<CartType> = () => {
         removeProductFromCart({ ...product, count: 1 })
     };
 
-    const handleDelete = () => {
-        removeAll()
-    };
-
-    const handleRemoveAll = (product: Product) => {
+    const handleDelete = (product: Product) => {
         removeProductFromCart(product)
     };
+
+    const handleDeleteFromCartSideBar = (product: Product) => {
+        console.log(product)
+        removeCartProductFromCart(product)
+    };
+
     console.log("cartObj : ", cartObj);
-    console.log("cart : ", amount);
+    console.log("cartProducts : ", cartProducts);
 
     return (
         <div className="container mx-auto xl:px-40 px-5 mt-24 mb-20">
@@ -500,8 +451,8 @@ const Cart: FC<CartType> = () => {
                             <hr />
                             <table className="w-full">
                         <tbody>
-                            {productCart.map((item: any, index: number) => (
-                                <CartSideBar getPrice={getPrice} item={item} key={index} />
+                            {cartProducts.map((item: any, index: number) => (
+                                <CartSideBar getPrice={getPrice} item={item} key={index} handleDelete={handleDeleteFromCartSideBar} />
                             ))}
                         </tbody>
                     </table>
@@ -512,7 +463,7 @@ const Cart: FC<CartType> = () => {
                                             Subtotal
                                         </td>
                                         <td className="border-b border-[#e4e5ee] py-3 text-[15px] text-right">
-                                            {getPrice(amount)}
+                                            {getPrice(cartProductsAmount)}
                                         </td>
                                     </tr>
 
@@ -521,7 +472,7 @@ const Cart: FC<CartType> = () => {
                                             Total
                                         </td>
                                         <td className="border-y border-[#e4e5ee] text-right font-semibold text-xl py-4">
-                                            {getPrice(amount)}
+                                            {getPrice(cartProductsAmount)}
                                         </td>
                                     </tr>
                                 </tbody>
@@ -557,7 +508,7 @@ const Cart: FC<CartType> = () => {
                     <hr />
                     <table className="w-full">
                         <tbody>
-                            {productCart.map((item: any, index: number) => (
+                            {cartProducts.map((item: any, index: number) => (
                                 <CartSideBar getPrice={getPrice} item={item} key={index} />
                             ))}
                             
@@ -570,7 +521,7 @@ const Cart: FC<CartType> = () => {
                                     Subtotal
                                 </td>
                                 <td className="border-b border-[#e4e5ee] py-3 text-[15px] text-right">
-                                    {getPrice(amount)}
+                                    {getPrice(cartProductsAmount)}
                                 </td>
                             </tr>
 
@@ -579,7 +530,7 @@ const Cart: FC<CartType> = () => {
                                     Total
                                 </td>
                                 <td className="border-b border-[#e4e5ee] text-right font-semibold text-xl py-4">
-                                    {getPrice(amount)}
+                                    {getPrice(cartProductsAmount)}
                                 </td>
                             </tr>
                         </tbody>
