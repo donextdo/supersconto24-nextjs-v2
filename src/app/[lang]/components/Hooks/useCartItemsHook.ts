@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "@/app/[lang]/redux/store";
 import {Product} from "@/app/[lang]/features/product/product";
-import {addProduct, removeProduct, setCart} from "@/app/[lang]/features/cart/cartSlice";
+import {addProduct, removeProduct, resetProduct, setCart} from "@/app/[lang]/features/cart/cartSlice";
 import baseUrl, {axiosRequest} from "../../../../../utils/baseUrl";
 
 const UseCartItemsHook = () => {
@@ -45,7 +45,7 @@ const UseCartItemsHook = () => {
         cartItems.forEach((item) => {
             cartCountCalculated += item.count
 
-            if (!item.expired){
+            if (!item.expired) {
                 if (!item.discount) {
                     cartAmountCalculated += item.count * item.unit_price;
                 } else {
@@ -63,37 +63,44 @@ const UseCartItemsHook = () => {
         dispatch(removeProduct(product))
     }
 
+    const removeAll = () => {
+        dispatch(resetProduct())
+    }
+
     const fetchCart = () => {
         const localCart = localStorage.getItem("cartItems") ? JSON.parse(localStorage.getItem("cartItems")!) : []
 
         if (localCart.length > 0) {
 
             getCartItems(localCart).then((data) => {
-                const fetchedCartItems = data.map((item: Product) => {
-                    const itemInCart: any = localCart.find((p: Product) => p._id === item._id);
-                    if (itemInCart) {
-                        const expireDate = new Date(item?.catelog_book_id?.expiredate);
-                        const currentDate = new Date();
-                        const expired = currentDate > expireDate;
-                        return {...item, count: itemInCart.count || 0, expired};
-                    }
-                    return item;
-                });
+                if (data && data.length > 0) {
+                    const fetchedCartItems = data.map((item: Product) => {
+                        const itemInCart: any = localCart.find((p: Product) => p._id === item._id);
+                        if (itemInCart) {
+                            const expireDate = new Date(item?.catelog_book_id?.expiredate);
+                            const currentDate = new Date();
+                            const expired = currentDate > expireDate;
+                            return {...item, count: itemInCart.count || 0, expired};
+                        }
+                        return item;
+                    });
 
-                if (fetchedCartItems.length > 0) {
-                    const {cartAmountCalculated, cartCountCalculated} = calCartDetails(fetchedCartItems)
-                    dispatch(setCart({
-                        totalAmount: cartAmountCalculated,
-                        totalCount: cartCountCalculated,
-                        cartItems: fetchedCartItems
-                    }))
-                } else {
-                    setCartItems([])
-                    setCartAmount(0)
-                    setCartCount(0)
+                    if (fetchedCartItems.length > 0) {
+                        const {cartAmountCalculated, cartCountCalculated} = calCartDetails(fetchedCartItems)
+                        dispatch(setCart({
+                            totalAmount: cartAmountCalculated,
+                            totalCount: cartCountCalculated,
+                            cartItems: fetchedCartItems
+                        }))
+                    } else {
+                        setCartItems([])
+                        setCartAmount(0)
+                        setCartCount(0)
+                    }
+                    console.log({fetchedCartItems});
+
                 }
 
-                console.log({fetchedCartItems});
 
             }).catch((error) => {
                 console.error("error : ", error);
@@ -107,7 +114,7 @@ const UseCartItemsHook = () => {
     }
     // console.log("render", {cartItems, cartCount, cartAmount, addProductToCart, removeProductFromCart})
 
-    return {cartItems, cartCount, cartAmount, addProductToCart, removeProductFromCart, fetchCart}
+    return {cartItems, cartCount, cartAmount, addProductToCart, removeProductFromCart, fetchCart, removeAll}
 };
 
 export default UseCartItemsHook;

@@ -81,10 +81,7 @@ const UseCartProductHook = () => {
                 });
 
                 if (fetchedCartItems.length > 0) {
-                    const {cartAmountCalculated, cartCountCalculated} = calCartDetails(fetchedCartItems)
                     dispatch(setCart({
-                        totalAmount: cartAmountCalculated,
-                        totalCount: cartCountCalculated,
                         cartItems: fetchedCartItems
                     }))
                 } else {
