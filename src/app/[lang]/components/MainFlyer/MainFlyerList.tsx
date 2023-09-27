@@ -126,8 +126,8 @@ const MainFlyerList = ({ dictionary, locale }: MainFlyerListType) => {
         <div className="rounded-lg border border-[#4BB62E] bg-white">
             <div
                 className={`w-full h-auto grid grid-cols-2 gap-x-4 gap-y-5
-                sm:grid-cols-4
-                xxl:grid-cols-4 pt-4  shadow-lg px-2 `}
+                sm:grid-cols-3 lg:grid-cols-4 
+                2xl:grid-cols-5 pt-4  shadow-lg px-2 `}
             >
                 {notExpiredData?.slice(0, visible).map((flyer: any, index: number) => (
                     <a

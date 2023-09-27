@@ -12,6 +12,7 @@ import {Product} from "../../product/product";
 import {useSearchParams} from "next/navigation";
 import useCurrency from "@/app/[lang]/components/Hooks/useCurrencyHook";
 import useCartItemsHook from "@/app/[lang]/components/Hooks/useCartItemsHook";
+import Draggable from "react-draggable";
 
 const CartPopup = () => {
     const {getPrice} = useCurrency();
@@ -20,8 +21,9 @@ const CartPopup = () => {
 
     return (
         <>
+        <Draggable>
             {cartItems.length > 0 ? (
-                <div className="absolute w-[300px] max-h-[540px] bg-white right-0 z-50 px-5 py-4 shadow-lg">
+                <div className="absolute w-[300px] max-h-[540px] bg-white right-0 z-50 px-5 py-4 shadow-lg mt-4">
                     <div className="max-h-[260px] overflow-y-auto overflow-x-hidden">
                         {cartItems.map((item: any, index: number) => (
                             <CartPopupCard
@@ -74,6 +76,7 @@ const CartPopup = () => {
                     </div>
                 </div>
             )}
+            </Draggable>
         </>
     );
 };

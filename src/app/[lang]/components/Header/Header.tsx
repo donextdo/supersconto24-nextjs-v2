@@ -18,6 +18,8 @@ import { updateParamValue } from "../../../../../utils/baseUrl";
 import { useRouter } from "next/navigation";
 import SideNavBar from "../SideNavBar/SideNavBar";
 import useAuthCheckHook from "../Hooks/useAuthCheck";
+import CartPopupRight from "../../features/cart/popup-cart/CartPopupRight";
+import Draggable from "react-draggable";
 
 const Header = () => {
     const [cart, setCart] = useState(false);
@@ -54,7 +56,9 @@ const Header = () => {
     const handleLeave = () => {
         setCart(false);
     };
-
+    const handleCart = () => {
+        setCart(!cart);
+    };
     const handleSideNavbar = () => {
         setShowSideNavbar(!showSideNavbar);
     };
@@ -74,10 +78,11 @@ const Header = () => {
     // console.log("da", authUser)
     return (
         <>
-            <div className="hidden md:block container mx-auto xl:px-40 px-5 sticky top-0 z-40 bg-[#f5f5f5]">
+            <div className="hidden md:block  px-5 sticky top-0 z-40 bg-[#f5f5f5]">
                 <div className=" flex items-center justify-between  py-2">
                     <div className="flex">
                         <div className="text-4xl font-bold text-[#223994] flex justify-start">
+                        <Draggable>
                             <Link href="/">
                                 <div className="h-[50px] w-auto ">
                                     <Image
@@ -94,6 +99,7 @@ const Header = () => {
                                     />
                                 </div>
                             </Link>
+                            </Draggable>
                         </div>
                         <div className="flex justify-start items-center lg:visible md:visible invisible">
                             <Location />
@@ -131,8 +137,9 @@ const Header = () => {
                             <div className="mr-4">{getPrice(cartAmount)}</div>
                             <div
                                 className="relative"
-                                onMouseEnter={handleEnter}
-                                onMouseLeave={handleLeave}
+                                // onMouseEnter={handleEnter}
+                                // onMouseLeave={handleLeave}
+                                onClick={handleCart}
                             >
                                 <button
                                     className="border border-[#fff1ee] bg-[#fff1ee] rounded-full p-2"
@@ -141,7 +148,9 @@ const Header = () => {
                                     <SlHandbag className="text-2xl text-[#ea2b0f]" />
                                 </button>
 
-                                {cart && <CartPopup />}
+                                {/* {cart && <CartPopup />} */}
+                                  {cart && <CartPopupRight />}
+
                                 {cartCount > 0 && (
                                     <div
                                         className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full h-5 w-5 flex items-center justify-center">

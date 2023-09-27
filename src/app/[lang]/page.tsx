@@ -50,8 +50,8 @@ export default async function page({
                 </div> */}
             </div>
 
-            <div className="w-full flex flex-row gap-4">
-                <div className="w-96  hidden xl:block"></div>
+            <div className="w-full mt-4">
+                
                 <div className="w-full ">
                     <MainFlyerList locale={lang} dictionary={dictionary.mainFlyer} />
                 </div>

@@ -21,7 +21,7 @@ export default function BottomFooter() {
   const contactNumber = process.env.NEXT_PUBLIC_CONTACT_NUMBER;
   return (
     <>
-      <div className="my-10 ">
+      <div className="py-10 ">
         <div className="flex flex-col md:flex-row gap-4 justify-center sm:justify-between px-2 items-center">
           <div className="space-y-2">
             <div className="flex">

@@ -73,7 +73,7 @@ const TopHeader = ({lang}: { lang: string }) => {
 
     return (
         <>
-            <div className=" hidden xl:block container mx-auto xl:px-40 px-5">
+            <div className=" hidden xl:block px-5">
                 <div className=" flex justify-between py-2.5">
                     <div>
                         <nav>
