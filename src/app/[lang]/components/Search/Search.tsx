@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FiSearch } from "react-icons/fi";
+import { VscSearch } from "react-icons/vsc";
+
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -63,7 +65,7 @@ export const SearchItem = () => {
   };
 
   return (
-    <div className="flex flex-col xl:w-[400px] 2xl:w-[500px] w-full md:w-full lg:w-96 place-content-center relative border border-gray-200 ">
+    <div className="flex flex-col w-full place-content-center relative border border-gray-200 ">
       <div className="flex relative w-full">
         <input
           type="text"
@@ -72,10 +74,10 @@ export const SearchItem = () => {
           placeholder="Search products..."
           className="bg-gray-50 rounded-tl rounded-bl min-h-[60px] md:w-full lg-w-full w-1/2 pl-5 text-sm focus:outline-none "
         />
-        <div className="bg-gray-50 rounded-br rounded-tr min-h-[60px] min-w-[60px]  flex items-center justify-center hover:cursor-pointer ">
-          <FiSearch
+        <div className="bg-green-500 rounded-r-md min-h-[60px] px-8 flex items-center justify-center hover:cursor-pointer ">
+          <VscSearch
             type="submit"
-            className="min-h-[36px] min-w-[24px] text-blue-900 "
+            className="text-xl text-white "
           />
         </div>
       </div>

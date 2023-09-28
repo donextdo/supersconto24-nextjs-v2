@@ -9,6 +9,7 @@ import axios from "axios";
 import baseUrl from "../../../../../utils/baseUrl";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
+import AllCategories from "./AllCategories";
 
 const PageNavBar = () => {
   const [homeOpen, setHomeOpen] = useState(false);
@@ -56,6 +57,14 @@ const PageNavBar = () => {
   return (
     <div className="lg:flex lg:flex-row ">
       <div className="lg:space-x-1 lg:flex gap gap-0">
+
+        {/* Blog */}
+        <div className="font-semibold ">
+            <div  className="text-gray-700 hover:text-[#4BB62E]">
+            <AllCategories /> 
+            </div>
+        </div>
+
         {/* Shop */}
         <div className="font-semibold hoverable hover:rounded-full relative hover:bg-[#F0FAFF] " onMouseEnter={toggleShopEnter} onMouseLeave={toggleShopLeave}>
           <button onClick={toggleShop} className="lg:py-2 lg:px-4">
@@ -85,9 +94,9 @@ const PageNavBar = () => {
           )}
         </div>
 
-        <div className="font-semibold rounded-full bg-[#F0FAFF] relative" onMouseEnter={toggleHome} onMouseLeave={toggleHomeLeave} >
+        {/* <div className="font-semibold rounded-full hover:bg-[#F0FAFF] relative" onMouseEnter={toggleHome} onMouseLeave={toggleHomeLeave} >
           <button className="lg:py-2 lg:px-4">
-            <div className="text-[#4BB62E] flex text-[15px]  font-ff-headings">
+            <div className="hover:text-[#4BB62E] flex text-[15px]  font-ff-headings">
                 Our Menu
                 <MdKeyboardArrowDown className="ml-2 text-xl" />
             </div>
@@ -127,7 +136,7 @@ const PageNavBar = () => {
               </Link>
             </div>
           )}
-        </div>
+        </div> */}
 
 
         {/* Meats & SeaFood */}

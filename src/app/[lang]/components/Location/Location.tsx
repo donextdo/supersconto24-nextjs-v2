@@ -169,18 +169,15 @@ export const Location = () => {
 
 
     return (
-        <div className=" z-40">
+        <div className="w-full z-40">
             <div
-                className="border border-green-500 rounded-l-md relative ml-6 flex flex-row justify-start items-center h-[60px] w-[200px] 2xl:w-[250px] py-6 px-4 cursor-pointer md:ml-3 bg-gray-50"
+                className="border 00 rounded-l-md relative flex flex-row justify-start items-center h-[60px] w-full py-6 px-4 cursor-pointer bg-gray-50"
                 onClick={handleModal}
             >
-                <div className="flex-grow flex flex-col">
-                    <div className="text-[0.625rem] opacity-50 self-start ">
-                        Your Location
-                    </div>
+                <div className="flex flex-grow  flex-col">
                     <div
-                        className="truncate w-[150px] 2xl:w-[200px] text-[11px] self-start font-semibold overflow-hidden whitespace-nowrap text-[#233a95] pr-4 break-words">
-                        {selectedLocation ?? "Select a location"}
+                        className="truncate min-w-[150px] w-full text-[13px] self-start font-semibold overflow-hidden whitespace-nowrap text-[#233a95] pr-4 break-words">
+                        {selectedLocation ? selectedLocation : "Select a location....."}
                     </div>
                 </div>
                 <div className="flex-shrink flex justify-center items-center w-6 ">

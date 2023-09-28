@@ -16,11 +16,11 @@ const NavBar = () => {
     fetchData();
   }, []);
   return (
-    <div className="hidden md:hidden xl:block container mx-auto xl:px-40 px-5">
+    <div className="hidden md:hidden xl:block  px-5">
       <div className=" lg:flex lg:flex-row  lg:justify-between lg:items-center">
         <div className="lg:flex lg:flex-col items-center">
           <div className="mt-4">
-            <AllCategories />
+            {/* <AllCategories /> */}
           </div>
           {/* <div className="flex justify-center items-center bg-[#edeef5] rounded-full h-[18px] w-[120px] -mt-6">
             <h1 className="text-[#71778e] text-[10px]">

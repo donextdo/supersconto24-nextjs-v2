@@ -25,7 +25,7 @@ const Layout: React.FC<Props> = ({children, params:{lang}}) => {
 
     const pathname = usePathname()
     return (
-        <div className=" bg-[#f5f5f5]">
+        <div className=" bg-[#E4E4E4]">
             {/* <LocaleSwitcher /> */}
             {!pathname.includes("catalog-preview") && <>
                 <Message/>

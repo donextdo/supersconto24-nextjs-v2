@@ -3,7 +3,7 @@ import { SearchItem } from "../Search/Search";
 import { AiOutlineUser } from "react-icons/ai";
 import { SlHandbag } from "react-icons/sl";
 import Link from "next/link";
-import { BsList } from "react-icons/bs";
+import { BsCart4, BsList } from "react-icons/bs";
 import Image from "next/image";
 import logo from "../../../../../assets/logo/logo.png";
 // import getConfig from "next/config";
@@ -18,6 +18,10 @@ import { updateParamValue } from "../../../../../utils/baseUrl";
 import { useRouter } from "next/navigation";
 import SideNavBar from "../SideNavBar/SideNavBar";
 import useAuthCheckHook from "../Hooks/useAuthCheck";
+import CartPopupRight from "../../features/cart/popup-cart/CartPopupRight";
+import Draggable from "react-draggable";
+import { FaLocationArrow } from "react-icons/fa";
+import cartsvg from '../../../../../assets/cart/cartsvg.svg'
 
 const Header = () => {
     const [cart, setCart] = useState(false);
@@ -46,7 +50,7 @@ const Header = () => {
     }
     let initials = extractedUsername?.charAt(0).toUpperCase()
     const handleClick = () => {
-        setCart(!cart)
+        // setCart(!cart)
     };
     const handleEnter = () => {
         setCart(true);
@@ -54,7 +58,10 @@ const Header = () => {
     const handleLeave = () => {
         setCart(false);
     };
+    const handleCart = () => {
+        setCart(true);
 
+    };
     const handleSideNavbar = () => {
         setShowSideNavbar(!showSideNavbar);
     };
@@ -74,52 +81,66 @@ const Header = () => {
     // console.log("da", authUser)
     return (
         <>
-            <div className="hidden md:block container mx-auto xl:px-40 px-5 sticky top-0 z-40 bg-[#f5f5f5]">
-                <div className=" flex items-center justify-between  py-2">
-                    <div className="flex">
-                        <div className="text-4xl font-bold text-[#223994] flex justify-start">
-                            <Link href="/">
-                                <div className="h-[50px] w-auto ">
-                                    <Image
-                                        src={logo}
-                                        alt="item1"
-                                        style={{
-                                            objectFit: "contain",
-                                            
-                                            width: "100%",
-                                            height: "100%",
-                                        }}
-                                        width={450}
-                                        height={400}
-                                    />
+            <div className="hidden lg:block  px-5 sticky top-0 z-40 bg-[#E4E4E4]">
+                <div className=" flex items-center py-2 w-full">
+                    <div>
+                        <button className="text-3xl" onClick={handleSideNavbar}>
+                            <BsList />
+                        </button>
+                        {showSideNavbar && (
+                            <SideNavBar setShowSideNavbar={setShowSideNavbar} handleSideNavbar={handleSideNavbar} />
+                        )}
+                    </div>
+
+                    <div className="text-4xl font-bold text-[#223994] flex justify-start ml-4">
+                        <Link href="/">
+                            <div className="h-[69px] w-[216px] ">
+                                <Image
+                                    src={logo}
+                                    alt="item1"
+                                    style={{
+                                        objectFit: "contain",
+
+                                        width: "100%",
+                                        height: "100%",
+                                    }}
+                                    width={500}
+                                    height={500}
+                                />
+                            </div>
+                        </Link>
+                    </div>
+                    <div className="flex flex-row gap-4 w-full mx-4 xl:mx-20">
+                        <div className="basis-1/2 flex w-full">
+                            <div className="flex justify-start items-center lg:visible md:visible invisible w-full">
+                                <Location />
+                            </div>
+                            <div className="flex justify-center items-center font-semibold ">
+                                <div className="">
+                                    <a onClick={() => getMyLocation()}>
+                                        <button className="h-[60px] bg-red-600 px-8 rounded-r-md">
+                                            <FaLocationArrow className="text-lg text-white " />
+                                        </button>
+                                    </a>
                                 </div>
-                            </Link>
-                        </div>
-                        <div className="flex justify-start items-center lg:visible md:visible invisible">
-                            <Location />
-                        </div>
-                        <div className="flex justify-center items-center font-semibold ">
-                            <div className="">
-                                <a onClick={() => getMyLocation()}>
-                                    <button className="h-[60px] bg-green-500 px-2 rounded-r-md">
-                                        <BiCurrentLocation className="text-lg text-white " />
-                                    </button>
-                                </a>
                             </div>
                         </div>
-                    </div>
-                    <div className="flex">
-                        <div className=" search-bar">
+                        <div className=" basis-1/2 search-bar">
                             <SearchItem />
                         </div>
 
+
+                    </div>
+                    <div className="flex justify-end ">
+
+
                         <div className=" flex justify-end items-center font-semibold">
                             {authUser?._id ? (
-                                <div className="mx-4 h-10 w-10 rounded-full bg-[#233a95] flex items-center justify-center text-white text-xl cursor-pointer">
+                                <div className="mr-8 h-10 w-10 rounded-full bg-[#233a95] flex items-center justify-center text-white text-xl cursor-pointer">
                                     <a onClick={() => window.location.href = '/account'}>
                                         {initials}</a></div>
                             ) : (
-                                <div className="mx-4">
+                                <div className="mr-8">
                                     <a onClick={() => window.location.href = '/account'}>
                                         <button className="border rounded-full p-2">
                                             <AiOutlineUser className="text-2xl" />
@@ -128,27 +149,33 @@ const Header = () => {
                                 </div>
                             )}
 
-                            <div className="mr-4">{getPrice(cartAmount)}</div>
-                            <div
-                                className="relative"
-                                onMouseEnter={handleEnter}
-                                onMouseLeave={handleLeave}
-                            >
-                                <button
-                                    className="border border-[#fff1ee] bg-[#fff1ee] rounded-full p-2"
-                                    onClick={handleClick}
+                            <div className="bg-white flex justify-center items-center p-2 shadow-md">
+                                <div
+                                    className="relative"
+                                // onMouseEnter={handleEnter}
+                                // onMouseLeave={handleLeave}
                                 >
-                                    <SlHandbag className="text-2xl text-[#ea2b0f]" />
-                                </button>
-
-                                {cart && <CartPopup />}
-                                {cartCount > 0 && (
                                     <div
-                                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full h-5 w-5 flex items-center justify-center">
-                                        {cartCount}
+                                        className="border border-[#fff1ee] bg-[#fff1ee] rounded-full p-2 w-10 h-10 cursor-pointer"
+                                        onClick={handleCart}
+                                    >
+                                        <Image src={cartsvg} alt="cart" className="object-cover w-full h-full" />
+                                        {/* <BsCart4 className="text-2xl text-primary" /> */}
                                     </div>
-                                )}
+
+                                    {cart && <CartPopup setCart={setCart} />}
+
+
+                                    {cartCount > 0 && (
+                                        <div
+                                            className="absolute -top-2 -right-2 bg-primary text-white rounded-full h-5 w-5 flex items-center justify-center">
+                                            {cartCount}
+                                        </div>
+                                    )}
+                                </div>
+                                <div className="ml-4 text-primary">{getPrice(cartAmount)}</div>
                             </div>
+
                             <div>
 
                             </div>
@@ -158,7 +185,7 @@ const Header = () => {
             </div>
 
             {/* mobile version */}
-            <div className="md:hidden  sticky top-0  w-full bg-white z-50">
+            <div className="lg:hidden  sticky top-0  w-full bg-white z-50">
                 <div className="flex justify-between items-center h-14 px-2">
                     <div>
                         <button className="text-3xl" onClick={handleSideNavbar}>
@@ -186,19 +213,22 @@ const Header = () => {
                     </div>
                     <div
                         className="relative"
-                        onMouseEnter={handleEnter}
-                        onMouseLeave={handleLeave}
+                    // onMouseEnter={handleEnter}
+                    // onMouseLeave={handleLeave}
+
+
                     >
-                        <button
-                            className="border border-[#fff1ee] bg-[#fff1ee] rounded-full p-2"
-                            onClick={handleClick}
+                        <div
+                            className="border border-[#fff1ee] bg-[#fff1ee] rounded-full p-2 w-10 h-10 cursor-pointer"
+                            onClick={handleCart}
                         >
-                            <SlHandbag className="text-2xl text-[#ea2b0f]" />
-                        </button>
-                        {cart && <CartPopup />}
+                            <Image src={cartsvg} alt="cart" className="object-cover w-full h-full" />
+                            {/* <BsCart4 className="text-2xl text-primary" /> */}
+                        </div>
+                        {cart && <CartPopup setCart={setCart} />}
                         {cartCount > 0 && (
                             <div
-                                className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full h-5 w-5 flex items-center justify-center">
+                                className="absolute -top-2 -right-2 bg-primary text-white rounded-full h-5 w-5 flex items-center justify-center">
                                 {cartCount}
                             </div>
                         )}
