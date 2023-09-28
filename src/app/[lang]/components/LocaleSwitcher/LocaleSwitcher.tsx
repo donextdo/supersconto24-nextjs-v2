@@ -29,7 +29,7 @@ export default function LocaleSwitcher({handleLanguageSelect}:any) {
     // };
     return (
 
-        <div className='absolute w-[100px] max-h-[540px] bg-white left-0 z-50 top-4 px-5 py-4 shadow-lg  rounded-b-lg'>
+        <div className='absolute w-[100px] max-h-[540px] bg-white right-0 z-50 top-4 px-5 py-4 shadow-lg  rounded-b-lg'>
             {/* <p className="text-lg font-bold">Locale switcher:</p> */}
 
             <ul className=" space-y-2">

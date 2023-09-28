@@ -31,7 +31,7 @@ export default async function page({
     console.log("render page", dictionary);
 
     return (
-        <div className="container mx-auto xl:px-40 px-5 ">
+        <div className="px-[82px] ">
             {/* <NewProductList /> */}
             <div className="grid grid-cols-4 gap-1">
                 {/* left side */}
@@ -51,21 +51,27 @@ export default async function page({
             </div>
 
             <div className="w-full mt-4">
-                
-                <div className="w-full ">
+                <div className="flex flex-col">
+                    <div className="uppercase font-semibold text-lg font-ff-headings lg:text-xl">
+                        YOUR NEAREST FLYERS
+                    </div>
+                    <div className="text-xs text-gray-400">
+                        Do not miss the current offers until the end of March.
+                    </div>
+                </div>
+
+                <div className="w-full mt-2">
                     <MainFlyerList locale={lang} dictionary={dictionary.mainFlyer} />
                 </div>
             </div>
 
-            <div className="w-full flex flex-row gap-4">
-                <div className="w-96 hidden xl:block">
-                    <ContactAds />
+            <div className="w-full ">
+
+
+                <div className="mt-8">
+                    <ProductList />
                 </div>
-                <div className="w-full">
-                    <div className="mt-8">
-                        <ProductList />
-                    </div>
-                </div>
+
             </div>
 
             <div className="w-full flex flex-row gap-4">

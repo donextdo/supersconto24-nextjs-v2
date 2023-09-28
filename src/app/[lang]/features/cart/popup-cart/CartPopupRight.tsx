@@ -27,9 +27,8 @@ const CartPopupRight = () => {
             <Draggable>
                 <div
                     style={{
-                        
+                        position:'absolute',
                         right: '0',
-                        overflow:'visible',
                         marginTop: '72px',
                         width: '64px',
                         minHeight: '400px',

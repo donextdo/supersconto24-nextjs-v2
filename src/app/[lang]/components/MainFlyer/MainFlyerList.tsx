@@ -123,11 +123,11 @@ const MainFlyerList = ({ dictionary, locale }: MainFlyerListType) => {
     console.log(activeProduct)
 
     return (
-        <div className="rounded-lg border border-[#4BB62E] bg-white">
+        <div className="rounded-lg bg-white px-4 py-4 shadow-md">
             <div
                 className={`w-full h-auto grid grid-cols-2 gap-x-4 gap-y-5
-                sm:grid-cols-3 lg:grid-cols-4 
-                2xl:grid-cols-5 pt-4  shadow-lg px-2 `}
+                sm:grid-cols-3 lg:grid-cols-5 
+                2xl:grid-cols-5 pb-6 `}
             >
                 {notExpiredData?.slice(0, visible).map((flyer: any, index: number) => (
                     <a
@@ -144,7 +144,7 @@ const MainFlyerList = ({ dictionary, locale }: MainFlyerListType) => {
             </div>
 
             <button
-                className="w-full  bg-[#efefef] py-2 px-6 text-base font-medium text-[#898989] rounded-md hover:bg-[#E7E7E7] shadow-lg mb-2"
+                className="w-full  bg-primary py-3 px-6 text-base font-medium text-white rounded-md hover:bg-green-600 shadow-lg"
                 onClick={() => {
                     setVisible((prevValue) => prevValue + 8);
                     setHeight(height + 48);
