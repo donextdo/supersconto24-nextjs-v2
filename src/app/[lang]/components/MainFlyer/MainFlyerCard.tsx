@@ -30,12 +30,12 @@ const MainFlyerCard = ({ flyer }: any) => {
                     <h1 className="text-sm font-semibold">{flyer.shop_id?.customized_shop_name ? flyer.shop_id?.customized_shop_name : flyer.shop_id?.shop_name}</h1>
                 </div>
             </div>
-            <div className="grid grid-cols-5 gap-2 ">
-                <div className="col-span-3 flex items-center gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-5 gap-2 ">
+                <div className="sm:col-span-3 flex items-center gap-2">
                     <RiPinDistanceFill className="text-sm fill-gray-500" />
                     {flyer?.shop_id?.distance && <h1 className="text-sm text-gray-500 font-semibold">{(flyer.shop_id.distance / 1000)?.toFixed(2)} km</h1>}
                 </div>
-                <div className="col-span-2  flex items-center gap-2">
+                <div className="sm:col-span-2  flex items-center sm:justify-end gap-2">
                     <FaCalendarAlt className="text-sm fill-gray-500" />
                     <h1 className="text-sm text-gray-500 text-right font-semibold">
                         {formattedDate}

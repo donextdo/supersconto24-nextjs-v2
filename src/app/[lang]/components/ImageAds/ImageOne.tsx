@@ -82,7 +82,9 @@ export const ImageThree = () => {
         <Image
           src={banner3}
           alt="banner - Image"
-          className="mb-0 h-[220px] w-full rounded-md "
+          className="mb-0 h-[220px] w-full rounded-md object-cover"
+          height={1000}
+          width={1000}
         />
       
         <div className="absolute inset-0 flex flex-col justify-center max-w-[390px] max-h-[290px] lg:max-w-[610px] lg:max-h-[372px] p-8 lg:mt-3 md:justify-center md:mt-14 md:max-w-[450px]">
@@ -113,7 +115,9 @@ export const ImageFour = () => {
       <Image
         src={banner4}
         alt="banner - Image"
-        className="mb-0 h-[220px] w-full rounded-md "
+        className="mb-0 h-[220px] w-full rounded-md object-cover"
+        height={1000}
+        width={1000}
       />
       <div className="absolute inset-0 flex flex-col justify-center max-w-[390px] lg:mt-3 max-h-[290px] lg:max-w-[610px] lg:max-h-[372px] p-8 md:justify-center md:mt-14 md:max-w-[450px]">
         <div className="flex flex-row  mt-3 items-center">

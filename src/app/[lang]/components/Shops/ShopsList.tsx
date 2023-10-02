@@ -22,6 +22,17 @@ const Shops = () => {
             console.log(err);
         }
     }
+
+    const uniqueShops = shops.reduce((unique:any, shop:any) => {
+      const existingShop = unique.find((s:any) => s.shop_name === shop.shop_name);
+      
+      if (!existingShop) {
+        unique.push(shop);
+      }
+      
+      return unique;
+    }, []);
+    
     return ( 
         <div className="flex flex-col w-full gap-6">
         <h2 className="text-lg font-semibold">SHOPS</h2>
@@ -29,7 +40,7 @@ const Shops = () => {
         <div className="">
           <section className="w-full ">
             <Slider padding="px-10 py-10">
-              {shops.map((shop:any, index:number) => (
+              {uniqueShops.map((shop:any, index:number) => (
                 <Link href={`/shop-preview/${shop._id}`} key={index}>
                   <ShopsCard shop={shop} key={index} />
                  </Link>
