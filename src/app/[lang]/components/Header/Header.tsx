@@ -94,7 +94,7 @@ const Header = () => {
 
                     <div className="text-4xl font-bold text-[#223994] flex justify-start ml-4">
                         <Link href="/">
-                            <div className="h-[69px] w-[216px] ">
+                            <div className="h-[69px] w-[150px] xl:w-[216px] ">
                                 <Image
                                     src={logo}
                                     alt="item1"
@@ -110,9 +110,10 @@ const Header = () => {
                             </div>
                         </Link>
                     </div>
-                    <div className="flex flex-row gap-4 w-full mx-4 xl:mx-20">
-                        <div className="basis-1/2 flex w-full">
-                            <div className="flex justify-start items-center lg:visible md:visible invisible w-full">
+
+                    <div className="grid grid-cols-2 gap-4 w-full mx-4 xl:mx-20">
+                        <div className="flex w-full">
+                            <div className="flex justify-start items-center w-full">
                                 <Location />
                             </div>
                             <div className="flex justify-center items-center font-semibold ">
@@ -125,22 +126,19 @@ const Header = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className=" basis-1/2 search-bar">
+                        <div className="search-bar">
                             <SearchItem />
                         </div>
-
-
                     </div>
+
                     <div className="flex justify-end ">
-
-
                         <div className=" flex justify-end items-center font-semibold">
                             {authUser?._id ? (
-                                <div className="mr-8 h-10 w-10 rounded-full bg-[#233a95] flex items-center justify-center text-white text-xl cursor-pointer">
+                                <div className="mr-4 xl:mr-8 h-10 w-10 rounded-full bg-[#233a95] flex items-center justify-center text-white text-xl cursor-pointer">
                                     <a onClick={() => window.location.href = '/account'}>
                                         {initials}</a></div>
                             ) : (
-                                <div className="mr-8">
+                                <div className="mr-4 xl:mr-8">
                                     <a onClick={() => window.location.href = '/account'}>
                                         <button className="border rounded-full p-2">
                                             <AiOutlineUser className="text-2xl" />

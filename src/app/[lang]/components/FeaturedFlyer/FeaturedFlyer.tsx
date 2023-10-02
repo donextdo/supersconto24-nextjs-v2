@@ -26,7 +26,7 @@ const FeaturedFlyer = () => {
     return (
         <>
             <div>
-                <div className="flex flex-row items-center justify-between mb-9 ">
+                <div className="flex flex-row items-center justify-between mb-2 ">
                     <div className="flex flex-col">
                         <div className="uppercase font-semibold text-lg font-ff-headings lg:text-xl">
                             Featured Flyer

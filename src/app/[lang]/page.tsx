@@ -68,44 +68,44 @@ export default async function page({
             <div className="w-full ">
 
 
-                <div className="mt-8">
+                <div className="mt-10">
                     <ProductList />
                 </div>
 
             </div>
 
-            <div className="w-full flex flex-row gap-4">
+            <div className="w-full flex flex-row gap-4 mt-10">
                 <div className="w-96 hidden xl:block">
                     <ImageOne />
                 </div>
                 <div className="w-full">
-                    <div className="mt-8">
+                    <div className="">
                         <FeaturedFlyer />
                     </div>
                 </div>
             </div>
 
-            <div className="mt-8">
+            <div className="mt-10">
                 <LatestFlyers />
             </div>
 
-            <div className="mt-8">
+            <div className="mt-10">
                 <ShopsList />
             </div>
 
-            <div className="mt-8">
+            <div className="mt-10">
                 <CitiesList />
             </div>
 
-            <div className="mt-8">
+            <div className="mt-10">
                 <NewsList />
             </div>
 
-            <div className="mt-8">
+            <div className="mt-10">
                 <FirstPurchaceAds />
             </div>
 
-            <div className="mt-8 w-full flex flex-row gap-4">
+            <div className="mt-10 w-full flex flex-row gap-4">
                 <div className="w-96  hidden lg:block">
                     <ImageFive />
                 </div>
@@ -115,7 +115,7 @@ export default async function page({
                 </div>
             </div>
 
-            <div className="mt-8">
+            <div className="mt-10">
                 <MoreCategoriesList />
             </div>
 

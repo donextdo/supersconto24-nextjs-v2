@@ -34,8 +34,8 @@ const Shops = () => {
     }, []);
     
     return ( 
-        <div className="flex flex-col w-full gap-6">
-        <h2 className="text-lg font-semibold">SHOPS</h2>
+        <div className=" w-full ">
+        <h2 className="text-lg font-semibold mb-2">SHOPS</h2>
   
         <div className="">
           <section className="w-full ">

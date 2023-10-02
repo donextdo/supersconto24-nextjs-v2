@@ -30,9 +30,9 @@ const LatestFlyers = () => {
     console.log("render", productList)
 
     return (
-        <div className='flex flex-col w-full gap-6'>
+        <div className='w-full'>
 
-            <h2 className='text-lg font-semibold'>
+            <h2 className='text-lg font-semibold mb-2'>
                 TOP DEALS
             </h2>
             <div className="">
