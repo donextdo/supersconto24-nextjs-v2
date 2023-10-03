@@ -31,7 +31,7 @@ export default async function page({
     console.log("render page", dictionary);
 
     return (
-        <div className="px-[82px] ">
+        <div className="px-5 md:px-[82px] ">
             {/* <NewProductList /> */}
             <div className="grid grid-cols-4 gap-1">
                 {/* left side */}
@@ -68,44 +68,44 @@ export default async function page({
             <div className="w-full ">
 
 
-                <div className="mt-8">
+                <div className="mt-10">
                     <ProductList />
                 </div>
 
             </div>
 
-            <div className="w-full flex flex-row gap-4">
+            <div className="w-full flex flex-row gap-4 mt-10">
                 <div className="w-96 hidden xl:block">
                     <ImageOne />
                 </div>
                 <div className="w-full">
-                    <div className="mt-8">
+                    <div className="">
                         <FeaturedFlyer />
                     </div>
                 </div>
             </div>
 
-            <div className="mt-8">
+            <div className="mt-10">
                 <LatestFlyers />
             </div>
 
-            <div className="mt-8">
+            <div className="mt-10">
                 <ShopsList />
             </div>
 
-            <div className="mt-8">
+            <div className="mt-10">
                 <CitiesList />
             </div>
 
-            <div className="mt-8">
+            <div className="mt-10">
                 <NewsList />
             </div>
 
-            <div className="mt-8">
+            <div className="mt-10">
                 <FirstPurchaceAds />
             </div>
 
-            <div className="mt-8 w-full flex flex-row gap-4">
+            <div className="mt-10 w-full flex flex-row gap-4">
                 <div className="w-96  hidden lg:block">
                     <ImageFive />
                 </div>
@@ -115,13 +115,13 @@ export default async function page({
                 </div>
             </div>
 
-            <div className="mt-8">
+            <div className="mt-10">
                 <MoreCategoriesList />
             </div>
 
-            <div className="mt-8">
+            {/* <div className="mt-8">
                 <NewsLettertwo />
-            </div>
+            </div> */}
 
             {/* <div className="footer-container">
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 py-16 px-8">

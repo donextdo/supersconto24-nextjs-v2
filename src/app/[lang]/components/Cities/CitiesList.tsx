@@ -30,11 +30,11 @@ const CitiesList = () => {
   // console.log("new city", uniqueCities)
 
   return (
-    <div className="flex flex-col gap-6 ">
-      <h2 className="text-lg font-semibold">CITIES WITH NEARBY OFFERS</h2>
+    <div className="">
+      <h2 className="text-lg font-semibold mb-2">CITIES WITH NEARBY OFFERS</h2>
       <div className="">
         <section className="w-full">
-          <Slider padding="px-10 py-5" grid="grid-rows-3" gap="gap-x-4 gap-y-1">
+          <Slider padding="px-10 py-5" grid="grid-rows-3" gap="gap-x-4 gap-y-2">
             {uniqueCities.map((city: any, index: number) => (
               <Link key={index} href={`/city/${city}`}>
                 < CitiesCard city={city} key={index} />

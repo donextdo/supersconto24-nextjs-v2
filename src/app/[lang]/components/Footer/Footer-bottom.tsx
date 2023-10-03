@@ -26,7 +26,7 @@ export default function BottomFooter() {
           <div className="space-y-2">
             <div className="flex">
               <div>
-                <button className="p-3 border rounded-full mr-2">
+                <button className="p-3 border rounded-full mr-2 bg-white">
                   <FiPhoneCall />
                 </button>
               </div>
@@ -74,16 +74,16 @@ export default function BottomFooter() {
             </div>
 
             <div className="">
-              <Link href="https://www.facebook.com"><button className="border rounded-full p-2  mt-3 lg:mt-0 text-[#233a95]">
+              <Link href="https://www.facebook.com"><button className="border rounded-full p-2  mt-3 lg:mt-0 text-[#233a95] bg-white">
                 <GrFacebookOption />
               </button></Link>
               <Link href="https://www.twitter.com">
-                <button className="border rounded-full p-2  mx-2 text-[#233a95]">
+                <button className="border rounded-full p-2  mx-2 text-[#233a95] bg-white">
                   <AiOutlineTwitter />
                 </button>
               </Link>
               <Link href="https://www.instagram.com">
-                <button className="border rounded-full p-2    text-[#233a95]">
+                <button className="border rounded-full p-2 text-[#233a95] bg-white">
                   <AiOutlineInstagram />
                 </button>
               </Link>
@@ -127,9 +127,9 @@ export default function BottomFooter() {
             </div>
         </div>
 
-        <hr className="my-5 " />
+        <hr className="my-5 text-black bg-red-500" />
 
-        <div className="flex flex-col sm:flex-row justify-between">
+        <div className="flex flex-col sm:flex-row justify-between px-2">
           <div className="flex flex-row gap-4">
             <div>
 
