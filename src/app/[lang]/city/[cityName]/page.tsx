@@ -34,7 +34,7 @@ const CityPage = ({ params }: IProps) => {
     const filteredShops = shops.filter((shop: any) => shop.city === city)
     console.log(filteredShops)
     return (
-        <div className="container mx-auto xl:px-40 px-5 my-4">
+        <div className="container mx-auto xl:px-40 px-5 my-4 h-40">
             <div className="grid grid-cols-2 md:grid-cols-4">
                 {filteredShops.map((shop: any, index: any) => (
                     <Link
