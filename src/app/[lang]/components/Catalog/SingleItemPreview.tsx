@@ -30,7 +30,7 @@ const SingleItemPreview: React.FC<Props> = ({
 
 
 
-    console.log({width, height, imageWidth, imageHeight,scaleX : width / imageWidth, scaleY : height / imageHeight, coordinates})
+    // console.log({width, height, imageWidth, imageHeight,scaleX : width / imageWidth, scaleY : height / imageHeight, coordinates})
 
     return (
 

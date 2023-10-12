@@ -17,27 +17,48 @@ function Draggable({pages, setShowModal, item}: any) {
     const {cartItems} = useCartItemsHook()
 
 
+
     useEffect(() => {
         setWindowInfo({width: window.innerWidth, height: window.innerHeight})
     }, [])
 
     useEffect(() => {
+
+        const handleIntersect = (entries: any) => {
+            console.log({isDragging, entries: entries.filter((entry: any) => entry.isIntersecting)})
+            entries.forEach((entry: any) => {
+                console.log({entry,isIntersecting: entry.isIntersecting,intersectionRatio: entry.intersectionRatio})
+                if (entry.isIntersecting) {
+                    if (isDragging || isScrolling) {
+                        console.log("intersecting", {
+                            currentIndex,
+                            length: pages.length
+                        }, entry.target.dataset.index);
+                        const newIndex = parseInt(entry.target.dataset.index)
+                        setCurrentIndex(prevIndex => ({...prevIndex, index: newIndex}));
+                    }
+                }
+            });
+        }
+
         observer.current = new IntersectionObserver(handleIntersect, {
-            threshold: 1,
+            root: containerRef.current,
+            rootMargin: "0% -60% 0% 10%"
         });
 
         const items = itemRefs.current;
         items.forEach((item: any) => observer.current.observe(item));
 
+        console.log("init obs")
         return () => {
             if (observer.current) {
                 observer.current.disconnect();
             }
         };
-    }, [pages, currentIndex, isDragging, isScrolling]);
+    }, [currentIndex, isDragging, isScrolling, pages.length,containerRef.current]);
 
     useEffect(() => {
-        if (pages.length > 0) {
+        if (pages.length > 0 && !isScrolling) {
             itemRefs.current[currentIndex.index].scrollIntoView({
                 inline: "center",
                 behavior: "smooth"
@@ -45,42 +66,36 @@ function Draggable({pages, setShowModal, item}: any) {
         }
     }, [currentIndex, pages])
 
+
+
     const handleMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
+        console.log("mouse down")
+
         setIsDragging(true);
         setDragStartX(event.clientX);
         setScrollLeft(containerRef.current!.scrollLeft);
     };
 
     const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
-        if (!isDragging) {
+        if (!isDragging || isScrolling) {
+            // console.log("mouse moving ignored")
+
             return;
         }
 
+        console.log("mouse moving")
         const dragDistance = event.clientX - dragStartX;
         containerRef.current!.scrollLeft = scrollLeft - dragDistance;
     };
 
     const handleMouseUp = () => {
+        console.log("mouse up")
         setIsDragging(false);
     };
 
-    const handleIntersect = (entries: any) => {
-        console.log(isDragging, entries)
-        entries.forEach((entry: any) => {
-            if (entry.intersectionRatio > 0.8) {
-                if (isDragging || isScrolling) {
-                    console.log("intersecting", {
-                        currentIndex,
-                        length: pages.length
-                    }, entry.target.dataset.index);
-                    const newIndex = parseInt(entry.target.dataset.index)
-                    setCurrentIndex(prevIndex => ({...prevIndex, index: newIndex}));
-                }
-            }
-        });
-    }
 
-    console.log({...currentIndex,pages});
+
+    // console.log({...currentIndex,pages});
 
     return (
 
@@ -103,8 +118,8 @@ function Draggable({pages, setShowModal, item}: any) {
                 onMouseLeave={handleMouseUp}
                 onMouseUpCapture={handleMouseUp}
 
-                onWheel={(event: any) => {
-                    console.log("on Wheel")
+                onWheel={(event) => {
+                    console.log("on Wheel",event.deltaY)
 
                     if (containerRef.current) {
                         containerRef.current.scrollLeft += event.deltaY;
@@ -113,7 +128,7 @@ function Draggable({pages, setShowModal, item}: any) {
                         setTimeout(() => {
                             setIsScrolling(false);
 
-                        }, 500)
+                        }, 10)
                     }
                 }}
             >

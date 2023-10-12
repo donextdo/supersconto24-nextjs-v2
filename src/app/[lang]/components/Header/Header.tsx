@@ -22,6 +22,7 @@ import CartPopupRight from "../../features/cart/popup-cart/CartPopupRight";
 import Draggable from "react-draggable";
 import { FaLocationArrow } from "react-icons/fa";
 import cartsvg from '../../../../../assets/cart/cartsvg.svg'
+import cartimg from '../../../../../assets/cart/cartimg.jpg'
 
 const Header = () => {
     const [cart, setCart] = useState(false);
@@ -111,9 +112,9 @@ const Header = () => {
                         </Link>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4 w-full mx-4 xl:mx-20">
+                    <div className="grid grid-cols-2 gap-4 lg:gap-6 w-full mx-4 xl:mx-12 2xl:mx-20">
                         <div className="flex w-full">
-                            <div className="flex justify-start items-center w-full">
+                            <div className="flex justify-start items-center w-full max-w-[350px] 2xl:max-w-[400px]">
                                 <Location />
                             </div>
                             <div className="flex justify-center items-center font-semibold ">
@@ -126,7 +127,7 @@ const Header = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="search-bar">
+                        <div className="search-bar max-w-[360px] 2xl:max-w-[400px]">
                             <SearchItem />
                         </div>
                     </div>
@@ -154,10 +155,10 @@ const Header = () => {
                                 // onMouseLeave={handleLeave}
                                 >
                                     <div
-                                        className="border border-[#fff1ee] bg-[#fff1ee] rounded-full p-2 w-10 h-10 cursor-pointer"
+                                        className="border border-[#fff1ee] bg-[#fff1ee] rounded-full p-2 w-12 h-12 cursor-pointer"
                                         onClick={handleCart}
                                     >
-                                        <Image src={cartsvg} alt="cart" className="object-cover w-full h-full" />
+                                        <Image src={cartimg} alt="cart" className="object-cover w-full h-full" />
                                         {/* <BsCart4 className="text-2xl text-primary" /> */}
                                     </div>
 
@@ -217,10 +218,10 @@ const Header = () => {
 
                     >
                         <div
-                            className="border border-[#fff1ee] bg-[#fff1ee] rounded-full p-2 w-10 h-10 cursor-pointer"
+                            className="border border-[#fff1ee] bg-[#fff1ee] rounded-full p-2 w-12 h-12 cursor-pointer"
                             onClick={handleCart}
                         >
-                            <Image src={cartsvg} alt="cart" className="object-cover w-full h-full" />
+                            <Image src={cartimg} alt="cart" className="object-cover w-full h-full" />
                             {/* <BsCart4 className="text-2xl text-primary" /> */}
                         </div>
                         {cart && <CartPopup setCart={setCart} />}
