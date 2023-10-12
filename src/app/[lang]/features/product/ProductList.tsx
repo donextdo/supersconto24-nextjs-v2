@@ -31,7 +31,7 @@ const ProductList = () => {
   return (
     <>
       <div>
-        <div className="flex flex-row items-center justify-between mb-9 ">
+        <div className="flex flex-row items-center justify-between mb-2 ">
           <div className="flex flex-col">
             <div className="uppercase font-semibold text-lg font-ff-headings lg:text-xl">
               Best Seller
@@ -51,7 +51,7 @@ const ProductList = () => {
           </div> */}
         </div>
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 shadow-lg">
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 shadow-lg">
         {products.slice(0, 4).map((product) => (
           <ProductCard key={product._id} product={product} />
         ))}

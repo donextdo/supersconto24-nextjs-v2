@@ -189,7 +189,7 @@ const AllCategories = () => {
   };
 
   useEffect(() => {
-    if (pathname === "/en" || pathname === "/it") {
+    if (pathname === "//en" || pathname === "//it") {
       setHomeOpen(true);
       handleCategoryLeave();
     } else {
@@ -205,18 +205,16 @@ const AllCategories = () => {
   return (
     <div className="">
       <button
-        className="w-64 min-w-[17rem] h-[50px]  border border-[#4BB62E] rounded-t-lg"
+        className=" hover:rounded-full hover:bg-[#F0FAFF] lg:py-2 lg:px-4 "
         onClick={toggleHome}
       >
         <div>
           <Link
             href="#"
-            className="font-ff-headings text-[#898989] justify-between px-3 py-4 text-[13px] font-semibold flex "
+            className="font-ff-headings text-gray-700 hover:text-[#4BB62E] justify-between  font-semibold flex "
           >
             {" "}
-            <div>
-              <MdMenu className="mx-2 text-xl " />
-            </div>
+            
             ALL CATEGORIES
             <div>
               <MdKeyboardArrowDown className="mx-2 text-xl " />

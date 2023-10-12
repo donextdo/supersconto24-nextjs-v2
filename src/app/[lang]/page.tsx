@@ -31,7 +31,7 @@ export default async function page({
     console.log("render page", dictionary);
 
     return (
-        <div className="container mx-auto xl:px-40 px-5 ">
+        <div className="px-5 md:px-[82px] ">
             {/* <NewProductList /> */}
             <div className="grid grid-cols-4 gap-1">
                 {/* left side */}
@@ -50,56 +50,62 @@ export default async function page({
                 </div> */}
             </div>
 
-            <div className="w-full flex flex-row gap-4">
-                <div className="w-96  hidden xl:block"></div>
-                <div className="w-full ">
+            <div className="w-full mt-4">
+                <div className="flex flex-col">
+                    <div className="uppercase font-semibold text-lg font-ff-headings lg:text-xl">
+                        YOUR NEAREST FLYERS
+                    </div>
+                    <div className="text-xs text-gray-400">
+                        Do not miss the current offers until the end of March.
+                    </div>
+                </div>
+
+                <div className="w-full mt-2">
                     <MainFlyerList locale={lang} dictionary={dictionary.mainFlyer} />
                 </div>
             </div>
 
-            <div className="w-full flex flex-row gap-4">
-                <div className="w-96 hidden xl:block">
-                    <ContactAds />
+            <div className="w-full ">
+
+
+                <div className="mt-10">
+                    <ProductList />
                 </div>
-                <div className="w-full">
-                    <div className="mt-8">
-                        <ProductList />
-                    </div>
-                </div>
+
             </div>
 
-            <div className="w-full flex flex-row gap-4">
+            <div className="w-full flex flex-row gap-4 mt-10">
                 <div className="w-96 hidden xl:block">
                     <ImageOne />
                 </div>
                 <div className="w-full">
-                    <div className="mt-8">
+                    <div className="">
                         <FeaturedFlyer />
                     </div>
                 </div>
             </div>
 
-            <div className="mt-8">
+            <div className="mt-10">
                 <LatestFlyers />
             </div>
 
-            <div className="mt-8">
+            <div className="mt-10">
                 <ShopsList />
             </div>
 
-            <div className="mt-8">
+            <div className="mt-10">
                 <CitiesList />
             </div>
 
-            <div className="mt-8">
+            <div className="mt-10">
                 <NewsList />
             </div>
 
-            <div className="mt-8">
+            <div className="mt-10">
                 <FirstPurchaceAds />
             </div>
 
-            <div className="mt-8 w-full flex flex-row gap-4">
+            <div className="mt-10 w-full flex flex-row gap-4">
                 <div className="w-96  hidden lg:block">
                     <ImageFive />
                 </div>
@@ -109,13 +115,13 @@ export default async function page({
                 </div>
             </div>
 
-            <div className="mt-8">
+            <div className="mt-10">
                 <MoreCategoriesList />
             </div>
 
-            <div className="mt-8">
+            {/* <div className="mt-8">
                 <NewsLettertwo />
-            </div>
+            </div> */}
 
             {/* <div className="footer-container">
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 py-16 px-8">

@@ -9,11 +9,13 @@ import axios from "axios";
 import baseUrl from "../../../../../utils/baseUrl";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
+import AllCategories from "./AllCategories";
 
 const PageNavBar = () => {
   const [homeOpen, setHomeOpen] = useState(false);
   const [shopOpen, setShopOpen] = useState(false);
   const [allShop, setAllShop] = useState<any>([])
+  const [uniqueShopNames, setUniqueShopNames] = useState<any>([]);
 
   const toggleHome = () => {
     setHomeOpen(true);
@@ -38,13 +40,16 @@ const PageNavBar = () => {
 
   useEffect(() => {
     fetchShopData();
+    
   }, []);
+  
 
 
   async function fetchShopData() {
     try {
       const res = await axios.get(`${baseUrl}/shop`);
       const data = res.data;
+      console.log("shops",data)
       setAllShop(data)
 
     } catch (error) {
@@ -52,10 +57,31 @@ const PageNavBar = () => {
     }
   }
 
+  const uniqueNames = Array.from(new Set(allShop.map((shop:any) => shop.shop_name)));
+  const uniqueShops = allShop.reduce((unique:any, shop:any) => {
+    const existingShop = unique.find((s:any) => s.shop_name === shop.shop_name);
+    
+    if (!existingShop) {
+      unique.push(shop);
+    }
+    
+    return unique;
+  }, []);
+  
+  // Now uniqueShops contains only the details of unique shops.
+  console.log(uniqueShops);
 
   return (
     <div className="lg:flex lg:flex-row ">
       <div className="lg:space-x-1 lg:flex gap gap-0">
+
+        {/* Categories */}
+        <div className="font-semibold ">
+            <div  className="text-gray-700 hover:text-[#4BB62E]">
+            <AllCategories /> 
+            </div>
+        </div>
+
         {/* Shop */}
         <div className="font-semibold hoverable hover:rounded-full relative hover:bg-[#F0FAFF] " onMouseEnter={toggleShopEnter} onMouseLeave={toggleShopLeave}>
           <button onClick={toggleShop} className="lg:py-2 lg:px-4">
@@ -71,8 +97,8 @@ const PageNavBar = () => {
           </button>
 
           {shopOpen && (
-            <div className="text-[13px] absolute w-40 py-2 top-10 shadow-md font-medium bg-white rounded-lg z-50">
-              {allShop.map((shop: any, index: number) => (
+            <div className="text-[13px] absolute w-40 h-80 overflow-y-auto py-2 top-10 shadow-md font-medium bg-white rounded-lg z-50">
+              {uniqueShops.map((shop: any, index: number) => (
                 <Link
                   key={index}
                   href={`/shop-preview/${shop._id}`}
@@ -85,9 +111,9 @@ const PageNavBar = () => {
           )}
         </div>
 
-        <div className="font-semibold rounded-full bg-[#F0FAFF] relative" onMouseEnter={toggleHome} onMouseLeave={toggleHomeLeave} >
+        {/* <div className="font-semibold rounded-full hover:bg-[#F0FAFF] relative" onMouseEnter={toggleHome} onMouseLeave={toggleHomeLeave} >
           <button className="lg:py-2 lg:px-4">
-            <div className="text-[#4BB62E] flex text-[15px]  font-ff-headings">
+            <div className="hover:text-[#4BB62E] flex text-[15px]  font-ff-headings">
                 Our Menu
                 <MdKeyboardArrowDown className="ml-2 text-xl" />
             </div>
@@ -127,26 +153,10 @@ const PageNavBar = () => {
               </Link>
             </div>
           )}
-        </div>
+        </div> */}
 
 
-        {/* Meats & SeaFood */}
-        {/* <li className="font-semibold font-ff-headings hoverable hover:rounded-full  hover:bg-[#F0FAFF] ">
-          <button
-            // onMouseEnter={toggleShop}
-            className="lg:py-2 lg:px-4 inline-flex items-center"
-            // onClick={() => handleMeat("Meats & Seafood")}
-          >
-            <GiChickenOven className="text-xl mr-2" />
-            <Link
-              // href={"/shop"}
-              href="#"
-              className="hover:text-[#4BB62E] flex text-gray-700 text-[15px]"
-            >
-              MEATS &amp; SEAFOOD
-            </Link>
-          </button>
-        </li> */}
+        
         {/* Bakery */}
         {/* <li className="font-semibold font-ff-headings hoverable hover:rounded-full  hover:bg-[#F0FAFF] ">
           <button
@@ -164,24 +174,6 @@ const PageNavBar = () => {
             </Link>
           </button>
         </li> */}
-        {/* Beverages */}
-        {/* <li className="font-semibold font-ff-headings hoverable hover:rounded-full  hover:bg-[#F0FAFF] ">
-          <button
-            // onMouseEnter={toggleShop}
-            className="lg:py-2 lg:px-4 inline-flex items-center"
-            // onClick={() => handleMeat("Beverages")}
-          >
-            <FaMugHot className="text-xl mr-2" />
-            <Link
-              // href={"/shop"}
-              href="#"
-              className="hover:text-[#4BB62E] flex text-gray-700 text-[15px]"
-            >
-              BEVERAGES
-            </Link>
-          </button>
-        </li> */}
-
 
         {/* Blog */}
         <div className="font-semibold ">

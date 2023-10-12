@@ -8,10 +8,11 @@ import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 interface Props {
     children: React.ReactNode
     padding?: string,
-    gap?: string
+    gap?: string,
+    grid?: string
 }
 
-const Slider: React.FC<Props> = ({children, padding, gap}) => {
+const Slider: React.FC<Props> = ({children, padding, gap, grid}) => {
 
     const rowRef = useRef<HTMLDivElement>(null)
     // const [isMoved, setIsMoved] = useState(false)
@@ -34,7 +35,7 @@ const Slider: React.FC<Props> = ({children, padding, gap}) => {
     <Card padding={padding ? padding : 'px-10 py-4'} styleClass='rounded-md relative'>
         
         <div ref={rowRef}
-        className={`w-full grid grid-flow-col-dense overflow-x-hidden scrollbar-hide  ${gap ? gap : 'gap-4'}`}>
+        className={`w-full grid grid-flow-col overflow-x-hidden scrollbar-hide  ${gap ? gap : 'gap-4'} ${grid ? grid : 'grid-rows-1'}`}>
             { children} 
         
         </div>

@@ -8,11 +8,11 @@ import avatar from "../../../../../assets/home/avatar.jpg";
 
 export const ImageOne = () => {
   return (
-    <div className="mt-9 relative lg:mt-9 cursor-pointer shadow-lg">
+    <div className=" relative  cursor-pointer shadow-lg">
       <Image
         src={banner1}
         alt="banner - Image"
-        className="mb-0 h-[260px] w-full rounded-md lg:h-[403px] lg:w-[270px]"
+        className="w-full rounded-md "
       />
       <div className="absolute inset-0 flex flex-col justify-center max-w-[390px] max-h-[290px] md:justify-center md:mt-14 md:max-w-[450px] lg:ml-7 lg:mt-0 px-8">
         <div className="flex flex-row  mt-3 lg:mt-6 items-center">
@@ -82,7 +82,9 @@ export const ImageThree = () => {
         <Image
           src={banner3}
           alt="banner - Image"
-          className="mb-0 h-[220px] w-full rounded-md "
+          className="mb-0 h-[220px] w-full rounded-md object-cover"
+          height={1000}
+          width={1000}
         />
       
         <div className="absolute inset-0 flex flex-col justify-center max-w-[390px] max-h-[290px] lg:max-w-[610px] lg:max-h-[372px] p-8 lg:mt-3 md:justify-center md:mt-14 md:max-w-[450px]">
@@ -113,7 +115,9 @@ export const ImageFour = () => {
       <Image
         src={banner4}
         alt="banner - Image"
-        className="mb-0 h-[220px] w-full rounded-md "
+        className=" h-[220px] w-full rounded-md object-cover"
+        height={1000}
+        width={1000}
       />
       <div className="absolute inset-0 flex flex-col justify-center max-w-[390px] lg:mt-3 max-h-[290px] lg:max-w-[610px] lg:max-h-[372px] p-8 md:justify-center md:mt-14 md:max-w-[450px]">
         <div className="flex flex-row  mt-3 items-center">
@@ -139,7 +143,7 @@ export const ImageFour = () => {
 
 export const ImageFive = () => {
   return (
-    <div className="bg-[#fffbec] p-4 mt-9 w-[270px]">
+    <div className="bg-[#fffbec] p-4 mt-9 w-[270px] h-[220px]">
       <h1 className="font-bold text-sm">The Best Marketplace</h1>
       <p className="mt-2 text-[13px]">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut.
@@ -151,6 +155,7 @@ export const ImageFive = () => {
           width={50}
           height={50}
           className="rounded-full"
+        
         />
         <div className="flex flex-col ml-2">
           <span className="text-sm">Your Name</span>

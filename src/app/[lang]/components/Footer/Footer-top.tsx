@@ -5,10 +5,11 @@ import { TbDiscount2 } from "react-icons/tb";
 import { CiDollar } from "react-icons/ci";
 
 import MainFooter from "./Footer-middle";
+import NewsLettertwo from "../NewsLetter2/NewsLettertwo";
 
 export default function Footer() {
   return (
-    <div className="container mx-auto xl:px-40 px-5">
+    <div className="">
       {/* <div className="bg-[#f7f8fd] w-[100%] h-1/2">
         <div className="container justify-center pt-10 mx-auto xl:py-10 xl:flex">
 
@@ -54,6 +55,7 @@ export default function Footer() {
         </div>
         <hr className="xl:mx-16" />
       </div> */}
+      <NewsLettertwo />
       <MainFooter />
     </div>
   );
