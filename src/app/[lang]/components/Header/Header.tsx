@@ -112,7 +112,7 @@ const Header = () => {
                         </Link>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4 lg:gap-6 w-full mx-4 xl:mx-12 2xl:mx-20">
+                    <div className="grid grid-cols-2 gap-8 w-full mx-2 xl:mx-10 2xl:mx-16">
                         <div className="flex w-full">
                             <div className="flex justify-start items-center w-full max-w-[350px] 2xl:max-w-[400px]">
                                 <Location />
