@@ -23,8 +23,8 @@ const PRODUCTS_URL = `${baseUrl}/catelog/item`;
 export const fetchProducts = createAsyncThunk(
   "product/fetchProducts",
   async () => {
-    const response = await axios.get(PRODUCTS_URL);
-    console.log(response.data)
+    const response = await axios.get(`${baseUrl}/catelog/item`);
+    console.log("products",response.data)
     return response.data;
   }
 );
