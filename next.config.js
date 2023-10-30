@@ -9,6 +9,7 @@ const nextConfig = {
           "spoonfulapp.com",
           "klbtheme.com",
           "ongolemart.com",
+          "supersconto-images-bucket.s3.eu-west-3.amazonaws.com",
         ]
         // domains: ['http://localhost:3000/','localhost']
       },

@@ -30,7 +30,7 @@ type MainFlyerListType = {
 const MainFlyerList = ({ dictionary, locale }: MainFlyerListType) => {
     const [coordinates, setCoordinates] = useState<any>();
     // const [productList, setProductList] = useState<any>()
-    const [visible, setVisible] = useState(8);
+    const [visible, setVisible] = useState(10);
     const [height, setHeight] = useState(48);
     const productList = useSelector((state: RootState) => state.flyer.flyers);
     const dispatch = useDispatch<AppDispatch>();
@@ -146,7 +146,7 @@ const MainFlyerList = ({ dictionary, locale }: MainFlyerListType) => {
             <button
                 className="w-full  bg-primary py-3 px-6 text-base font-medium text-white rounded-md hover:bg-green-600 shadow-lg"
                 onClick={() => {
-                    setVisible((prevValue) => prevValue + 8);
+                    setVisible((prevValue) => prevValue + 10);
                     setHeight(height + 48);
 
                 }}
