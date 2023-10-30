@@ -65,14 +65,14 @@ export default async function page({
                 </div>
             </div>
 
-            {/* <div className="w-full ">
+             <div className="w-full ">
 
 
                 <div className="mt-10">
                     <ProductList />
                 </div>
 
-            </div> */}
+            </div>
 
             <div className="w-full flex flex-row gap-4 mt-10">
                 <div className="w-96 hidden xl:block">
