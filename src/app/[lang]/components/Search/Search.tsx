@@ -67,14 +67,21 @@ export const SearchItem = () => {
   return (
     <div className="flex flex-col w-full place-content-center relative border border-gray-200 ">
       <div className="flex relative w-full">
-        <input
+        {/* <input
           type="text"
           value={query}
           onChange={handleInputChange}
           placeholder="Search products..."
-          className="bg-gray-50 rounded-tl rounded-bl min-h-[60px] md:w-full lg-w-full w-1/2 pl-5 text-sm focus:outline-none "
-        />
-        <div className="bg-green-500 rounded-r-md min-h-[60px] px-8 flex items-center justify-center hover:cursor-pointer ">
+          className="bg-gray-50 rounded-tl rounded-bl min-h-[40px] md:w-full lg-w-full w-1/2 pl-5 text-sm focus:outline-none "
+        /> */}
+        <input
+  type="text"
+  value={query}
+  onChange={handleInputChange}
+  placeholder="Search products..."
+  className="bg-gray-50 rounded-tl rounded-bl min-h-[40px] md:w-full lg-w-full w-1/2 pl-5 text-[16px] font-semibold focus:outline-none"
+/>
+        <div className="bg-green-500 rounded-r-md min-h-[40px] px-8 flex items-center justify-center hover:cursor-pointer ">
           <VscSearch
             type="submit"
             className="text-xl text-white "

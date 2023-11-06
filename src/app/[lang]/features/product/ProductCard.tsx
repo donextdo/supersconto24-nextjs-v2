@@ -22,13 +22,14 @@ export const ProductCard: FC<Props> = ({ product }) => {
     const [productPopup, setProductPopup] = useState(false);
     const [proId, setProId] = useState("");
     const [count, setCount] = useState(0);
-    const router = useRouter()
+    const router = useRouter();
 
     const { getPrice } = useCurrency();
     const { cartItems, addProductToCart, removeProductFromCart } = useCartItemsHook()
     const {isLoggedIn, authUser, logOut} = useAuthCheckHook()
-
+    
     useEffect(() => {
+        
         const currentProduct = cartItems.find((item) => item._id === product._id)
         if (currentProduct) {
             setCount(currentProduct.count)
@@ -135,6 +136,34 @@ export const ProductCard: FC<Props> = ({ product }) => {
         }
         
     };
+    // const handleWishlist = async (product: any) => {
+    //     if (authUser && authUser._id) {
+    //       console.log(authUser._id);
+    //       try {
+    //         // Send a request to your API to add the product to the wishlist
+    //         const response = await axios.post(`${baseUrl}/users/wishlist/${authUser._id}`, {
+    //           productId: product._id,
+    //         });
+    //         console.log(response.data);
+    //         // Show a success message
+    //         Swal.fire({
+    //           title: '<span style="font-size: 18px">Item has been added to your wishlist</span>',
+    //           width: 400,
+    //           timer: 1500,
+    //           color: "white",
+    //           background: "#00B853",
+    //           showConfirmButton: false,
+    //           heightAuto: true,
+    //           position: "bottom-end",
+    //         });
+    //       } catch (error) {
+    //         console.log(error);
+    //         // Handle the error (e.g., show an error message)
+    //       }
+    //     } else {
+    //       router.push("/account");
+    //     }
+    //   };
 
     const handlePopup = (product: any) => {
         setProductPopup(true);
@@ -277,7 +306,7 @@ export const ProductCard: FC<Props> = ({ product }) => {
                             </button>
                         </div>
                     )}
-                </div>
+                    </div>
                 {/* )} */}
                 
             </div>
