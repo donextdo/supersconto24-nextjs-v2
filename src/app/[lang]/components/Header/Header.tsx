@@ -120,7 +120,7 @@ const Header = () => {
                             <div className="flex justify-center items-center font-semibold ">
                                 <div className="">
                                     <a onClick={() => getMyLocation()}>
-                                        <button className="h-[60px] bg-red-600 px-8 rounded-r-md">
+                                        <button className="h-[40px] bg-red-600 px-8 rounded-r-md">
                                             <FaLocationArrow className="text-lg text-white " />
                                         </button>
                                     </a>

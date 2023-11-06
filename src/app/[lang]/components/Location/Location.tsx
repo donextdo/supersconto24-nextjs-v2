@@ -171,14 +171,22 @@ export const Location = () => {
     return (
         <div className="w-full z-40">
             <div
-                className="border rounded-l-md relative flex flex-row justify-start items-center h-[60px] w-full py-6 px-4 cursor-pointer bg-gray-50"
-                onClick={handleModal}
-            >
+            //     className="border rounded-l-md relative flex flex-row justify-start items-center h-[60px] w-full py-6 px-4 cursor-pointer bg-gray-50"
+            //     onClick={handleModal}
+            // >
+            className="border rounded-l-md relative flex flex-row justify-start items-center h-[40px] w-full py-4 px-3 cursor-pointer bg-gray-50"
+            onClick={handleModal}
+        >
                 <div className="flex flex-grow flex-col">
-                    <div
+                    {/* <div
                         className="truncate w-[150px] xl:w-[200px] 2xl:w-[300px] text-[13px] self-start font-semibold overflow-hidden whitespace-nowrap text-[#233a95] pr-4 break-words">
                         {selectedLocation ? selectedLocation : "Select a location....."}
+                    </div> */}
+                    <div
+                         className="truncate w-[100px] xl:w-[150px] 2xl:w-[200px] text-[16px] self-start font-semibold overflow-hidden whitespace-nowrap text-[#233a95] pr-4 break-words">
+                         {selectedLocation ? selectedLocation : "Select a location....."}
                     </div>
+
                 </div>
                 <div className="flex-shrink flex justify-center items-center w-6 ">
                     <MdKeyboardArrowDown className="text-xl text-gray-400" />
