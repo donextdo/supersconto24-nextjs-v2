@@ -67,13 +67,6 @@ export const SearchItem = () => {
   return (
     <div className="flex flex-col w-full place-content-center relative border border-gray-200 ">
       <div className="flex relative w-full">
-        {/* <input
-          type="text"
-          value={query}
-          onChange={handleInputChange}
-          placeholder="Search products..."
-          className="bg-gray-50 rounded-tl rounded-bl min-h-[40px] md:w-full lg-w-full w-1/2 pl-5 text-sm focus:outline-none "
-        /> */}
         <input
   type="text"
   value={query}

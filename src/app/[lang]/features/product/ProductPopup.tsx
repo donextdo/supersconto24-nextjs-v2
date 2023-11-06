@@ -376,7 +376,7 @@ const ProductPopup = ({ setProductPopup, proId }: any) => {
 
                                         {data.discount && (
                                             <span className="my-1 text-red-700 text-lg font-semibold">
-                                                {getPrice(newPrice)}
+                        red                        {getPrice(newPrice)}
                                             </span>
                                         )}
                                     </div>
