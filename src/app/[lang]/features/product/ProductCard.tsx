@@ -27,6 +27,7 @@ export const ProductCard: FC<Props> = ({ product }) => {
     const { getPrice } = useCurrency();
     const { cartItems, addProductToCart, removeProductFromCart } = useCartItemsHook()
     const {isLoggedIn, authUser, logOut} = useAuthCheckHook()
+    const [isInWishlist, setIsInWishlist] = useState(product.isFavourite);
     
     useEffect(() => {
         
@@ -94,32 +95,88 @@ export const ProductCard: FC<Props> = ({ product }) => {
     }, [product])
 
 
+    // const handleWishlist = async (product: any) => {
+    //     console.log(authUser._id)
+    //     if(authUser._id){
+    //         const wishListObj = {
+    //             wishList: [
+    //               {
+    //                 productId: product._id,
+    //                 front: product.product_image,
+    //                 title: product.product_name,
+    //                 price: product.unit_price,
+    //                 date: new Date().toLocaleDateString("en-US", {
+    //                   month: "long",
+    //                   day: "numeric",
+    //                   year: "numeric",
+    //                 }),
+    //                 quantity: product.quantity,
+    //               },
+    //             ],
+    //           };
+    
+    //         try {
+    //             const response = await axios.post(`${baseUrl}/users/wishList/${authUser._id}`, wishListObj);
+    //             console.log(response.data); // do something with the response data
+    //             Swal.fire({
+    //                 title:
+    //                     '<span style="font-size: 18px">Item has been added to your wishlist</span>',
+    //                 width: 400,
+    //                 timer: 1500,
+    //                 color: "white",
+    //                 background: "#00B853",
+    //                 showConfirmButton: false,
+    //                 heightAuto: true,
+    //                 position: "bottom-end",
+    //             });
+    //         } catch (error) {
+    //             console.log(error); // handle the error
+    //         }
+    //     }else{
+    //         router.push("/account")
+    //     }
+        
+    // };
     const handleWishlist = async (product: any) => {
-        console.log(authUser._id)
-        if(authUser._id){
+        if (authUser._id) {
             const wishListObj = {
                 wishList: [
-                  {
-                    productId: product._id,
-                    front: product.product_image,
-                    title: product.product_name,
-                    price: product.unit_price,
-                    date: new Date().toLocaleDateString("en-US", {
-                      month: "long",
-                      day: "numeric",
-                      year: "numeric",
-                    }),
-                    quantity: product.quantity,
-                  },
+                    {
+                        productId: product._id,
+                        front: product.product_image,
+                        title: product.product_name,
+                        price: product.unit_price,
+                        date: new Date().toLocaleDateString("en-US", {
+                            month: "long",
+                            day: "numeric",
+                            year: "numeric",
+                        }),
+                        quantity: product.quantity,
+                    },
                 ],
-              };
+            };
     
             try {
-                const response = await axios.post(`${baseUrl}/users/wishList/${authUser._id}`, wishListObj);
-                console.log(response.data); // do something with the response data
+                if (isInWishlist) {
+                    // If the product is already in the wishlist, remove it
+                    const response = await axios.delete(
+                        `${baseUrl}/users/wishList/${authUser._id}/${product._id}`
+                    );
+                    console.log(response.data); // do something with the response data
+                } else {
+                    // If the product is not in the wishlist, add it
+                    const response = await axios.post(
+                        `${baseUrl}/users/wishList/${authUser._id}`,
+                        wishListObj
+                    );
+                    console.log(response.data); // do something with the response data
+                }
+    
+                // Toggle the isInWishlist state
+                setIsInWishlist(!isInWishlist);
+    
                 Swal.fire({
-                    title:
-                        '<span style="font-size: 18px">Item has been added to your wishlist</span>',
+                    title: '<span style="font-size: 18px">Item has been added to your wishlist</span>',
                     width: 400,
                     timer: 1500,
                     color: "white",
@@ -131,11 +188,11 @@ export const ProductCard: FC<Props> = ({ product }) => {
             } catch (error) {
                 console.log(error); // handle the error
             }
-        }else{
-            router.push("/account")
+        } else {
+            router.push("/account");
         }
-        
     };
+    
     // const handleWishlist = async (product: any) => {
     //     if (authUser && authUser._id) {
     //       console.log(authUser._id);
@@ -206,15 +263,15 @@ export const ProductCard: FC<Props> = ({ product }) => {
                     </button>
 
                     <div
-                        className={`absolute max-w-[24px] max-h-[24px] top-9 right-2 bg-white flex items-center justify-center rounded-full h-8 w-8 hover:cursor-pointer drop-shadow-lg md:invisible group-hover:visible md:group-hover:-translate-x-3 md:group-hover:ease-in transition duration-150 hover:bg-blue-900 group/icon1`}
-                        onClick={() => handleWishlist(product)}
-                    >
-                        {product.isFavourite ? (
-                            <FaHeart className="h-3 w-3 fill-blue-900 group-hover/icon1:fill-white" />
-                        ) : (
-                            <FiHeart className="h-3 w-3 text-blue-900 group-hover/icon1:text-white" />
-                        )}
-                    </div>
+                    className={`absolute max-w-[24px] max-h-[24px] top-9 right-2 bg-white flex items-center justify-center rounded-full h-8 w-8 hover:cursor-pointer drop-shadow-lg md:invisible group-hover:visible md:group-hover:-translate-x-3 md:group-hover:ease-in transition duration-150 hover:bg-blue-900 group/icon1`}
+                    onClick={() => handleWishlist(product)}
+                >
+                    {isInWishlist ? (
+                        <FaHeart className="h-3 w-3 fill-blue-900 group-hover/icon1:fill-white" />
+                    ) : (
+                        <FiHeart className="h-3 w-3 text-blue-900 group-hover/icon1:text-white" />
+                    )}
+                  </div>
                 </div>
 
                 {/* Main Imagee */}

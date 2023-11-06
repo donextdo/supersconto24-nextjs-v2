@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 import React, { ReactElement, useEffect, useMemo, useState } from "react";
 import { MainCategory, Product, SubCategory } from "./product";
 import axios from "axios";
@@ -9,7 +9,14 @@ import { IoClose } from "react-icons/io5";
 import Swal from "sweetalert2";
 import useCurrency from "@/app/[lang]/components/Hooks/useCurrencyHook";
 import useCartItemsHook from "@/app/[lang]/components/Hooks/useCartItemsHook";
+import { FaHeart } from "react-icons/fa";
+import { FiHeart } from "react-icons/fi";
+import Image from "next/image";
+import useAuthCheckHook from "@/app/[lang]/components/Hooks/useAuthCheck";
+import { useRouter } from "next/navigation";
 
+
+ 
 interface Review {
     rating: number;
     name: string;
@@ -60,6 +67,7 @@ const ProductPopup = ({ setProductPopup, proId }: any) => {
         type: "",
         unit_price: 0,
     });
+    const [isInWishlist, setIsInWishlist] = useState(data.isFavourite);
     const [allreview, setAllreview] = useState<Array<Review>>([]);
     const [tag, setTag] = useState([]);
     const [subCategory, setSubCategory] = useState<SubCategory>({
@@ -75,6 +83,8 @@ const ProductPopup = ({ setProductPopup, proId }: any) => {
     const { getPrice } = useCurrency();
     const { cartItems, addProductToCart, removeProductFromCart } =
         useCartItemsHook();
+        const {isLoggedIn, authUser, logOut} = useAuthCheckHook()
+    const router = useRouter();    
 
     useEffect(() => {
         getCategory();
@@ -185,6 +195,99 @@ const ProductPopup = ({ setProductPopup, proId }: any) => {
         setProductPopup(false);
     };
 
+    // const toggleWishlist = () => {
+    //     // Toggle the isInWishlist state
+    //     setIsInWishlist(!isInWishlist);
+    
+    //     // Send a request to your API to add/remove the product from the wishlist
+    //     // You can use axios or any other method to perform this action
+    
+    //     if (isInWishlist) {
+    //         // If the product is already in the wishlist, remove it
+    //         // Example code to remove the product from the wishlist (you should adjust this as per your API):
+    //         axios.delete(`${baseUrl}/users/wishList${proId}`)
+    //             .then((response) => {
+    //                 // Handle the success response
+    //                 console.log(response.data);
+    //             })
+    //             .catch((error) => {
+    //                 // Handle the error
+    //                 console.error(error);
+    //             });
+    //     } else {
+    //         // If the product is not in the wishlist, add it
+    //         // Example code to add the product to the wishlist (you should adjust this as per your API):
+    //         axios.post(`${baseUrl}/users/wishList${proId}`)
+    //             .then((response) => {
+    //                 // Handle the success response
+    //                 console.log(response.data);
+    //             })
+    //             .catch((error) => {
+    //                 // Handle the error
+    //                 console.error(error);
+    //             });
+    //     }
+
+    // };
+
+    const handleWishlist = async (product: any) => {
+        if (authUser._id) {
+            const wishListObj = {
+                wishList: [
+                    {
+                        productId: product._id,
+                        front: product.product_image,
+                        title: product.product_name,
+                        price: product.unit_price,
+                        date: new Date().toLocaleDateString("en-US", {
+                            month: "long",
+                            day: "numeric",
+                            year: "numeric",
+                        }),
+                        quantity: product.quantity,
+                    },
+                ],
+            };
+    
+            try {
+                if (isInWishlist) {
+                    // If the product is already in the wishlist, remove it
+                    const response = await axios.delete(
+                        `${baseUrl}/users/wishList/${authUser._id}/${product._id}`
+                    );
+                    console.log(response.data); // do something with the response data
+                } else {
+                    // If the product is not in the wishlist, add it
+                    const response = await axios.post(
+                        `${baseUrl}/users/wishList/${authUser._id}`,
+                        wishListObj
+                    );
+                    console.log(response.data); // do something with the response data
+                }
+    
+                // Toggle the isInWishlist state
+                setIsInWishlist(!isInWishlist);
+    
+                Swal.fire({
+                    title: '<span style="font-size: 18px">Item has been added to your wishlist</span>',
+                    width: 400,
+                    timer: 1500,
+                    color: "white",
+                    background: "#00B853",
+                    showConfirmButton: false,
+                    heightAuto: true,
+                    position: "bottom-end",
+                });
+            } catch (error) {
+                console.log(error); // handle the error
+            }
+        } else {
+            router.push("/account");
+        }
+    };
+    
+
+
     console.log({ mainCategory, subCategory });
     return (
         <div className="fixed inset-0 z-50 grid place-items-center bg-slate-900 bg-opacity-80">
@@ -286,7 +389,17 @@ const ProductPopup = ({ setProductPopup, proId }: any) => {
                                             Out of Stock
                                         </div>
                                     )}
+                                            <button
 
+                                            onClick={handleWishlist}
+                                            className={`mt-4 p-2 rounded-md ${
+                                                isInWishlist ? "bg-red-500 text-white" : "bg-blue-900 text-white"
+                                            }`}
+                                            >
+                                            <FiHeart className="h-4 w-4" />
+                                            {isInWishlist ? "" : ""}
+                                            </button>
+                                            
                                     <div className="mt-6 text-[.8125rem]">
                                         <p className=" ">{data.product_description}</p>
                                     </div>
@@ -320,6 +433,7 @@ const ProductPopup = ({ setProductPopup, proId }: any) => {
                                             >
                                                 Add to list
                                             </button>
+
                                         </div>
                                     </div>
                                     <div className="max-h-[66px]  mt-6">
@@ -401,10 +515,11 @@ const ProductPopup = ({ setProductPopup, proId }: any) => {
                                             </div>
                                         )}
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
+                         </div>
+                     </div>
+                 </div>
+            </div>
                 ) : (
                     <div className="h-[50vh] flex justify-center items-center">
                         <h3>Loading...</h3>
