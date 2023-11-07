@@ -30,9 +30,6 @@ const Wishlist = () => {
     const [data, setData] = useState<Array<WIshlist>>([]);
     const dispatch = useDispatch()
     const router = useRouter ()
-
-   
-
     const { cartItems, addProductToCart, removeProductFromCart } = useCartItemsHook()
     const {isLoggedIn, authUser, logOut} = useAuthCheckHook()
 
@@ -90,8 +87,6 @@ const Wishlist = () => {
             console.log(err);
         }
     };
-
-
 
     const handleCart = async (item: any) => {
         console.log(item)
@@ -168,8 +163,6 @@ const Wishlist = () => {
 
         });
     }
-
-
 
     const handleAddCart = () => {
         const cartItemsString = localStorage.getItem('cartItems');
