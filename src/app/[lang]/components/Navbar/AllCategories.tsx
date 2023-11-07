@@ -57,6 +57,7 @@ const AllCategories = () => {
   useEffect(() => {
     const fetchData = async () => {
       const response = await axios.get(`${baseUrl}/category/categories`);
+      console.log(response.data);
       setviewCategory(response.data.mainCategories);
       setviewSubCategory(response.data.subCategories);
       setviewSubCategoryLevelTwo(response.data.subCategoriesLevelTwo);
@@ -68,9 +69,9 @@ const AllCategories = () => {
 
   const handleCategoryHover = (_id: any) => {
     const selectedCategory = viewSubCategory.filter(
-      (category) => category.mainCategoryId === _id
+      (category) => category.mainCategoryId._id === _id
     );
-    console.log(selectedCategory);
+    console.log(selectedCategory, _id, viewSubCategory);
     if (selectedCategory.length > 0) {
       setActiveCategory(_id);
       setviewSubCategoryList(selectedCategory);
@@ -85,7 +86,7 @@ const AllCategories = () => {
 
   const handleCategoryLevelTwoHover = (_id: any) => {
     const selectedCategoryLevelTwo = viewSubCategoryLevelTwo.filter(
-      (category) => category.mainCategoryId === _id
+      (category) => category.mainCategoryId._id === _id
     );
 
     if (selectedCategoryLevelTwo.length > 0) {
@@ -102,7 +103,7 @@ const AllCategories = () => {
 
   const handleCategoryLevelThreeHover = (_id: any) => {
     const selectedCategoryLevelThree = viewSubCategoryLevelThree.filter(
-      (category) => category.mainCategoryId === _id
+      (category) => category.mainCategoryId._id === _id
     );
 
     if (selectedCategoryLevelThree.length > 0) {
@@ -119,7 +120,7 @@ const AllCategories = () => {
 
   const handleCategoryLevelFourHover = (_id: any) => {
     const selectedCategoryLevelFour = viewSubCategoryLevelFour.filter(
-      (category) => category.mainCategoryId === _id
+      (category) => category.mainCategoryId._id === _id
     );
 
     if (selectedCategoryLevelFour.length > 0) {
@@ -136,7 +137,7 @@ const AllCategories = () => {
 
   const hasSubcategories = (categoryId: string) => {
     const selectedCategory = viewSubCategory.find(
-      (category) => category.mainCategoryId === categoryId
+      (category) => category.mainCategoryId._id === categoryId
     );
 
     return selectedCategory !== undefined;
@@ -144,21 +145,21 @@ const AllCategories = () => {
 
   const hasSubcategoriesLevelTwo = (categoryId: string) => {
     const selectedCategoryLevelTwo = viewSubCategoryLevelTwo.find(
-      (category) => category.mainCategoryId === categoryId
+      (category) => category.mainCategoryId._id === categoryId
     );
     return selectedCategoryLevelTwo !== undefined;
   };
 
   const hasSubcategoriesLevelThree = (categoryId: string) => {
     const selectedCategoryLevelThree = viewSubCategoryLevelThree.find(
-      (category) => category.mainCategoryId === categoryId
+      (category) => category.mainCategoryId._id === categoryId
     );
     return selectedCategoryLevelThree !== undefined;
   };
 
   const hasSubcategoriesLevelFour = (categoryId: string) => {
     const selectedCategoryLevelFour = viewSubCategoryLevelFour.find(
-      (category) => category.mainCategoryId === categoryId
+      (category) => category.mainCategoryId._id === categoryId
     );
     return selectedCategoryLevelFour !== undefined;
   };
@@ -224,7 +225,7 @@ const AllCategories = () => {
       </button>
       {homeOpen && (
         <div
-          className="text-[13px] w-64 py-2 min-w-[17rem] bg-white  m-auto absolute p-3 z-30 shadow-lg border border-[#4BB62E] rounded-b-lg"
+          className="text-[13px] w-64 py-2 min-w-[17rem] max-h-[60vh] overflow-y-auto bg-white  m-auto absolute p-3 z-30 shadow-lg border border-[#4BB62E] rounded-b-lg"
           onMouseLeave={handleCategoryLeave}
         >
           <ul className="relative">
@@ -404,9 +405,9 @@ const AllCategories = () => {
             })}
           </ul>
 
-          <hr className="my-2" />
+          {/*<hr className="my-2" />*/}
 
-          <div className="py-2 px-2">
+          {/*<div className="py-2 px-2">
             <p
               className="hover:text-[#4BB62E] hover:cursor-pointer"
               onClick={redirectFilter}
@@ -429,7 +430,7 @@ const AllCategories = () => {
             >
               New Arrivals
             </p>
-          </div>
+          </div>*/}
         </div>
       )}
     </div>

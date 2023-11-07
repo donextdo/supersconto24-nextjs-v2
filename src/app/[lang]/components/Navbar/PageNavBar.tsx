@@ -97,7 +97,7 @@ const PageNavBar = () => {
           </button>
 
           {shopOpen && (
-            <div className="text-[13px] absolute w-40 h-80 overflow-y-auto py-2 top-10 shadow-md font-medium bg-white rounded-lg z-50">
+            <div className="text-[13px] w-64 py-2 min-w-[17rem] max-h-[60vh] overflow-y-auto bg-white  m-auto absolute p-3 z-30 shadow-lg border border-[#4BB62E] rounded-b-lg">
               {uniqueShops.map((shop: any, index: number) => (
                 <Link
                   key={index}

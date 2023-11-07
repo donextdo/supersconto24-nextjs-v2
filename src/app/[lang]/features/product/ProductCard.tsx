@@ -138,7 +138,7 @@ export const ProductCard: FC<Props> = ({ product }) => {
         
     // };
     const handleWishlist = async (product: any) => {
-        if (authUser._id) {
+        if (isLoggedIn && authUser?._id) {
             const wishListObj = {
                 wishList: [
                     {
