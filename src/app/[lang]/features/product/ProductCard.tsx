@@ -16,9 +16,10 @@ import { useRouter } from "next/navigation";
 
 interface Props {
     product: Product;
+    exClass?: string;
 }
 
-export const ProductCard: FC<Props> = ({ product }) => {
+export const ProductCard: FC<Props> = ({ product, exClass }) => {
     const [productPopup, setProductPopup] = useState(false);
     const [proId, setProId] = useState("");
     const [count, setCount] = useState(0);
@@ -231,7 +232,7 @@ export const ProductCard: FC<Props> = ({ product }) => {
     return (
         <>
             <div
-                className="w-full min-h-[350px] mx-auto bg-white border border-gray-200  overflow-hidden relative group hover:drop-shadow-lg rounded-sm"
+                className={`w-full min-h-[350px] mx-auto bg-white border border-gray-200  overflow-hidden relative group hover:drop-shadow-lg rounded-sm ${exClass ? exClass: ""}`}
                 key={product._id}
             >
                 <div className="absolute max-w-[88.41px] max-h-[49px] flex flex-col items-start gap-1 p-2">
