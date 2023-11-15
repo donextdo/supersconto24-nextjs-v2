@@ -1,18 +1,9 @@
 "use client"
-import {useCallback, useEffect, useState} from "react";
-import {useSearchParams, useRouter} from "next/navigation";
-import baseUrl, {axiosRequest} from "../../../../../utils/baseUrl";
-import axios from "axios";
 import Link from "next/link";
 import Slider from "../Shared/Slider";
 import LatestFlyersCard from "./LatestFlyerCard";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
-
-
-
-
-
+import {useSelector} from "react-redux";
+import {RootState} from "../../redux/store";
 
 
 const LatestFlyers = () => {

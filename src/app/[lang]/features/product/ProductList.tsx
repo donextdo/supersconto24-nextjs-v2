@@ -8,6 +8,7 @@ import { Product } from "./product";
 import { ProductCard } from "./ProductCard";
 import { BsArrowRight } from "react-icons/bs";
 import { useRouter } from "next/navigation";
+import Slider from "@/app/[lang]/components/Shared/Slider";
 
 
 const ProductList = () => {
@@ -51,11 +52,12 @@ const ProductList = () => {
           </div> */}
         </div>
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 shadow-lg">
-        {products.slice(0, 4).map((product) => (
-          <ProductCard key={product._id} product={product} />
+      <div className="w-full shadow-lg">
+        <Slider>
+        {products.map((product) => (
+          <ProductCard key={product._id} product={product} exClass="min-w-[320px]" />
         ))}
-
+        </Slider>
       </div>
     </>
   );
