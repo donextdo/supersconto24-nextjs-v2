@@ -295,7 +295,7 @@ const ProductPopup = ({ setProductPopup, proId }: any) => {
                 <div className="absolute top-4 right-10">
                     <button
                         onClick={handleClose}
-                        className="bg-[#c2c2d3] rounded-full w-8 h-8 flex justify-center items-center"
+                        className="bg-[#d02231] rounded-full w-8 h-8 flex justify-center items-center"
                     >
                         <IoClose className="text-white" />
                     </button>
